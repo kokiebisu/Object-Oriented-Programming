@@ -3,12 +3,28 @@ import datetime
 
 
 class Asteroid:
+    id = 0
+    timestamp = 0
 
     def __init__(self, radius, position, velocity):
         self._radius = radius
         self._position = position
         self._velocity = velocity
-        self._id = self._id + 1
+        self._id = self.addID()
+        self._timestamp = self.addTimestamp()
+
+    @classmethod
+    def addID(cls):
+        cls.id = cls.id + 1
+        return cls.id
+
+    @classmethod
+    def addTimestamp(cls):
+        cls.timestamp = datetime.datetime.now()
+        return cls.timestamp
+
+    def getID(self):
+        return self._id
 
     def getRadius(self):
         return self._radius
@@ -37,4 +53,4 @@ class Asteroid:
                 self._velocity[index]
 
     def __str__(self):
-        return f"Radius:{self._radius}, Position: {self._position}, Velocity: {self._velocity}, Timestamp: {self._velocity}, Id: {self._id}"
+        return f"ID: {self.getID()}, Radius:{self.getRadius()}, Position: {self.getPosition()}, Velocity: {self.getVelocity()}, Timestamp: {self.getTimestamp()}"

@@ -1,5 +1,6 @@
 from asteroid import Asteroid
 import random
+import time
 
 
 class Controller:
@@ -32,16 +33,19 @@ class Controller:
         return [x, y, z]
 
     def simulate(self, seconds):
-        for x in range(len(self.asteroids)):
-            self.asteroids[x].move()
-            print(self.asteroids[x])
+        for x in range(0, seconds):
+            startTime = time.time()
+            for y in range(len(self.asteroids)):
+                self.asteroids[x].move()
+                print(self.asteroids[x])
+            endTime = time.time()
+            time.sleep(1 - (endTime - startTime))
 
 
 def main():
     controller = Controller()
-    controller.addAsteroid()
-    for x in controller.asteroids:
-        print(x)
+    for x in range(1, 5):
+        controller.addAsteroid()
     controller.simulate(2)
 
 
