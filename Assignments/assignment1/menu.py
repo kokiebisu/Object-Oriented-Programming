@@ -32,6 +32,7 @@ class Menu:
         print("1. Check the status")
         print("2. Feed your tamagotchi")
         print("3. Play with your tamagotchi")
+        print("4. Give medicine")
 
     @classmethod
     def showStatus(cls):
@@ -44,7 +45,8 @@ class Menu:
             else:
                 print("Sorry to hear that...")
                 exit()
-        print(cls.character.isSick())
+        print(cls.character.getSick())
+
         #     print("Your tamagotchi is sick!")
         # print(datetime)
         cls.character.showStatus()
@@ -56,8 +58,14 @@ class Menu:
         print("Great! Your tamagochi is happier than before!")
 
     @classmethod
+    def giveMedicine(cls):
+        cls.character.giveMedicine()
+        print("Your tamagotchi recovered")
+
+    @classmethod
     def play(cls):
-        cls.character.play()
+        playInput = random.randint(0, 1)
+        cls.character.play(playInput)
         print("Your tamagotchi seems happy!")
 
 
@@ -83,5 +91,7 @@ while True:
         Menu.feedFood(foodInput)
     elif optionInput == 3:
         Menu.play()
+    elif optionInput == 4:
+        Menu.giveMedicine()
     else:
         print("Invalid Input! Try again!")

@@ -1,3 +1,4 @@
+# from pikachu import Pikachu
 import time
 import datetime
 import random
@@ -10,7 +11,9 @@ class Tamagochi:
         self._happiness = happiness
         self._hunger = hunger
         self._isAlive = True
+        self._isSick = False
         self._lastChecked = datetime.datetime.now()
+        self._timeElapsed = 0
 
     def spawn():
         pikachu = Pikachu(100, 100, 0, True)
@@ -21,9 +24,13 @@ class Tamagochi:
 
     def decreaseHappiness(self, amount, time):
         self._happiness = self._happiness - amount * time
+        if self._happiness <= 0:
+            self._happiness = 0
 
     def increaseHunger(self, amount, time):
         self._hunger = self._hunger + amount * time
+        if self._hunger > 100:
+            self._hunger = 100
 
     def giveFood(self, food, preferredFood, hungerAmount):
         if food in preferredFood:
@@ -33,8 +40,14 @@ class Tamagochi:
         if self._hunger <= 0:
             self._hunger = 0
 
-    def play(self, happinessAmount):
+    def giveMedicine(self):
+        self._health = 100
+
+    def play(self, phrase, happinessAmount):
         self._happiness = self._happiness + happinessAmount
+        if self._happiness > 100:
+            self._happiness = 100
+        print(phrase)
 
     def born(self, character):
         print(f"Say hello to your new {character}!\n")
@@ -52,8 +65,11 @@ class Tamagochi:
             return True
 
     def isSick(self, sickValue):
-        if self._health < sickValue:
-            return True
+        if self._health < 60:
+            self._isSick = True
+
+    def getSick(self):
+        return self._isSick
 
     def __str__(self):
         return f"Tamagochi here"
@@ -62,11 +78,14 @@ class Tamagochi:
 class Pikachu(Tamagochi):
     amount = 2
     rate = 1
-    happinessAmount = 100
-    hungerBaseAmount = 100
+    happinessAmount = 40
+    hungerBaseAmount = 60
     pikachuSick = 60
     # pikachuHappinessAmount = 1
     preferredFood = {"Apple", "Orange"}
+    playList = ["You played a game with Pikachu",
+                "You did hide and seek with Pikachu",
+                "You played soccer with Pikachu"]
 
     def __init__(self, health=100, happiness=100, hunger=0, isAlive=100, lastChecked=0):
         super().__init__(
@@ -84,12 +103,13 @@ class Pikachu(Tamagochi):
     def giveFood(self, food):
         super().giveFood(food, self.preferredFood, self.hungerBaseAmount)
 
-    def play(self):
-        super().play(self.happinessAmount)
+    def play(self, playInput):
+        super().play(self.playList[playInput], self.happinessAmount)
 
     def updateStatus(self):
         timeElapsed = datetime.datetime.now() - self._lastChecked
         timeElapsedInSeconds = timeElapsed.total_seconds()
+        self._timeElapsed = timeElapsed
         self.decreaseHealth(timeElapsedInSeconds)
         self.decreaseHappiness(timeElapsedInSeconds)
         self.increaseHunger(timeElapsedInSeconds)
@@ -99,4 +119,4 @@ class Pikachu(Tamagochi):
         super().isSick(self.pikachuSick)
 
     def __str__(self):
-        return f"\nPikachu: health: {round(self._health)}, happiness: {round(self._happiness)}, hunger: {round(self._hunger)}\n"
+        return f"\nPikachu: health: {round(self._health)}, happiness: {round(self._happiness)}, hunger: {round(self._hunger)}, time elapsed: {self._timeElapsed}\n"

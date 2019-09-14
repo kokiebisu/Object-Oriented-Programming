@@ -2,19 +2,19 @@ from tamagochi import Tamagochi
 import datetime
 
 
-class Pikachu(Tamagochi):
+class Mew(Tamagochi):
     amount = 2
     rate = 1
     happinessAmount = 40
     hungerBaseAmount = 60
-    pikachuSick = 60
+    mewSick = 60
     # pikachuHappinessAmount = 1
     preferredFood = {"Apple", "Orange"}
-    playList = ["You played a game with Pikachu",
-                "You did hide and seek with Pikachu",
-                "You played soccer with Pikachu"]
+    playList = ["You played a game with Mew",
+                "You did hide and seek with Mew",
+                "You played soccer with Mew"]
 
-    def __init__(self, health=100, happiness=100, hunger=0, isAlive=100, timeElapsed=0):
+    def __init__(self, health=100, happiness=100, hunger=0, isAlive=100, lastChecked=0):
         super().__init__(
             health, happiness, hunger, isAlive)
 
@@ -36,14 +36,14 @@ class Pikachu(Tamagochi):
     def updateStatus(self):
         timeElapsed = datetime.datetime.now() - self._lastChecked
         timeElapsedInSeconds = timeElapsed.total_seconds()
-        self._timeElapsed = timeElapsedInSeconds
+        self._timeElapsed = timeElapsed
         self.decreaseHealth(timeElapsedInSeconds)
         self.decreaseHappiness(timeElapsedInSeconds)
         self.increaseHunger(timeElapsedInSeconds)
         self._lastChecked = datetime.datetime.now()
 
     def isSick(self):
-        super().isSick(self.pikachuSick)
+        super().isSick(self.mewSick)
 
     def __str__(self):
-        return f"\nPikachu: health: {round(self._health)}, happiness: {round(self._happiness)}, hunger: {round(self._hunger)}, time elapsed: {self._timeElapsed}\n"
+        return f"\nMew: health: {round(self._health)}, happiness: {round(self._happiness)}, hunger: {round(self._hunger)}, time elapsed: {self._timeElapsed}\n"
