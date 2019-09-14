@@ -8,13 +8,16 @@ class Menu:
     food = {1: "Apple", 2: "Orange", 3: "Kiwi"}
     character = []
     @staticmethod
-    def prompt():
-
+    def welcome():
         print("\n#####################\n")
         print("Welcome to Tamagochi\n")
         print("#######################\n")
-        print("You don't have a tamagochi yet? Would you like to get one?")
-        print("1. Yes 2. No")
+
+    @staticmethod
+    def promptUser():
+        print("Would you like to get one?")
+        print("1. Yes")
+        print("2. No")
 
     @classmethod
     def createTamagochi(cls):
@@ -33,7 +36,17 @@ class Menu:
     @classmethod
     def showStatus(cls):
         cls.character.updateStatus()
-        print(datetime)
+        if cls.character.isDead():
+            Menu.promptUser()
+            numberInput = int(input())
+            if numberInput == 1:
+                Menu.createTamagochi()
+            else:
+                print("Sorry to hear that...")
+                exit()
+        print(cls.character.isSick())
+        #     print("Your tamagotchi is sick!")
+        # print(datetime)
         cls.character.showStatus()
 
     @classmethod
@@ -42,11 +55,20 @@ class Menu:
         cls.character.giveFood(selectedFood)
         print("Great! Your tamagochi is happier than before!")
 
+    @classmethod
+    def play(cls):
+        cls.character.play()
+        print("Your tamagotchi seems happy!")
 
-Menu.prompt()
+
+Menu.welcome()
+Menu.promptUser()
 numberInput = int(input())
 if numberInput == 1:
     Menu.createTamagochi()
+else:
+    print("Sorry to hear that...")
+    exit()
 while True:
     Menu.showOptions()
     optionInput = int(input())
@@ -59,3 +81,7 @@ while True:
         print("3. Kiwi")
         foodInput = int(input())
         Menu.feedFood(foodInput)
+    elif optionInput == 3:
+        Menu.play()
+    else:
+        print("Invalid Input! Try again!")
