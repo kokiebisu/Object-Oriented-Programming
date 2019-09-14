@@ -15,35 +15,50 @@ class Tamagochi:
         pikachu = Pikachu(100, 100, 100, True)
         return pikachu
 
+    def decreaseHealth(self, amount):
+        self._health = self._health - amount
+
+    def decreaseHappiness(self, amount):
+        self._happiness = self._happiness - amount
+
+    def increaseHunger(self, amount):
+        self._hunger = self._hunger - amount
+
+    def giveFood(self, food, preferredFood, hungerAmount):
+        if food in preferredFood:
+            self._hunger = self._hunger - 1.1 * hungerAmount
+        else:
+            self._hunger = self._hunger - hungerAmount
+
     def showStatus(self):
-        print(self.__str__)
+        print(self.__str__())
 
     def __str__(self):
         return f"Tamagochi here"
 
 
 class Pikachu(Tamagochi):
-    # decreaseRate = 1
+    amount = 13
     # increaseRate = 1
-    # hungerBaseAmount = 1
+    hungerBaseAmount = 1
     # pikachuHappinessAmount = 1
-    # preferredFood = {"dogFood", "catFood"}
+    preferredFood = {"dogFood", "catFood"}
 
     def __init__(self, health=100, happiness=100, hunger=0, isAlive=100, lastChecked=0):
         super().__init__(
             health, happiness, hunger, isAlive)
 
-    def showStatus(self):
-        print(self.__str__())
-
     def decreaseHealth(self):
-        self._health = self._health - 5
+        super().decreaseHealth(self.amount)
 
     def decreaseHappiness(self):
-        self._happiness = self._happiness - 5
+        super().decreaseHappiness(self.amount)
 
     def increaseHunger(self):
-        self._hunger = self._hunger + 5
+        super().increaseHunger(self.amount)
+
+    def giveFood(self, food):
+        super().giveFood(food, self.preferredFood, self.hungerBaseAmount)
 
     def __str__(self):
         return f"Pikachu: health: {self._health}, happiness: {self._happiness}, hunger: {self._hunger}, isAlive: {self._isAlive}, last_checked: {self._lastChecked}"

@@ -12,17 +12,6 @@ class Pikachu(Tamagochi):
         super().__init__(
             health, happiness, hunger, isAlive)
 
-    # def decreaseHealth():
-    #     super().decreaseHealth()
-
-    # @classmethod
-    # def decreaseHappiness(cls):
-    #     super().decreaseHappiness(cls.decreaseRate)
-
-    # @classmethod
-    # def increaseHunger(cls):
-    #     super().increaseHunger(cls.increaseRate)
-
     # @classmethod
     # def giveFood(cls, food):
     #     super().giveFood(food, cls.hungerBaseAmount)
