@@ -1,6 +1,7 @@
 import time
 import datetime
 import random
+import datetime
 
 
 class Tamagochi:
@@ -15,11 +16,11 @@ class Tamagochi:
         pikachu = Pikachu(100, 100, 100, True)
         return pikachu
 
-    def decreaseHealth(self, amount):
+    def decreaseHealth(self, amount, time):
         self._health = self._health - amount
 
     def decreaseHappiness(self, amount):
-        self._happiness = self._happiness - amount
+        self._happiness = self._happiness - time * rate
 
     def increaseHunger(self, amount):
         self._hunger = self._hunger - amount
@@ -30,6 +31,9 @@ class Tamagochi:
         else:
             self._hunger = self._hunger - hungerAmount
 
+    def born(self, character):
+        print(f"Say hello to your new {character}!\n")
+
     def showStatus(self):
         print(self.__str__())
 
@@ -38,8 +42,8 @@ class Tamagochi:
 
 
 class Pikachu(Tamagochi):
-    amount = 13
-    # increaseRate = 1
+    amount = 2
+    rate = 1
     hungerBaseAmount = 1
     # pikachuHappinessAmount = 1
     preferredFood = {"dogFood", "catFood"}
@@ -49,7 +53,8 @@ class Pikachu(Tamagochi):
             health, happiness, hunger, isAlive)
 
     def decreaseHealth(self):
-        super().decreaseHealth(self.amount)
+        timeElapsed = datetime.datetime.now() - self._lastChecked
+        super().decreaseHealth(self.amount, timeElapsed)
 
     def decreaseHappiness(self):
         super().decreaseHappiness(self.amount)
@@ -60,5 +65,8 @@ class Pikachu(Tamagochi):
     def giveFood(self, food):
         super().giveFood(food, self.preferredFood, self.hungerBaseAmount)
 
+    def updateStatus(self):
+        self.decreaseHealth()
+
     def __str__(self):
-        return f"Pikachu: health: {self._health}, happiness: {self._happiness}, hunger: {self._hunger}, isAlive: {self._isAlive}, last_checked: {self._lastChecked}"
+        return f"\nPikachu: health: {self._health}, happiness: {self._happiness}, hunger: {self._hunger}, isAlive: {self._isAlive}, last_checked: {self._lastChecked}\n"
