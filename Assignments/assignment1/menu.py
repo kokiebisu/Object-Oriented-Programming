@@ -13,7 +13,11 @@ class Menu:
     @classmethod
     def createTamagochi(cls):
         cls.character = Tamagochi.spawn()
-        print(cls.character)
+        cls.character.showStatus()
+        cls.character.decreaseHealth()
+        cls.character.decreaseHappiness()
+        cls.character.increaseHunger()
+        cls.character.showStatus()
 
     # @classmethod
     # def action(cls):
