@@ -1,6 +1,7 @@
 from tamagochi import Tamagochi
 import datetime
 
+ # testing purpose
 
 class Jigglypuff(Tamagochi):
     amount = 2
