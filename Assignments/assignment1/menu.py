@@ -77,7 +77,7 @@ class Menu:
         cls.character.show_status()
 
     @classmethod
-    def feedFood(cls, number):
+    def feed_food(cls, number):
         """
         Feeds food to the tamagotchi
         :param number: an int
@@ -87,7 +87,7 @@ class Menu:
         print("Great! Your tamagochi is happier than before!")
 
     @classmethod
-    def giveMedicine(cls):
+    def give_medicine(cls):
         """
         Gives medicine to the tamagotchi
         """
@@ -102,6 +102,7 @@ class Menu:
         play_input = random.randint(0, 1)
         cls.character.play(play_input)
         print("Your tamagotchi seems happy!")
+
 
 def main():
     """
@@ -133,6 +134,7 @@ def main():
             Menu.give_medicine()
         else:
             print("Invalid Input! Try again!")
+
 
 if __name__ == "__main__":
     main()

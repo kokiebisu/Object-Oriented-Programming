@@ -6,8 +6,8 @@ import datetime
 
 
 class Tamagochi:
-    """A
-    tamagotchi class tha models a tamagotchi with a health, happiness and hunge.
+    """
+    A tamagotchi class tha models a tamagotchi with a health, happiness and hunge.
 
     THis class srves a s base class and should be inherited from if any
     tamagotchis are required with specialized behaviors.
@@ -88,7 +88,7 @@ class Tamagochi:
         if self._hunger <= 0:
             self._hunger = 0
 
-    def give_fedicine(self):
+    def give_medicine(self):
         """
         Increases the health property of the tamagotchi to the maximum range.
         """
@@ -168,7 +168,7 @@ class Pikachu(Tamagochi):
     pikachu_sick = 60
     pikachu_happinessAmount = 1
     preferred_food = {"Apple", "Orange"}
-    playList = ["You played a game with Pikachu",
+    playlist = ["You played a game with Pikachu",
                 "You did hide and seek with Pikachu",
                 "You played soccer with Pikachu"]
 
@@ -203,22 +203,21 @@ class Pikachu(Tamagochi):
         Overrides the tamagotchi's increase_hunger function with pikachu's own uniqued speed of increasing
         :param time: an int
         """
-        super().increaseHunger(self.amount, time)
+        super().increase_hunger(self.amount, time)
 
     def give_food(self, food):
         """
         Overrides the tamagotchi's give_food function with pikachu's own unique amount of decreasing hunge
         :param food: an int
         """
-        super().giveFood(food, self.preferredFood, self.hungerBaseAmount)
+        super().give_food(food, self.preferred_food, self.hunger_base_amount)
 
     def play(self, play_input):
         """
-        Overrides the tamagotchi's play functio with pikachu's own unique amount of increasing happiness
-        :param playInput:
-        :return:
+        Overrides the tamagotchi's play function with pikachu's own unique amount of increasing happiness
+        :param playInput: an int
         """
-        super().play(self.playList[play_input], self.happinessAmount)
+        super().play(self.playlist[play_input], self.happiness_amount)
 
     def update_status(self):
         """
