@@ -1,7 +1,5 @@
 from tamagochi import Tamagochi
 import random
-import time
-import datetime
 
 
 class Menu:
@@ -32,17 +30,17 @@ class Menu:
         """
         print("Would you like to get one?")
         print("1. Yes")
-        print("2. No")
+        print("2. No\n")
 
     @classmethod
     def create_tamagochi(cls):
         """
         Creates a tamagotchi of random type.
         """
-        print("creating tamagochi...\n")
+        print("\nCreating Tamagochi...\n")
         # time.sleep(3)
         cls.character = Tamagochi.spawn()
-        cls.character.born(type(cls.character))
+        cls.character.born()
 
     @classmethod
     def show_options(cls):
@@ -53,7 +51,7 @@ class Menu:
         print("1. Check the status")
         print("2. Feed your tamagotchi")
         print("3. Play with your tamagotchi")
-        print("4. Give medicine")
+        print("4. Give medicine\n")
 
     @classmethod
     def show_status(cls):
@@ -70,10 +68,9 @@ class Menu:
             else:
                 print("Sorry to hear that...")
                 exit()
-        print(cls.character.get_sick())
+        if cls.character.is_sick():
+            print("Your tamagotchi is sick!")
 
-        #     print("Your tamagotchi is sick!")
-        # print(datetime)
         cls.character.show_status()
 
     @classmethod
@@ -84,7 +81,7 @@ class Menu:
         """
         selected_food = cls.food.get(number)
         cls.character.give_food(selected_food)
-        print("Great! Your tamagochi is happier than before!")
+        print("\nGreat! Your tamagochi is happier than before!\n")
 
     @classmethod
     def give_medicine(cls):
@@ -92,49 +89,13 @@ class Menu:
         Gives medicine to the tamagotchi
         """
         cls.character.give_medicine()
-        print("Your tamagotchi recovered")
+        print("\nYour tamagotchi recovered\n")
 
     @classmethod
     def play(cls):
         """
         Plays with the tamagotchi. Method of playing will be randomized.
         """
-        play_input = random.randint(0, 1)
+        play_input = random.randint(0, 2)
         cls.character.play(play_input)
-        print("Your tamagotchi seems happy!")
-
-
-def main():
-    """
-    Creates a tamagotchi and let's the User take care and interact with it.
-    """
-    Menu.welcome()
-    Menu.prompt_user()
-    number_input = int(input())
-    if number_input == 1:
-        Menu.create_tamagochi()
-    else:
-        print("Sorry to hear that...")
-        exit()
-    while True:
-        Menu.show_options()
-        option_input = int(input())
-        if option_input == 1:
-            Menu.show_status()
-        elif option_input == 2:
-            print("Which food would you like to give?")
-            print("1. Apple")
-            print("2. Orange")
-            print("3. Kiwi")
-            food_input = int(input())
-            Menu.feed_food(food_input)
-        elif option_input == 3:
-            Menu.play()
-        elif option_input == 4:
-            Menu.give_medicine()
-        else:
-            print("Invalid Input! Try again!")
-
-
-if __name__ == "__main__":
-    main()
+        print("Your tamagotchi seems happy!\n")
