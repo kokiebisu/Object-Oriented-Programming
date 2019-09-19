@@ -2,10 +2,17 @@ from library import Library, Catalogue
 
 
 def generating_item(catalogue):
+    """
+    Creates the item which will be added to the catalogue
+    :param catalogue: an instance of catalogue
+    """
     catalogue.add_item()
 
 
 def prompt():
+    """
+    Asks the usr what actions they want to take
+    """
     print("What is your option?")
     print("1: Display all items")
     print("2: Return a item")
@@ -15,6 +22,9 @@ def prompt():
 
 
 def main():
+    """
+    Runs the program
+    """
     flag = True
     catalogue = Catalogue()
     generating_item(catalogue)

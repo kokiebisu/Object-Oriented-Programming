@@ -3,10 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="0f4139f4-8315-4c7e-82eb-27b3ca36a1f9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/book.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/driver.py" beforeDir="false" afterPath="$PROJECT_DIR$/driver.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dvd.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/journal.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/items.py" beforeDir="false" afterPath="$PROJECT_DIR$/items.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/library.py" beforeDir="false" afterPath="$PROJECT_DIR$/library.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -108,7 +106,7 @@
       <workItem from="1568833982366" duration="12000" />
       <workItem from="1568852054565" duration="933000" />
       <workItem from="1568863001057" duration="748000" />
-      <workItem from="1568918557290" duration="3068000" />
+      <workItem from="1568918557290" duration="4543000" />
     </task>
     <servers />
   </component>
@@ -129,6 +127,6 @@
     </option>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Lab2$driver.coverage" NAME="driver Coverage Results" MODIFIED="1568921654868" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Lab2$driver.coverage" NAME="driver Coverage Results" MODIFIED="1568922489402" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

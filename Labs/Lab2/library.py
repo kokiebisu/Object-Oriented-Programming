@@ -1,6 +1,5 @@
-from items import LibraryItem, Journal, Dvd, Book
+from items import Journal, Dvd, Book
 import difflib
-from abc import ABC
 
 
 class Library:
