@@ -17,17 +17,17 @@ class Book:
     def get_num_copies(self):
         return self._num_copies
 
-    def set_title(self):
-        return self._title
+    def set_title(self, title):
+        self._title = title
 
-    def set_call_number(self):
-        return self._call_number
+    def set_call_number(self, call_number):
+        self._call_number = call_number
 
-    def set_author(self):
-        return self._author
+    def set_author(self, author):
+        self._author = author
 
-    def set_num_copies(self):
-        return self._num_copies
+    def set_num_copies(self, num_copies):
+        self._num_copies = num_copies
 
     title = property(get_title, set_title)
     call_number = property(get_call_number, set_call_number)
