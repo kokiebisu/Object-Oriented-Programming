@@ -10,12 +10,11 @@ class Library:
         if catalogue.search(call_number_input):
             for item in catalogue.item_list:
                 if catalogue.item_list[item]._call_number == call_number_input:
-                    catalogue.item_list[item]._num_copies += 1;
+                    catalogue.item_list[item]._num_copies += 1
         else:
-            similar_words = difflib.get_close_matches(call_number_input, catalogue.item_list)
+            similar_words = difflib.get_close_matches(
+                call_number_input, catalogue.item_list)
             print("Nothing Found. Did you mean {}".format(similar_words))
-
-
 
     @staticmethod
     def check_out_item(catalogue):
@@ -24,9 +23,10 @@ class Library:
         if catalogue.search(call_number_input):
             for item in catalogue.item_list:
                 if catalogue.item_list[item]._call_number == call_number_input:
-                    catalogue.item_list[item]._num_copies -= 1;
+                    catalogue.item_list[item]._num_copies -= 1
         else:
-            similar_words = difflib.get_close_matches(call_number_input, catalogue.item_list)
+            similar_words = difflib.get_close_matches(
+                call_number_input, catalogue.item_list)
             print("Nothing Found. Did you mean {}".format(similar_words))
 
     @staticmethod
@@ -43,7 +43,8 @@ class Library:
                 if catalogue.item_list[i]._name == name_input:
                     print(catalogue.item_list[i])
         else:
-            similar_words = difflib.get_close_matches(name_input, catalogue.item_list)
+            similar_words = difflib.get_close_matches(
+                name_input, catalogue.item_list)
             print("Nothing Found. Did you mean {}".format(similar_words))
 
 
@@ -79,7 +80,6 @@ class Catalogue:
             pass
         else:
             self.item_list[item._call_number] = item
-
 
     def remove_book(self, call_number):
         if Library.search(call_number):

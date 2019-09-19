@@ -5,6 +5,7 @@ class LibraryItem(ABC):
     """
     The Abstracted class for specific objects Journal, Dvd, Book
     """
+
     def __init__(self, name, call_number, num_copies):
         """
         Initializes the created instance
@@ -24,13 +25,18 @@ class LibraryItem(ABC):
         return self._num_copies == 0
 
     @staticmethod
-    @abstractstaticmethod
     def create():
         """
-        An abstract method of creating item
-        :return:
+        A method that returns the user input received for common attributes: name, call_number, num_copies
+        :return: a list of inputs from user
         """
-        pass
+        print("What is the name?")
+        name_input = input()
+        print("What is the call number?")
+        call_number_input = input()
+        print("How many number of copies?")
+        num_copies_input = int(input())
+        return [name_input, call_number_input, num_copies_input]
 
 
 class Journal(LibraryItem):
@@ -53,17 +59,12 @@ class Journal(LibraryItem):
         Prompts user for the name, call number, number of copies, issue number and publisher of the book and creates one
         :return: an instance of journal
         """
-        print("What is the name?")
-        name_input = input()
-        print("What is the call number?")
-        call_number_input = input()
-        print("How many number of copies?")
-        num_copies_input = int(input())
+        inputs = LibraryItem.create()
         print("What is the issue number?")
         issue_number_input = input()
         print("What is publisher?")
         publisher_input = input()
-        return Journal(name_input, call_number_input, num_copies_input, issue_number_input, publisher_input)
+        return Journal(inputs[0], inputs[1], inputs[2], issue_number_input, publisher_input)
 
     def __str__(self):
         """
@@ -92,18 +93,13 @@ class Dvd(LibraryItem):
         Prompts the user for necessary input and creates a Dvd object
         :return: an instance of Dvd
         """
-        print("What is the name?")
-        name_input = input()
-        print("What is the call number?")
-        call_number_input = input()
-        print("How many number of copies?")
-        num_copies_input = int(input())
+        inputs = LibraryItem.create()
         print("When is the release_date?")
         release_date_input = input()
         print("What is region code?")
         region_code_input = input()
-        return Dvd(name_input, call_number_input,
-                      num_copies_input, release_date_input, region_code_input)
+        return Dvd(inputs[0], inputs[1],
+                   inputs[2], release_date_input, region_code_input)
 
     def __str__(self):
         return f"DVD: {self._name}, Call Number: {self._call_number}, Release Date: {self._release_date}, Region Code: {self._region_code}, Number of Copies: {self._num_copies}"
@@ -127,17 +123,12 @@ class Book(LibraryItem):
         Prompts the user for necessary input and craetes a Book object
         :return: an instance of Book
         """
-        # print("What is the name?")
-        # name_input = input()
-        # print("What is the call number?")
-        # call_number_input = input()
-        # print("How many number of copies?")
-        # num_copies_input = int(input())
         super().create()
-        print("When is the author?")
+        inputs = LibraryItem.create()
+        print("Who is the author?")
         author_input = input()
-        return Book(name_input, call_number_input,
-                      num_copies_input, author_input)
+        return Book(inputs[0], inputs[1],
+                    inputs[2], author_input)
 
     def __str__(self):
         """
