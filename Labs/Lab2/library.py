@@ -1,47 +1,50 @@
-from book import Book
-from journal import Journal
-from dvd import Dvd
+from items import LibraryItem, Journal, Dvd, Book
 import difflib
+from abc import ABC
 
 
 class Library:
-    """This cl"""
-    def return_item(identification, item_type):
-        if Catalogue.search(identification) and item_type == "Book":
-            Catalogue.item_list[identification].num_copies += 1
-            print("Thank you for returning the book")
-        elif Catalogue.search(identification) and item_type == "Journal":
-            Catalogue.item_list[identification].num_copies += 1
-            print("Thank you for returning the Journal")
-        elif Catalogue.search(identification) and item_type == "Dvd":
-            Catalogue.item_list[identification].num_copies += 1
-            print("Thank you for returning the Dvd")
+    @staticmethod
+    def return_item(catalogue):
+        print("What is the call number?")
+        call_number_input = input()
+        if catalogue.search(call_number_input):
+            for item in catalogue.item_list:
+                if catalogue.item_list[item]._call_number == call_number_input:
+                    catalogue.item_list[item]._num_copies += 1;
         else:
-            similar_words = difflib.get_close_matches(identification, Catalogue.item_list)
+            similar_words = difflib.get_close_matches(call_number_input, catalogue.item_list)
+            print("Nothing Found. Did you mean {}".format(similar_words))
+
+
+
+    @staticmethod
+    def check_out_item(catalogue):
+        print("What is the call number?")
+        call_number_input = input()
+        if catalogue.search(call_number_input):
+            for item in catalogue.item_list:
+                if catalogue.item_list[item]._call_number == call_number_input:
+                    catalogue.item_list[item]._num_copies -= 1;
+        else:
+            similar_words = difflib.get_close_matches(call_number_input, catalogue.item_list)
             print("Nothing Found. Did you mean {}".format(similar_words))
 
     @staticmethod
-    def check_out_item(identification):
-        if Catalogue.search(identification):
-            Catalogue.item_list[identification].num_copies -= 1
-            print("Please return your book by due date")
-        else:
-            similar_words = difflib.get_close_matches(identification, Catalogue.item_list)
-            print("Nothing Found. Did you mean {}".format(similar_words))
+    def display_available_items(catalogue):
+        for i in catalogue.item_list:
+            print(catalogue.item_list[i])
 
     @staticmethod
-    def display_available_items():
-        for i in Catalogue.item_list:
-            print(Catalogue.item_list[i])
-
-    @staticmethod
-    def find_items(title):
-        for i in Catalogue.item_list:
-            if Catalogue.item_list[i].title == title:
-                return Catalogue.item_list[i].title
+    def find_items(catalogue):
+        print("What is the name?")
+        name_input = input()
+        if name_input in catalogue.item_list:
+            for i in catalogue.item_list:
+                if catalogue.item_list[i]._name == name_input:
+                    print(catalogue.item_list[i])
         else:
-            similar_words = difflib.get_close_matches(
-                title, Catalogue.item_list)
+            similar_words = difflib.get_close_matches(name_input, catalogue.item_list)
             print("Nothing Found. Did you mean {}".format(similar_words))
 
 
@@ -54,43 +57,35 @@ class LibraryItemGenerator:
         print("3. DVD")
         user_input = int(input())
         if user_input == 1:
-            return Book("randomBook", "randomBook", "randomBook", 3)
+            return Book.create()
         elif user_input == 2:
-            return Journal("randomJournal", "randomJournal", "randomJournal", 3)
+            return Journal.create()
         elif user_input == 3:
-            return Dvd("randomDvd", "randomDvd", "randomDvd", 3)
+            return Dvd.create()
         else:
             print("Invalid Input")
 
 
 class Catalogue:
-    item_list = {}
 
-    @classmethod
-    def search(cls, identification):
-        if identification in cls.item_list:
+    def __init__(self):
+        self.item_list = {}
+
+    def search(self, call_number):
+        if call_number in self.item_list:
             return True
 
-    @classmethod
-    def add_to_list(cls, item):
-        if isinstance(item, Book):
-            identification = item.call_number
-        elif isinstance(item, Journal):
-            identification = item.issue_number
-        else:
-            identification = item.region_code
-
-        if cls.search(identification):
+    def add_to_list(self, item):
+        if self.search(item._call_number):
             pass
         else:
-            cls.item_list[identification] = item
+            self.item_list[item._call_number] = item
 
-    @classmethod
-    def remove_book(cls, call_number):
+
+    def remove_book(self, call_number):
         if Library.search(call_number):
-            del cls.book_list[call_number]
+            del self.item_list[call_number]
 
-    @staticmethod
-    def add_item():
+    def add_item(self):
         created_item = LibraryItemGenerator.prompt()
-        Catalogue.add_to_list(created_item)
+        self.add_to_list(created_item)
