@@ -27,7 +27,7 @@ class Library:
             if cls.book_list[i].call_number == call_number:
                 return True
             else:
-                print("Invalid Search")
+                print("Adding Book...")
 
     @classmethod
     def find_books(cls, call_number):
@@ -51,12 +51,3 @@ class Library:
     def remove_book(cls, call_number):
         if Library.search(call_number):
             del cls.book_list[call_number]
-
-
-newBook = Book("title", "call_number", "author", "num_copies")
-anotherBook = Book("title2", "call_number2", "author", "num_copies")
-Library.add_book(newBook)
-Library.add_book(anotherBook)
-Library.remove_book("call_number")
-print("-------")
-Library.display_available_books()
