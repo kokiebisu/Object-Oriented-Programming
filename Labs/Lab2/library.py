@@ -3,46 +3,60 @@ from book import Book
 
 class Library:
 
-    def return_book(call_number):
-        if search(call_number):
-            num_copies += 1
-
-    def check_out(call_number):
-        if search(call_number):
-            num_copies -= 1
-
-    def display_available_books():
-        # print out the list of books available
-        for i in book_list:
-            print(book_list[i])
-
-    @staticmethod
-    def search(call_number):
-        for i in book_list:
-            if book_list[i].call_number == call_number:
-                return True
-
-    def print():
-        print("something")
-
-
-class Catalogue:
-    # this booklist
     book_list = {}
 
-    def find_books(call_number):
+    @classmethod
+    def return_book(cls, call_number):
+        if Library.search(call_number):
+            cls.book_list[call_number].num_copies += 1
+
+    @classmethod
+    def check_out(cls, call_number):
+        if Library.search(call_number):
+            cls.book_list[call_number].num_copies -= 1
+
+    @classmethod
+    def display_available_books(cls):
+        # print out the list of books available
+        for i in cls.book_list:
+            print(cls.book_list[i])
+
+    @classmethod
+    def search(cls, call_number):
+        for i in cls.book_list:
+            if cls.book_list[i].call_number == call_number:
+                return True
+            else:
+                print("Invalid Search")
+
+    @classmethod
+    def find_books(cls, call_number):
         # Haven't figured out yet
-        if call_number in book_list:
-            # do something if found
+        for i in cls.book_list:
+            if cls.book_list[i].call_number == call_number:
+                return cls.book_list[i].title
         else:
             print("Invalid Call Number")
 
-    def add_book(book):
+    @classmethod
+    def add_book(cls, book):
+        call_number = book.call_number
         # check if it is in booklist
         if Library.search(call_number):
-            book_list.append()
+            pass
+        else:
+            cls.book_list[call_number] = book
 
-    def remove_book(call_number):
-        # if found in booklist
-        Library.search()
-        # delete from book_list
+    @classmethod
+    def remove_book(cls, call_number):
+        if Library.search(call_number):
+            del cls.book_list[call_number]
+
+
+newBook = Book("title", "call_number", "author", "num_copies")
+anotherBook = Book("title2", "call_number2", "author", "num_copies")
+Library.add_book(newBook)
+Library.add_book(anotherBook)
+Library.remove_book("call_number")
+print("-------")
+Library.display_available_books()
