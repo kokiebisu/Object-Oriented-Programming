@@ -3,9 +3,10 @@ import time
 import datetime
 import random
 import datetime
+import abc
 
 
-class Tamagochi:
+class Tamagochi(abc.ABC):
     """
     A tamagotchi class tha models a tamagotchi with a health, happiness and hunge.
 
@@ -50,6 +51,56 @@ class Tamagochi:
             jigglypuff = Jigglypuff()
             return jigglypuff
 
+    def get_health(self):
+        return self._health
+
+    def get_happiness(self):
+        return self._happiness
+
+    def get_hunger(self):
+        return self._hunger
+
+    def get_is_alive(self):
+        return self._is_alive
+
+    def get_is_sick(self):
+        return self._is_sick
+
+    def get_last_checked(self):
+        return self._last_checked
+
+    def time_elapsed(self):
+        return self._time_elapsed
+
+    def set_health(self, health):
+        self._health = health
+
+    def set_happiness(self, happiness):
+        self._happiness = happiness
+
+    def set_hunger(self, hunger):
+        self._hunger = hunger
+
+    def set_is_alive(self, is_alive):
+        self._is_alive = is_alive
+
+    def set_is_sick(self, is_sick):
+        self._is_sick = is_sick
+
+    def set_last_checked(self, last_checked):
+        self._last_checked = last_checked
+
+    health = property(get_health, set_health)
+    happiness = property(get_happiness, set_happiness)
+    hunger = property(get_hunger, set_hunger)
+    is_alive = property(get_is_alive, set_is_alive)
+    is_sick = property(get_is_sick, set_is_sick)
+    last_checked = property(get_last_checked, set_last_checked)
+
+    def time_elapsed(self):
+        return self._time_elapsed
+
+    @abc.abstractmethod
     def decrease_health(self, amount, time):
         """
         Decreases the health of the tamgotchi based on the time elapsed and the type of tamagotchi it is.
@@ -59,6 +110,7 @@ class Tamagochi:
         """
         self._health = self._health - amount * time
 
+    @abc.abstractmethod
     def decrease_happiness(self, amount, time):
         """
         Decreases the health of the tamagotchi based on the time elapsed and the type of tamagotchi it is.
@@ -70,6 +122,7 @@ class Tamagochi:
         if self._happiness <= 0:
             self._happiness = 0
 
+    @abc.abstractmethod
     def increase_hunger(self, amount, time):
         """
         Increases the hunger of the tamagotchi based on the time elapsed and the type of tamagotchi it is.
@@ -81,6 +134,7 @@ class Tamagochi:
         if self._hunger > 100:
             self._hunger = 100
 
+    @abc.abstractmethod
     def give_food(self, food, preferred_food, hunger_amount):
         """
         Decreases the hunger property of the tamagotchi based on the food being given and the type of tamagotchi it is.
@@ -102,6 +156,7 @@ class Tamagochi:
         """
         self._health = 100
 
+    @abc.abstractmethod
     def play(self, phrase, happiness_amount):
         """
         Prints a random message of how the user played with the tamagotchi and increases it's happiness based on the tamagotchi.
@@ -114,6 +169,7 @@ class Tamagochi:
             self._happiness = 100
         print(phrase)
 
+    @abc.abstractmethod
     def born(self, character):
         """
         Notifies the user which type of tamagotchi was being spawned.
@@ -143,6 +199,7 @@ class Tamagochi:
             self.die()
             return True
 
+    @abc.abstractmethod
     def is_sick(self, sick_value):
         """
         Checks whether if the tamagotchi is sick or not
@@ -327,11 +384,11 @@ class Mew(Tamagochi):
         Overriden to print the pikchu's attributes
         """
         if self._is_sick:
-            return f"\nMew: health: {round(self._health)}, happiness: {round(self._happiness)}," \
-                   f" hunger: {round(self._hunger)}, time elapsed: {self._time_elapsed}, Your tamagotchi is sick!\n"
+            return f"\nMew: health: {round(self.health)}, happiness: {round(self.happiness)}," \
+                   f" hunger: {round(self.hunger)}, time elapsed: {self.time_elapsed}, Your tamagotchi is sick!\n"
         else:
-            return f"\nMew: health: {round(self._health)}, happiness: {round(self._happiness)}," \
-                f" hunger: {round(self._hunger)}, time elapsed: {self._time_elapsed}\n"
+            return f"\nMew: health: {round(self.health)}, happiness: {round(self.happiness)}," \
+                f" hunger: {round(self.hunger)}, time elapsed: {self.time_elapsed}\n"
 
 
 class Jigglypuff(Tamagochi):

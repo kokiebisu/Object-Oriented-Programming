@@ -1,41 +1,52 @@
 from book import Book
 from journal import Journal
 from dvd import Dvd
+import difflib
 
 
 class Library:
-
-    def return_item(identification, itemType):
-        if Catalogue.search(identification) and itemType == "Book":
+    """This cl"""
+    def return_item(identification, item_type):
+        if Catalogue.search(identification) and item_type == "Book":
             Catalogue.item_list[identification].num_copies += 1
             print("Thank you for returning the book")
-        elif Catalogue.search(identification) and itemType == "Journal":
+        elif Catalogue.search(identification) and item_type == "Journal":
             Catalogue.item_list[identification].num_copies += 1
             print("Thank you for returning the Journal")
-        elif Catalogue.search(identification) and itemType == "Dvd":
+        elif Catalogue.search(identification) and item_type == "Dvd":
             Catalogue.item_list[identification].num_copies += 1
             print("Thank you for returning the Dvd")
         else:
-            print("item was not found")
+            similar_words = difflib.get_close_matches(identification, Catalogue.item_list)
+            print("Nothing Found. Did you mean {}".format(similar_words))
 
-    def check_out_item(call_number):
-        if Catalogue.search(call_number):
-            Catalogue.item_list[call_number].num_copies -= 1
+    @staticmethod
+    def check_out_item(identification):
+        if Catalogue.search(identification):
+            Catalogue.item_list[identification].num_copies -= 1
             print("Please return your book by due date")
+        else:
+            similar_words = difflib.get_close_matches(identification, Catalogue.item_list)
+            print("Nothing Found. Did you mean {}".format(similar_words))
 
+    @staticmethod
     def display_available_items():
         for i in Catalogue.item_list:
             print(Catalogue.item_list[i])
 
-    def find_items(call_number):
+    @staticmethod
+    def find_items(title):
         for i in Catalogue.item_list:
-            if Catalogue.item_list[i].call_number == call_number:
+            if Catalogue.item_list[i].title == title:
                 return Catalogue.item_list[i].title
         else:
-            print("Invalid Call Number")
+            similar_words = difflib.get_close_matches(
+                title, Catalogue.item_list)
+            print("Nothing Found. Did you mean {}".format(similar_words))
 
 
 class LibraryItemGenerator:
+    @staticmethod
     def prompt():
         print("Which type of item do you want to create?")
         print("1. Book")
@@ -79,6 +90,7 @@ class Catalogue:
         if Library.search(call_number):
             del cls.book_list[call_number]
 
+    @staticmethod
     def add_item():
         created_item = LibraryItemGenerator.prompt()
         Catalogue.add_to_list(created_item)

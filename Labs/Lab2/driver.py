@@ -1,5 +1,4 @@
 from library import Library, Catalogue
-from book import Book
 
 
 def generating_item():
@@ -12,6 +11,7 @@ def prompt():
     print("2: Return a item")
     print("3: Checkout a item")
     print("4: Add new Item")
+    print("5: Find item")
 
 
 def retrieve_item_type():
@@ -50,17 +50,22 @@ def main():
     while flag:
         prompt()
         option_input = int(input())
-        itemType = retrieve_item_type()
         if option_input == 1:
             Library.display_available_items()
         elif option_input == 2:
-            identification = retrieve_identification_code(itemType)
-            Library.return_item(identification, itemType)
+            item_type = retrieve_item_type()
+            identification = retrieve_identification_code(item_type)
+            Library.return_item(identification, item_type)
         elif option_input == 3:
-            identification = retrieve_identification_code(itemType)
+            item_type = retrieve_item_type()
+            identification = retrieve_identification_code(item_type)
             Library.check_out_item(identification)
         elif option_input == 4:
             generating_item()
+        elif option_input == 5:
+            item_type = retrieve_item_type()
+            identification = retrieve_identification_code(item_type)
+            Library.find_items(identification)
         else:
             print("Invalid input")
 
