@@ -12,7 +12,7 @@ class Book:
         return self._call_number
 
     def get_author(self):
-        return self.get_author
+        return self._author
 
     def get_num_copies(self):
         return self._num_copies
@@ -38,4 +38,4 @@ class Book:
         return f"Book: {self._title}, Call Number: {self._call_number}, Author: {self._author}, Number of Copies: {self._num_copies}"
 
     def check_availability(self):
-        return num_copies > 0
+        return self.num_copies > 0
