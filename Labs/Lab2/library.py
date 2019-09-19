@@ -11,7 +11,7 @@ class Library:
             cls.book_list[call_number].num_copies += 1
 
     @classmethod
-    def check_out(cls, call_number):
+    def check_out_book(cls, call_number):
         if Library.search(call_number):
             cls.book_list[call_number].num_copies -= 1
 
@@ -51,13 +51,3 @@ class Library:
     def remove_book(cls, call_number):
         if Library.search(call_number):
             del cls.book_list[call_number]
-
-
-book1 = Book("Hamlet", "1", "Shakespeare", 4)
-book2 = Book("Justic", "3", "Marc Adams", 2)
-Library.add_book(book1)
-print(book1.num_copies)
-Library.check_out(book1.call_number)
-print(book1.num_copies)
-Library.return_book(book1.call_number)
-print(book1.num_copies)

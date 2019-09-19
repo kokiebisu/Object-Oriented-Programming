@@ -23,22 +23,33 @@ def retrieve_call_number():
 
 
 def main():
+    flag = True
     # populate some books
     generating_books()
 
-    # prompt choices
-    prompt()
+    while flag:
+        prompt()
+        option_input = int(input())
 
-    option_input = int(input())
+        if option_input == 1:
+            Library.display_available_books()
+        elif option_input == 2:
+            call_number = retrieve_call_number()
+            Library.return_book(call_number)
+        elif option_input == 3:
+            call_number = retrieve_call_number()
+            Library.check_out_book(call_number)
 
-    if option_input == 1:
-        Library.display_available_books()
-    elif option_input == 2:
-        call_number = retrieve_call_number()
-        # Return book
-    elif option_input == 3:
-        call_number = retrieve_call_number()
-        # Checkout book
+        print("Would you like to continue?")
+        print("1. Yes")
+        print("2. No")
+        continue_input = int(input())
+        if continue_input == 1:
+            pass
+        elif continue_input == 2:
+            flag = False
+        else:
+            print("Invalid Input")
 
 
 if __name__ == '__main__':
