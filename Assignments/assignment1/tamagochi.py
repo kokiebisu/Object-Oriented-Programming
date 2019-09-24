@@ -18,16 +18,16 @@ class Tamagochi(abc.ABC):
     def __init__(self):
         """
 
-        :param _health:
-        :param _happiness:
-        :param _hunger:
-        :param _is_alive:
-        :param _is_sick:
-        :param _last_checked:
-        :param _time_elapsed:
+        :param _health: a float
+        :param _happiness: a float
+        :param _hunger: a float
+        :param _is_alive: a boolean
+        :param _is_sick: a boolean
+        :param _last_checked: a datetime object
+        :param _time_elapsed: a float
         """
-        self._health = 100
-        self._happiness = 100
+        self._health = 100.0
+        self._happiness = 100.0
         self._hunger = 0
         self._is_alive = True
         self._is_sick = False
