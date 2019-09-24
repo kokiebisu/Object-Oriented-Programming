@@ -17,14 +17,7 @@ class Tamagochi(abc.ABC):
 
     def __init__(self):
         """
-
-        :param _health: a float
-        :param _happiness: a float
-        :param _hunger: a float
-        :param _is_alive: a boolean
-        :param _is_sick: a boolean
-        :param _last_checked: a datetime object
-        :param _time_elapsed: a float
+        Initializes the constructed Tamagotchi instance
         """
         self._health = 100.0
         self._happiness = 100.0
@@ -42,14 +35,11 @@ class Tamagochi(abc.ABC):
         """
         spawning_tamagotchi = random.randint(0, 2)
         if spawning_tamagotchi == 0:
-            pikachu = Pikachu()
-            return pikachu
+            return Pikachu()
         elif spawning_tamagotchi == 1:
-            mew = Mew()
-            return mew
+            return Mew()
         else:
-            jigglypuff = Jigglypuff()
-            return jigglypuff
+            return Jigglypuff()
 
     def time_elapsed(self):
         return self._time_elapsed
@@ -59,7 +49,7 @@ class Tamagochi(abc.ABC):
         """
         Decreases the health of the tamgotchi based on the time elapsed and the type of tamagotchi it is.
         :param amount: an int in the range of 0 and 100
-        :param time: a positive int
+        :param time: an int
         :precondition: amount and time must be an int greater than 0
         """
         self._health = self._health - amount * time
@@ -69,7 +59,7 @@ class Tamagochi(abc.ABC):
         """
         Decreases the health of the tamagotchi based on the time elapsed and the type of tamagotchi it is.
         :param amount: an int in the range of 0 and 100
-        :param time: a positive int
+        :param time: an int
         :precondition: amount and time must be an int greater than 0
         """
         self._happiness = self._happiness - amount * time
@@ -80,8 +70,8 @@ class Tamagochi(abc.ABC):
     def increase_hunger(self, amount, time):
         """
         Increases the hunger of the tamagotchi based on the time elapsed and the type of tamagotchi it is.
-        :param amount:
-        :param time:
+        :param amount: an int it te range of 0 and 100
+        :param time: an int
         :precondition: amount and time must be an int greater than 0
         """
         self._hunger = self._hunger + amount * time
@@ -114,8 +104,8 @@ class Tamagochi(abc.ABC):
     def play(self, phrase, happiness_amount):
         """
         Prints a random message of how the user played with the tamagotchi and increases it's happiness based on the tamagotchi.
-        :param phrase:
-        :param happiness_amount:
+        :param phrase: a string
+        :param happiness_amount: a float
         """
 
         self._happiness = self._happiness + happiness_amount
@@ -170,6 +160,7 @@ class Tamagochi(abc.ABC):
 
     def __str__(self):
         """
+        String representation of the class
         :return: A user friendly formatted string depicting the tamagotchi attributes
         """
         return f"Tamagochi here"
@@ -177,7 +168,7 @@ class Tamagochi(abc.ABC):
 
 class Pikachu(Tamagochi):
     """
-    Pikachu is a specialied tamagotchi.
+    Pikachu is a specialized tamagotchi.
     """
     base_amount = 0.5
     rate = 2
@@ -194,39 +185,42 @@ class Pikachu(Tamagochi):
     def decrease_health(self, time):
         """
         Overrides the tamagotchi's decrease_health function with pikachu's own unique speed of decreasing.
-        :param time: an int
+        :param time: a float
         """
         super().decrease_health(self.base_amount, time)
 
     def decrease_happiness(self, time):
         """
         Overrides the tamagotchi's decrease_happiness function with pikachu's own unique speed of decreasing
-        :param time: an int
+        :param time: a float
         """
         super().decrease_happiness(self.base_amount, time)
 
     def increase_hunger(self, time):
         """
         Overrides the tamagotchi's increase_hunger function with pikachu's own uniqued speed of increasing
-        :param time: an int
+        :param time: a float
         """
         super().increase_hunger(self.base_amount, time)
 
     def give_food(self, food):
         """
         Overrides the tamagotchi's give_food function with pikachu's own unique amount of decreasing hunge
-        :param food: an int
+        :param food: a float
         """
         super().give_food(food, self.preferred_food, self.hunger_decrease_amount)
 
     def play(self, play_input):
         """
         Overrides the tamagotchi's play function with pikachu's own unique amount of increasing happiness
-        :param playInput: an int
+        :param play_input: a float
         """
         super().play(self.playlist[play_input], self.happiness_increase_amount)
 
     def born(self):
+        """
+        Prints a message that Pikachu was born.
+        """
         super().born("Pikachu")
 
     def update_status(self):
@@ -245,12 +239,13 @@ class Pikachu(Tamagochi):
     def is_sick(self):
         """
         Overrides the tamagotchi's is_sick function with pikachu's standard value of getting sick
+        :return: a boolean
         """
         return self._health < 60
 
     def __str__(self):
         """
-        Overriden to print the pikchu's attributes
+        Prints Pikachu's status
         """
         if self._is_sick:
             return f"\nPikachu: health: {round(self._health)}, happiness: {round(self._happiness)}," \
@@ -262,7 +257,7 @@ class Pikachu(Tamagochi):
 
 class Mew(Tamagochi):
     """
-    Mew is a specialied tamagotchi.
+    Mew is a specialized tamagotchi.
     """
     base_amount = 0.25
     rate = 3
@@ -279,39 +274,42 @@ class Mew(Tamagochi):
     def decrease_health(self, time):
         """
         Overrides the tamagotchi's decrease_health function with Mew's own unique speed of decreasing.
-        :param time: an int
+        :param time: a float
         """
         super().decrease_health(self.base_amount, time)
 
     def decrease_happiness(self, time):
         """
         Overrides the tamagotchi's decrease_happiness function with Mew's own unique speed of decreasing
-        :param time: an int
+        :param time: a float
         """
         super().decrease_happiness(self.base_amount, time)
 
     def increase_hunger(self, time):
         """
         Overrides the tamagotchi's increase_hunger function with Mew's own uniqued speed of increasing
-        :param time: an int
+        :param time: a float
         """
         super().increase_hunger(self.base_amount, time)
 
     def give_food(self, food):
         """
         Overrides the tamagotchi's give_food function with Mew's own unique amount of decreasing hunge
-        :param food: an int
+        :param food: a float
         """
         super().give_food(food, self.preferred_food, self.hunger_decrease_amount)
 
     def play(self, play_input):
         """
         Overrides the tamagotchi's play function with Mew's own unique amount of increasing happiness
-        :param playInput: an int
+        :param play_input: a float
         """
         super().play(self.playlist[play_input], self.happiness_increase_amount)
 
     def born(self):
+        """
+        Prints the message that Mew was born.
+        """
         super().born("Mew")
 
     def update_status(self):
@@ -330,12 +328,13 @@ class Mew(Tamagochi):
     def is_sick(self):
         """
         Overrides the tamagotchi's is_sick function with Mew's standard value of getting sick
+        :return: a boolean
         """
         return self._health < 60
 
     def __str__(self):
         """
-        Overriden to print the pikchu's attributes
+        Prints Mew's status
         """
         if self._is_sick:
             return f"\nMew: health: {round(self._health)}, happiness: {round(self._happiness)}," \
@@ -347,7 +346,7 @@ class Mew(Tamagochi):
 
 class Jigglypuff(Tamagochi):
     """
-    Jigglypuff is a specialied tamagotchi.
+    Jigglypuff is a specialized tamagotchi.
     """
     base_amount = 0.75
     rate = 5
@@ -364,21 +363,21 @@ class Jigglypuff(Tamagochi):
     def decrease_health(self, time):
         """
         Overrides the tamagotchi's decrease_health function with Jigglypuff's own unique speed of decreasing.
-        :param time: an int
+        :param time: a float
         """
         super().decrease_health(self.base_amount, time)
 
     def decrease_happiness(self, time):
         """
         Overrides the tamagotchi's decrease_happiness function with Jigglypuff's own unique speed of decreasing
-        :param time: an int
+        :param time: a float
         """
         super().decrease_happiness(self.base_amount, time)
 
     def increase_hunger(self, time):
         """
         Overrides the tamagotchi's increase_hunger function with Jigglypuff's own uniqued speed of increasing
-        :param time: an int
+        :param time: a float
         """
         super().increase_hunger(self.base_amount, time)
 
@@ -392,11 +391,15 @@ class Jigglypuff(Tamagochi):
     def play(self, play_input):
         """
         Overrides the tamagotchi's play function with Jigglypuff's own unique amount of increasing happiness
-        :param playInput: an int
+        :param play_input: an int
         """
         super().play(self.playlist[play_input], self.happiness_increase_amount)
 
     def born(self):
+        """
+        Prints a message that Jigglypuff was born
+        :return:
+        """
         super().born("Jigglypuff")
 
     def update_status(self):
@@ -415,12 +418,13 @@ class Jigglypuff(Tamagochi):
     def is_sick(self):
         """
         Overrides the tamagotchi's is_sick function with Jigglypuff's standard value of getting sick
+        :return: a boolean
         """
         return self._health < 60
 
     def __str__(self):
         """
-        Overriden to print the Jigglypuff's attributes
+        Prints Jigglypuff's status
         """
         if self._is_sick:
             return f"\nJigglypuff: health: {round(self._health)}, happiness: {round(self._happiness)}," \
