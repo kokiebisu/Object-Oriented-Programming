@@ -11,7 +11,7 @@ def main():
 
     print(smurfs.__len__())
 
-    # print(smurfs.__contains__('Bob'))
+    print(smurfs.__contains__('Bob'))
 
     # print(smurfs.__getitem__(0))
 
