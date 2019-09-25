@@ -13,7 +13,7 @@ def main():
 
     print(smurfs.__contains__('Bob'))
 
-    # print(smurfs.__getitem__(0))
+    print(smurfs.__getitem__(0))
 
     # smurfs_iterator = smurfs.__iter__()
     # for i in smurfs_iterator:
