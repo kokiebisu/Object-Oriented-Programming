@@ -7,9 +7,9 @@ def main():
 
     smurfs.append('Ken')
 
-    # print(smurfs)
+    print(smurfs)
 
-    # print(smurfs.__len__())
+    print(smurfs.__len__())
 
     # print(smurfs.__contains__('Bob'))
 
