@@ -2,6 +2,7 @@ class SmurfParade:
     """
     A class that encapsulates a list of smurfs.
     """
+
     def __init__(self, *values):
         """
         Initializes a list of smurfs with smurfs.
@@ -31,15 +32,13 @@ class SmurfParade:
         """
         return item in self._values
 
-    # Not sure about this, is key the index?
-
-    # def __getitem__(self, key):
-    #     """
-    #     Retrieves the element from the list based on the given key
-    #     :param key: an int
-    #     :return: a string
-    #     """
-    #     return self._values[key]
+    def __getitem__(self, key):
+        """
+        Retrieves the element from the list based on the given key
+        :param key: an int
+        :return: a string
+        """
+        return self._values[key]
 
     def __iter__(self):
         """
