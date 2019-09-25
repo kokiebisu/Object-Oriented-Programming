@@ -36,8 +36,7 @@ def main():
                            "Jean"])
     print(x_men)
     print(f"Number of members: {len(x_men)}")  # x_men.__len__()
-    # x_men.__contains__('cyclops')
-    print(f"Is cyclops part of the X-men? {'cyclops' in x_men}")
+    print(f"Is cyclops part of the X-men? {'cyclops' in x_men}") # x_men.__contains__('cyclops')
 
 
 if __name__ == '__main__':
