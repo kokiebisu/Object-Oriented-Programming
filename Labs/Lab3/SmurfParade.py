@@ -21,18 +21,18 @@ class SmurfParade:
         return iter(self._values)
 
     def count(self, item):
-        duplicate_count = 0
-        for i in self._values:
-            if i == item:
-                duplicate_count += 1
-        return duplicate_count
+        return self._values.count(item)
+        # duplicate_count = 0
+        # for i in self._values:
+        #     if i == item:
+        #         duplicate_count += 1
+        # return duplicate_count
 
-        # def index(item):
-        #     # display the index of the given item
+    def index(self, item):
+        return self._values.index(item)
 
-        # def __reversed__(self):
-        #     # reverse string
-        #     return reversed(self)
+    def __reversed__(self):
+        return self._values[::-1]
 
     def __str__(self):
         return f"{self._values}"

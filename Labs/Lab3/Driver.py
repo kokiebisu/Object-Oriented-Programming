@@ -2,7 +2,7 @@ from SmurfParade import SmurfParade
 
 
 def main():
-    smurfs = SmurfParade('Bob', 'Sam', 'Bob')
+    smurfs = SmurfParade('Bob', 'Sam', 'Ken')
 
     # smurfs.append('Ken')
 
@@ -19,6 +19,10 @@ def main():
     #     print(i)
 
     # print(smurfs.count('Bob'))
+
+    # print(smurfs.index('Sam'))
+
+    print(smurfs.__reversed__())
 
 
 if __name__ == '__main__':
