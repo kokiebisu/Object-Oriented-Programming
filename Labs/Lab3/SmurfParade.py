@@ -20,12 +20,12 @@ class SmurfParade:
     def __iter__(self):
         return iter(self._values)
 
-    def __str__(self):
-        return f"{self._values}"
-
-    # def count(item):
-    #     # count the number of items
-    #     return
+    def count(self, item):
+        duplicate_count = 0
+        for i in self._values:
+            if i == item:
+                duplicate_count += 1
+        return duplicate_count
 
         # def index(item):
         #     # display the index of the given item
@@ -33,3 +33,6 @@ class SmurfParade:
         # def __reversed__(self):
         #     # reverse string
         #     return reversed(self)
+
+    def __str__(self):
+        return f"{self._values}"

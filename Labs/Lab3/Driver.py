@@ -2,22 +2,23 @@ from SmurfParade import SmurfParade
 
 
 def main():
-    # create list
-    smurfs = SmurfParade('Bob', 'Sam')
+    smurfs = SmurfParade('Bob', 'Sam', 'Bob')
 
-    smurfs.append('Ken')
+    # smurfs.append('Ken')
 
-    print(smurfs)
+    # print(smurfs)
 
-    print(smurfs.__len__())
+    # print(smurfs.__len__())
 
-    print(smurfs.__contains__('Bob'))
+    # print(smurfs.__contains__('Bob'))
 
-    print(smurfs.__getitem__(0))
+    # print(smurfs.__getitem__(0))
 
-    smurfs_iterator = smurfs.__iter__()
-    for i in smurfs_iterator:
-        print(i)
+    # smurfs_iterator = smurfs.__iter__()
+    # for i in smurfs_iterator:
+    #     print(i)
+
+    # print(smurfs.count('Bob'))
 
 
 if __name__ == '__main__':
