@@ -5,7 +5,7 @@ def main():
     # create list
     smurfs = SmurfParade('Bob', 'Sam')
 
-    # smurfs.append('Ken')
+    smurfs.append('Ken')
 
     # print(smurfs)
 
