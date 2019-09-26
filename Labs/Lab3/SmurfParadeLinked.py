@@ -6,26 +6,34 @@ class SmurfParade:
     A class that encapsulates a list of smurfs.
     """
 
-    def __init__(self, *values):
+    def __init__(self, value):
         """
         Initializes a list of smurfs with smurfs.
         :param values: multiple packed arguments
         """
-        self._smurfs_list = list(values)
+        self._value = value
+        self._next = None
 
     def append(self, name):
         """
         Adds a smurf to the list.
         :param name: a string
         """
-        self._smurfs_list.append(name)
+        self._next = name
 
     def __len__(self):
         """
         Retrieves the number of smurfs in the list
         :return: an int
         """
-        return len(self._smurfs_list)
+        count = 0
+        flag = True
+        while flag == True:
+            if self._next:
+                count += 1
+            else:
+                flag = False
+        return count
 
     def __contains__(self, item):
         """
@@ -78,12 +86,12 @@ class SmurfParade:
         String representation of the created object
         :return: a string
         """
-        return f"{self._smurfs_list}"
+        return f"{self._value}"
 
 
 def main():
     print('Creating list of Smurfs')
-    smurfs = SmurfParade('Bob', 'Sam', 'Ken')
+    smurfs = SmurfParade('Bob')
     print(smurfs)
 
     print("\n")
@@ -91,37 +99,36 @@ def main():
     smurfs.append('Ken')
     print(smurfs)
 
-    print("\n")
-    print("__len__()")
-    print(len(smurfs))
+    # print("\n")
+    # print("__len__()")
+    # print(len(smurfs))
 
-    print("\n")
-    print("Contains")
-    print('Bob' in smurfs)
+    # print("\n")
+    # print("Contains")
+    # print('Bob' in smurfs)
 
-    print("\n")
-    print("__getitem__()")
-    print(smurfs[0])
+    # print("\n")
+    # print("__getitem__()")
+    # print(smurfs[0])
 
-    print("\n")
-    print("__iter__()")
-    smurf_iterable = iter(smurfs)
-    for i in smurf_iterable:
-        print(i)
+    # print("\n")
+    # print("__iter__()")
+    # for i in smurfs:
+    #     print(i)
 
-    print("\n")
-    print("count()")
-    print(smurfs.count('Bob'))
+    # print("\n")
+    # print("count()")
+    # print(smurfs.count('Bob'))
 
-    print("\n")
-    print("index()")
-    print(smurfs.index('Sam'))
+    # print("\n")
+    # print("index()")
+    # print(smurfs.index('Sam'))
 
-    print("\n")
-    print("reversed()")
-    print(reversed(smurfs))
+    # print("\n")
+    # print("reversed()")
+    # print(reversed(smurfs))
 
-    print(smurfs)
+    # print(smurfs)
 
 
 if __name__ == '__main__':
