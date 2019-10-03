@@ -1,5 +1,6 @@
-from controller import Controller
-from prompt import Prompt
+"""This module runs the program"""
+from dictionary import Dictionary, Controller, Prompt
+
 
 def main():
     """

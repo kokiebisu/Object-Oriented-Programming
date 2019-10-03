@@ -1,3 +1,4 @@
+"""This module is responsible with deals with everything concerning files outside of the program"""
 from enum import Enum
 from pathlib import Path
 import json
@@ -6,16 +7,14 @@ import json
 class FileHandler:
 
     """
-    This module is responsible for housing any classes and/or structures that are
-    responsible for reading and writing to files. This includes any custom exceptions
+    This class identifies the type of file and respond respectively based on it.
     """
 
     @staticmethod
     def load_data(path, file_extension):
         """
         Checks the file extension and reading the file accordingly
-        Responsible for raising any exceptions if they occur
-        look up pathlib module to be able to check if the file exists
+        :return: a list
         """
         if not Path(path).exists():
             raise InvalidFileTypeError
@@ -46,13 +45,15 @@ class FileHandler:
     def write_lines(path, line):
         """
         Writes the given lines to a Text file
-        Precaution: must be appended
         """
         with open(f"{path}", "a+") as write_file:
             write_file.write(f"{line}\n")
 
 
 class FileExtensions(Enum):
+    """
+    A class that holds two enum types that represent file extensions
+    """
     JSON = ".json"
     TEXT = ".txt"
 
@@ -62,17 +63,5 @@ class InvalidFileTypeError(Exception):
     This exception should be raised if the user attempts to read a file that is not a .json or .txt file
     """
 
-    def __init__(self, balance, amount):
-        pass
-
-    # try:
-    #     my_bank_account.withdraw(100, 000)
-    #
-    # except InvalidWithdrawalError as e:
-    #     print(e.args[0])
-    #
-    # else:
-    #     print("Withdrawal completed!")
-    #
-    # finally:
-    #     bank_service.close_connection()
+    def __init__(self, name):
+        super().__init__(f"{name} does not have an extension that is valid!")

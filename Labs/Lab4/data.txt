@@ -1,0 +1,2 @@
+hello: Expression of greeting used by two or more people who meet each other.
+why: For what reason.
