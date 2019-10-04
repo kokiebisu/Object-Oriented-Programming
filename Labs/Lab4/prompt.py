@@ -39,7 +39,9 @@ class Prompt:
         :return: a string
         """
         print("Let us know which file you want to load!")
-        file_path = input()
+        file_path = input().strip()
+        if file_path:
+            raise ValueError("Must have something!")
         return file_path
 
     @staticmethod
@@ -58,4 +60,4 @@ class Prompt:
         elif save_input == 2:
             return False
         else:
-            print("Invalid Input")
+            raise ValueError("Must be either 1 or 2")

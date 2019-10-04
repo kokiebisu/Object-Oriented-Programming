@@ -16,39 +16,29 @@ class FileHandler:
         Checks the file extension and reading the file accordingly
         :return: a list
         """
-
         file_path = Path(path)
-        try:
-            if not file_path.exists():
-                print(f"file_path: {file_path}")
-                raise FileNotFoundError
-            if file_extension == FileExtensions.JSON.value:
-                with open(f"{path}") as read_file:
-                    data = json.load(read_file)
-                    terms = []
-                    for term, _ in data.items():
-                        terms.append(term)
-                    return [data, terms]
-
-            elif file_extension == FileExtensions.TEXT.value:
-                with open(f"{path}", encoding='utf-8') as read_file:
-                    data = {}
-                    terms = []
-                    for line in read_file:
-                        line_stripped = line.strip(' ')
-                        term, definition = line_stripped.split(':')
-                        data[term] = definition
-                        terms.append(term)
+        if not file_path.exists():
+            raise FileNotFoundError
+        if file_extension == FileExtensions.JSON.value:
+            with open(f"{path}") as read_file:
+                data = json.load(read_file)
+                terms = []
+                for term, _ in data.items():
+                    terms.append(term)
                 return [data, terms]
-            else:
-                raise InvalidFileTypeError("hello")
-        except InvalidFileTypeError as e:
-            raise InvalidFileTypeError("hello")
-            print(e)
-            exit()
-        except FileNotFoundError:
-            print("OOPS! The file was not found!")
-            exit()
+
+        elif file_extension == FileExtensions.TEXT.value:
+            with open(f"{path}", encoding='utf-8') as read_file:
+                data = {}
+                terms = []
+                for line in read_file:
+                    line_stripped = line.strip(' ')
+                    term, definition = line_stripped.split(':')
+                    data[term] = definition
+                    terms.append(term)
+                return [data, terms]
+        else:
+            raise InvalidFileTypeError("Invalid File Type")
 
     @staticmethod
     def write_lines(path, line):
@@ -73,6 +63,7 @@ class InvalidFileTypeError(Exception):
     """
 
     def __init__(self, name):
-        super().__init__(f"{name} does not have an extension that is valid!")
+        super().__init__(name)
+
 
 

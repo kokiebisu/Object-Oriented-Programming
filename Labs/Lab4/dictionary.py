@@ -1,5 +1,5 @@
 """This module interacts with the dictionary"""
-from file_handler import FileHandler, FileExtensions
+from file_handler import FileHandler, InvalidFileTypeError
 import difflib
 from pathlib import Path
 
@@ -35,6 +35,12 @@ class Dictionary:
                 filepath, file_extension)
         except TypeError:
             print("OOPS! Cannot return the list!")
+            exit()
+        except InvalidFileTypeError as e:
+            print(e)
+            exit()
+        except FileNotFoundError as e:
+            print(e)
             exit()
 
     def query_definition(self, word):
@@ -82,4 +88,3 @@ class WordNotFoundError(Exception):
             return f"Can't find {self.incorrect_word}. Did you mean? {close_word_string}"
         else:
             return f"Sorry, I have no idea what you are looking for..."
-

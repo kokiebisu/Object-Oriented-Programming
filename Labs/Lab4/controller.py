@@ -2,13 +2,15 @@ from dictionary import Dictionary
 from prompt import Prompt
 from file_handler import FileHandler
 
+
 class Controller:
-    def __init__(self, file_path):
+    def __init__(self):
         """
         Initializes the Controller class
         """
-        self.dictionary = Dictionary(file_path)
+        self.dictionary = None
         self.run()
+
 
     @staticmethod
     def prompt_word():
@@ -38,6 +40,9 @@ class Controller:
         """
         Runs the program
         """
+        Prompt.welcome()
+        file_path = Prompt.prompt_file_path()
+        self.dictionary = Dictionary(file_path)
         will_continue = True
         while will_continue:
             user_input = self.prompt_word()
@@ -49,3 +54,6 @@ class Controller:
                         "./data.txt", self.get_saved_key_pair())
                 print("Saved Successfully")
 
+
+if __name__ == '__main__':
+    Controller()

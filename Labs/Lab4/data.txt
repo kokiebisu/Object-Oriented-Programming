@@ -1,1 +1,3 @@
 hello: Expression of greeting used by two or more people who meet each other.
+hello: Expression of greeting used by two or more people who meet each other.
+what: Which thing.Exclamation of amazement.

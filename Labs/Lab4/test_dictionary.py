@@ -13,7 +13,7 @@ class TestDictionary(TestCase):
         dictionary = Dictionary('../data.json')
 
     def test_valid_query(self):
-        """Test whether or not the dictionary queries correct definition."""
+        """Tests to see if the the querying the definition is implemented correctly"""
         data = 'Children word for "father".'
         dictionary = Dictionary('../data.json')
         value = dictionary.query_definition("dad")
@@ -21,19 +21,18 @@ class TestDictionary(TestCase):
         self.assertEquals(value, data)
 
     def test_not_found_query(self):
-        """Test whether or not an invalid word is handled properly."""
+        """Tests to see if a wrong term queried will give an error"""
         data = "Sorry, I have no idea what you are looking for..."
         dictionary = Dictionary('../data.json')
         value = dictionary.query_definition("c1e2R")
-        string = value
-        self.assertTrue(string, data)
+        self.assertTrue(value, data)
 
     def test_dictionary_data_is_loaded(self):
-        """Test whether or not the dictionary data is loaded."""
+        """Tests to see if the dictionary is loaded correctly"""
         dictionary = Dictionary('../data.json')
         self.assertTrue(len(dictionary._data) != 0)
 
     def test_dictionary_words_are_loaded(self):
-        """Test whether or not the dictionary words are loaded."""
+        """Tests to see if the terms are being loaded correctly"""
         dictionary = Dictionary('../data.json')
-        self.assertTrue(len(dictionary._data) != 0)
+        self.assertTrue(len(dictionary._terms) != 0)
