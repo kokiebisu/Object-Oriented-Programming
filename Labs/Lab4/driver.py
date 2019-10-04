@@ -1,5 +1,6 @@
 """This module runs the program"""
-from dictionary import Dictionary, Controller, Prompt
+from prompt import Prompt
+from controller import Controller
 
 
 def main():
@@ -7,7 +8,7 @@ def main():
     Starts the program
     """
     Prompt.welcome()
-    filepath = Prompt.prompt_file_path()
+    filepath = "./data.json" #Prompt.prompt_file_path()
     Controller(filepath)
 
 

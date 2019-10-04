@@ -1,5 +1,5 @@
 """This module interacts with the dictionary"""
-from file_handler import FileHandler
+from file_handler import FileHandler, FileExtensions
 import difflib
 from pathlib import Path
 
@@ -42,20 +42,18 @@ class Dictionary:
         Retrieves the definition of the given word
         :return: a string
         """
-        if word in self._terms:
-            for key, item in self._data.items():
-                if word == key:
-                    definition = ''.join(self._data[key])
-                    word_and_definition = [word, definition]
-                    self.save(word_and_definition)
-                    return definition
-
-        else:
-            close_word = difflib.get_close_matches(word, self._terms)
-            if isinstance(close_word, list):
-                return f"Did you mean from the following? {', '.join(close_word)}"
+        try:
+            if word in self._terms:
+                for key, item in self._data.items():
+                    if word == key:
+                        definition = ''.join(self._data[key])
+                        word_and_definition = [word, definition]
+                        self.save(word_and_definition)
+                        return definition
             else:
-                return close_word
+                raise WordNotFoundError(word, self._terms)
+        except WordNotFoundError as e:
+            return e
 
     def save(self, key_pair):
         """
@@ -67,117 +65,21 @@ class Dictionary:
         self._line = f"{term}: {definition}"
 
 
-class Controller:
-    def __init__(self, file_path):
-        """
-        Initializes the Controller class
-        """
-        self.dictionary = Dictionary(file_path)
-        self.run()
+class WordNotFoundError(Exception):
+    """
+    This exception should be raised if the user attempts to read a file that is not a .json or .txt file
+    """
 
-    @staticmethod
-    def prompt_word():
-        """
-        Calls the word method of the Prompt class
-        :return: a string
-        """
-        return Prompt.word()
+    def __init__(self, word, terms):
+        self.incorrect_word = word
+        phrase = self.get_close_match(word, terms)
+        super().__init__(phrase)
 
-    def get_saved_key_pair(self):
-        """
-        Calls the get_line method of the dictionary instance
-        :return: a string
-        """
-        return self.dictionary.get_line()
-
-    def search(self, word):
-        """
-        Calls the query definition method of the created dictionary instance
-        :param word: a string
-        :return: a string
-        """
-        definition = self.dictionary.query_definition(word)
-        return definition
-
-    def run(self):
-        """
-        Runs the program
-        """
-        will_continue = True
-        while will_continue:
-            option_input = Prompt.options()
-            if option_input == 1:
-                user_input = self.prompt_word()
-                definition = self.search(user_input)
-                print(f"{definition}\n")
-                will_continue = Prompt.prompt_continue()
-            elif option_input == 2:
-                FileHandler.write_lines(
-                    "./data.txt", self.get_saved_key_pair())
-                print("Saved Successfully")
-                Prompt.prompt_continue()
-            else:
-                print("Invalid Input")
-
-
-class Prompt:
-    @staticmethod
-    def welcome():
-        """
-        Greets the users with a warm welcome
-        """
-        print("Welcome to the dictionary")
-
-    @staticmethod
-    def options():
-        """
-        Displays options to let users interact with the program
-        :return: an int
-        """
-        print("\nWhat would you like to do?"
-              "\n1. Search"
-              "\n2. Add to textfile"
-              )
-        option_input = int(input())
-        return option_input
-
-    @staticmethod
-    def word():
-        """
-        Prompts the user for the word they want to search
-        :return: a string
-        """
-        print("What is the word? Type 'exitprogram' to quit.")
-        word_input = input().lower()
-        if word_input == 'exitprogram':
-            exit()
+    def get_close_match(self, word, terms):
+        close_word = difflib.get_close_matches(word, terms)
+        close_word_string = ', '.join(close_word)
+        if ',' in close_word_string:
+            return f"Can't find {self.incorrect_word}. Did you mean? {close_word_string}"
         else:
-            return word_input
+            return f"Sorry, I have no idea what you are looking for..."
 
-    @staticmethod
-    def prompt_file_path():
-        """
-        Prompts the user for the filepath in which they want to load the dictionary from
-        :return: a string
-        """
-        print("Let us know which file you want to load!")
-        file_path = input()
-        return file_path
-
-    @staticmethod
-    def prompt_continue():
-        """
-        Prompts the user if they would like to continue using the program
-        :return: a boolean
-        """
-        print("Would you like to continue?"
-              "\n 1. Yes"
-              "\n 2. No"
-              )
-        continue_input = int(input())
-        if continue_input == 1:
-            return True
-        elif continue_input == 2:
-            return False
-        else:
-            print("Invalid Input")

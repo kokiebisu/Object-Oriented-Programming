@@ -16,30 +16,39 @@ class FileHandler:
         Checks the file extension and reading the file accordingly
         :return: a list
         """
-        if not Path(path).exists():
-            raise InvalidFileTypeError
-        if file_extension == FileExtensions.JSON.value:
-            try:
+
+        file_path = Path(path)
+        try:
+            if not file_path.exists():
+                print(f"file_path: {file_path}")
+                raise FileNotFoundError
+            if file_extension == FileExtensions.JSON.value:
                 with open(f"{path}") as read_file:
                     data = json.load(read_file)
-            except FileNotFoundError:
-                print("OOPS! File was not found!")
-            else:
-                terms = []
-                for term, _ in data.items():
-                    terms.append(term)
-                return [data, terms]
+                    terms = []
+                    for term, _ in data.items():
+                        terms.append(term)
+                    return [data, terms]
 
-        elif file_extension == FileExtensions.TEXT.value:
-            with open(f"{path}", encoding='utf-8') as read_file:
-                data = read_file.read()
-                terms = []
-                for term, _ in data.items():
-                    terms.append(term)
+            elif file_extension == FileExtensions.TEXT.value:
+                with open(f"{path}", encoding='utf-8') as read_file:
+                    data = {}
+                    terms = []
+                    for line in read_file:
+                        line_stripped = line.strip(' ')
+                        term, definition = line_stripped.split(':')
+                        data[term] = definition
+                        terms.append(term)
                 return [data, terms]
-        else:
-            # add invalid exception
-            print("not valid")
+            else:
+                raise InvalidFileTypeError("hello")
+        except InvalidFileTypeError as e:
+            raise InvalidFileTypeError("hello")
+            print(e)
+            exit()
+        except FileNotFoundError:
+            print("OOPS! The file was not found!")
+            exit()
 
     @staticmethod
     def write_lines(path, line):
@@ -65,3 +74,5 @@ class InvalidFileTypeError(Exception):
 
     def __init__(self, name):
         super().__init__(f"{name} does not have an extension that is valid!")
+
+
