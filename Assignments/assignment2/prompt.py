@@ -13,7 +13,7 @@ class Prompt:
         :return:
         """
         print(
-            "\nWelcome to the wallet"
+            "\nWelcome to the wallet\n"
         )
 
     @staticmethod
@@ -22,10 +22,7 @@ class Prompt:
         Asks if the user want to start the program
         :return: a string
         """
-        print(
-            "\nWould you like to create a new wallet?"
-        )
-        return input().lower() == "yes"
+        return input("Would you like to create a new wallet?\n").lower() == "yes"
 
     @staticmethod
     def display_options():
@@ -64,36 +61,25 @@ class Prompt:
         Asks the user the card information to be stored
         :return: a list
         """
-        print("What is the name of the card?")
-        name_input = input()
-        print("What is the account number?")
-        account_number_input = int(input())
-        print("What is the security code?")
-        security_code_input = int(input())
-        print("When is the expiry date?")
-        expiry_date_input = input()
+        name_input = input("What is the name of the card?\n")
+        account_number_input = int(input("What is the account number\n"))
+        security_code_input = int(input("What is the security code?\n"))
+        expiry_date_input = input("When is the expiry date?\n")
         return [name_input, account_number_input, security_code_input, expiry_date_input]
 
     @staticmethod
     def prompt_membership_card():
-        print("What is the name of the card?")
-        name_input = input()
-        print("What is the organization?")
-        organization_input = input()
-        print("What is the membership number?")
-        membership_input = input()
-        print("When is the expiry date?")
-        expiry_date_input = input()
+        name_input = input("What is the name of the card?")
+        organization_input = input("What is the organization?")
+        membership_input = input("What is the membership number?")
+        expiry_date_input = input("When is the expiry date?")
         return [name_input, organization_input, membership_input, expiry_date_input]
 
     @staticmethod
     def prompt_gift_card():
-        print("What is the name of the card?")
-        name_input = input()
-        print("What is the amount?")
-        amount_input = int(input())
-        print("What is the code?")
-        code_input = input()
+        name_input = input("What is the name of the card?")
+        amount_input = int(input("What is the amount?"))
+        code_input = input("What is the code?")
         return [name_input, amount_input, code_input]
 
     @staticmethod
@@ -102,5 +88,4 @@ class Prompt:
         Asks the user for the id of the card
         :return: an int
         """
-        print("What is the id of the card?")
-        return int(input())
+        return int(input("What is the id of the card?"))
