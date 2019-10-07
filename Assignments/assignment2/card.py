@@ -30,7 +30,7 @@ class Card:
         String representation of the created instance
         :return: a string
         """
-        return f"ID: {self._id} Name: {self.name} "
+        return f"ID: {self._id} Type: {self.__class__.__name__} Name: {self.name} "
 
 
 class ExpiryCard(Card):

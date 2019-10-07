@@ -23,25 +23,7 @@ class Controller:
             self._wallet = Wallet()
             print("\nSuccessfully created wallet")
             while True:
-                try:
-                    option_input = Prompt.display_options()
-                    if option_input == 1:
-                        self.add_card()
-                    elif option_input == 2:
-                        self.search_card()
-                    elif option_input == 3:
-                        self.delete_card()
-                    elif option_input == 4:
-                        self.export_card()
-                    elif option_input == 5:
-                        self.check_cards()
-                    elif option_input == 6:
-                        print("See you next time")
-                        exit()
-                    else:
-                        raise ValueError
-                except ValueError:
-                    print("Select from within the provided options!")
+                self.give_options()
 
     def add_card(self):
         """
@@ -121,7 +103,8 @@ class Controller:
         else:
             self._wallet.display_all_cards()
 
-    def create_credit_card(self):
+    @staticmethod
+    def create_credit_card():
         """
         Creates a credit card from the given inputs
         :return: a CreditCard object
@@ -130,7 +113,8 @@ class Controller:
         return CreditCard(
             name=name_input, account_number=account_number_input, security_code=security_code_input, expiry_date=expiry_date_input)
 
-    def create_membership_card(self):
+    @staticmethod
+    def create_membership_card():
         """
         Creates a membership card from the given inputs
         :return: a MembershipCard object
@@ -138,13 +122,36 @@ class Controller:
         name_input, organization_input, membership_input, expiry_date_input = Prompt.prompt_membership_card()
         return MemberShipCard(name=name_input, organization=organization_input, membership_number=membership_input, expiry_date=expiry_date_input)
 
-    def create_gift_card(self):
+    @staticmethod
+    def create_gift_card():
         """
         Creates a gift card from the given inputs
         :return: a Gift Card object
         """
         name_input, amount_input, code_input = Prompt.prompt_gift_card()
         return GiftCard(name=name_input, amount=amount_input, code=code_input)
+
+    def give_options(self):
+        try:
+            option_input = Prompt.display_options()
+            if option_input == 1:
+                self.add_card()
+            elif option_input == 2:
+                self.search_card()
+            elif option_input == 3:
+                self.delete_card()
+            elif option_input == 4:
+                self.export_card()
+            elif option_input == 5:
+                self.check_cards()
+            elif option_input == 6:
+                print("See you next time")
+                exit()
+            else:
+                raise ValueError
+        except ValueError:
+            print("Select from within the provided options!")
+            self.give_options()
 
 
 class EmptyWalletError(Exception):
