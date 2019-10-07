@@ -1,27 +1,78 @@
-import abc
+""" This module deals with information about the Card class """
 
 
-class Card(ABC):
-    def __init__(self, name, category, **kwargs):
+class Card:
+    """
+    This class holds the attributes of the Card instance
+    """
+    card_id = 0
+
+    def __init__(self, name, **kwargs):
+        """
+        Initializes the Card instance
+        :param name: a string
+        :param kwargs: keyword arguments
+        """
         self.name = name
+        self._id = Card.card_id
+        Card.card_id += 1
 
-    @abc.abstractmethod
-    def get_input(self):
-        pass
+    @property
+    def id(self):
+        """
+        Gets the ID of the card
+        :return: an int
+        """
+        return self._id
+
+    def __str__(self):
+        """
+        String representation of the created instance
+        :return: a string
+        """
+        return f"ID: {self._id} Name: {self.name} "
 
 
 class CreditCard(Card):
+    """
+    This class holds the attributes of the Credit Card instance which is the subclass of the Card class
+    """
+
     def __init__(self, account_number, security_code, **kwargs):
+        """
+        Initializes the Credit Card instance
+        :param account_number: an int
+        :param security_code: an int
+        :param kwargs: keyword arguments
+        """
         self._account_number = account_number
         self._security_code = security_code
         super().__init__(**kwargs)
 
-    @staticmethod
-    def get_input():
+    def __str__(self):
+        """ String representation of the instance"""
+        return super().__str__() + f"Account_number: {self._account_number}, Security code: {self._security_code}"
+
+
+class MemberShipCard(Card):
+    def __init__(self, organization, membership_number, **kwargs):
+        self._organization = organization
+        self._membership_number = membership_number
+        super().__init__(**kwargs)
 
     def __str__(self):
-        return f"Name: {self.name}, Account_number: {self._account_number}, Security code: {self._security_code}"
+        return super().__str__() + f"Organization: {self._organization}, Membership Number: {self._membership_number}"
 
 
-# class CardType(Enum):
-#     CREDIT_CARD = 'Credit Card'
+class GiftCard(Card):
+    def __init__(self, amount, code, **kwargs):
+        self._amount = amount
+        self._code = code
+        super().__init__(**kwargs)
+
+    def __str__(self):
+        return super().__str__() + f"Amount: {self._amount}, Code: {self._code}"
+
+
+# class RestaurantCard(MemberShipCard):
+#     def __init__(self, )
