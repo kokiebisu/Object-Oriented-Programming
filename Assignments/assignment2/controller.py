@@ -122,16 +122,27 @@ class Controller:
             self._wallet.display_all_cards()
 
     def create_credit_card(self):
+        """
+        Creates a credit card from the given inputs
+        :return: a CreditCard object
+        """
         name_input, account_number_input, security_code_input, expiry_date_input = Prompt.prompt_credit_card()
-        print(f"name_iput:{name_input}")
         return CreditCard(
             name=name_input, account_number=account_number_input, security_code=security_code_input, expiry_date=expiry_date_input)
 
     def create_membership_card(self):
+        """
+        Creates a membership card from the given inputs
+        :return: a MembershipCard object
+        """
         name_input, organization_input, membership_input, expiry_date_input = Prompt.prompt_membership_card()
         return MemberShipCard(name=name_input, organization=organization_input, membership_number=membership_input, expiry_date=expiry_date_input)
 
     def create_gift_card(self):
+        """
+        Creates a gift card from the given inputs
+        :return: a Gift Card object
+        """
         name_input, amount_input, code_input = Prompt.prompt_gift_card()
         return GiftCard(name=name_input, amount=amount_input, code=code_input)
 
@@ -143,12 +154,19 @@ class EmptyWalletError(Exception):
 
     def __init__(self, name):
         """
-        Initializes the wallet
+        Initializes the error
         :param name: a string
         """
         super().__init__(name)
 
 
 class InvalidOptionError(Exception):
+    """
+    An error called when the user tried to select an option that is not displayed
+    """
     def __init__(self, name):
+        """
+        Initializes the error
+        :param name: a string
+        """
         super().__init__(name)
