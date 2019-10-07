@@ -33,7 +33,16 @@ class Card:
         return f"ID: {self._id} Name: {self.name} "
 
 
-class CreditCard(Card):
+class ExpiryCard(Card):
+    def __init__(self, expiry_date, **kwargs):
+        self._expiry_date = expiry_date
+        super().__init__(**kwargs)
+
+    def __str__(self):
+        return super().__str__() + f"Expiry Date: {self._expiry_date} "
+
+
+class CreditCard(ExpiryCard):
     """
     This class holds the attributes of the Credit Card instance which is the subclass of the Card class
     """
@@ -54,7 +63,7 @@ class CreditCard(Card):
         return super().__str__() + f"Account_number: {self._account_number}, Security code: {self._security_code}"
 
 
-class MemberShipCard(Card):
+class MemberShipCard(ExpiryCard):
     def __init__(self, organization, membership_number, **kwargs):
         self._organization = organization
         self._membership_number = membership_number
@@ -72,7 +81,3 @@ class GiftCard(Card):
 
     def __str__(self):
         return super().__str__() + f"Amount: {self._amount}, Code: {self._code}"
-
-
-# class RestaurantCard(MemberShipCard):
-#     def __init__(self, )

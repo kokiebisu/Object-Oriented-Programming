@@ -1,1 +1,0 @@
-ID: 0 Name: MasterCard Account_number: 10101, Security code: 101

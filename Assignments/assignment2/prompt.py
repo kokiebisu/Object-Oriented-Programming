@@ -53,6 +53,8 @@ class Prompt:
         print(
             "\nWhat type of card is it?"
             "\n1. Credit Card"
+            "\n2. Membership Card"
+            "\n3. Gift Card"
         )
         return int(input())
 
@@ -64,11 +66,35 @@ class Prompt:
         """
         print("What is the name of the card?")
         name_input = input()
-        print("What is account number?")
+        print("What is the account number?")
         account_number_input = int(input())
         print("What is the security code?")
         security_code_input = int(input())
-        return [name_input, account_number_input, security_code_input]
+        print("When is the expiry date?")
+        expiry_date_input = input()
+        return [name_input, account_number_input, security_code_input, expiry_date_input]
+
+    @staticmethod
+    def prompt_membership_card():
+        print("What is the name of the card?")
+        name_input = input()
+        print("What is the organization?")
+        organization_input = input()
+        print("What is the membership number?")
+        membership_input = input()
+        print("When is the expiry date?")
+        expiry_date_input = input()
+        return [name_input, organization_input, membership_input, expiry_date_input]
+
+    @staticmethod
+    def prompt_gift_card():
+        print("What is the name of the card?")
+        name_input = input()
+        print("What is the amount?")
+        amount_input = int(input())
+        print("What is the code?")
+        code_input = input()
+        return [name_input, amount_input, code_input]
 
     @staticmethod
     def prompt_id():
