@@ -1,6 +1,6 @@
 """ This module runs the sequence of instructions for the program to function"""
 from wallet import Wallet
-from card import CreditCard, MemberShipCard, GiftCard
+from card import CreditCard, ExpiryCard, MemberShipCard, GiftCard, DebitCard, BusinessCard
 from prompt import Prompt
 
 
@@ -37,6 +37,10 @@ class Controller:
                 card = self.create_membership_card()
             elif card_type == 3:
                 card = self.create_gift_card()
+            elif card_type == 4:
+                card = self.create_business_card()
+            elif card_type == 5:
+                card = self.create_debit_card()
             else:
                 raise InvalidOptionError("Select from the given options!")
         except InvalidOptionError as e:
@@ -109,7 +113,8 @@ class Controller:
         Creates a credit card from the given inputs
         :return: a CreditCard object
         """
-        name_input, account_number_input, security_code_input, expiry_date_input = Prompt.prompt_credit_card()
+        name_input, account_number_input, security_code_input = CreditCard.get_input()
+        expiry_date_input = ExpiryCard.get_input()
         return CreditCard(
             name=name_input, account_number=account_number_input, security_code=security_code_input, expiry_date=expiry_date_input)
 
@@ -119,8 +124,28 @@ class Controller:
         Creates a membership card from the given inputs
         :return: a MembershipCard object
         """
-        name_input, organization_input, membership_input, expiry_date_input = Prompt.prompt_membership_card()
+        name_input, organization_input, membership_input = MemberShipCard.get_input()
+        expiry_date_input = ExpiryCard.get_input()
         return MemberShipCard(name=name_input, organization=organization_input, membership_number=membership_input, expiry_date=expiry_date_input)
+
+    @staticmethod
+    def create_debit_card():
+        """
+        Creates a debit card from the given inputs
+        :return: a DebitCard object
+        """
+        name_input, account_number_input, security_code_input = DebitCard.get_input()
+        expiry_date_input = ExpiryCard.get_input()
+        return DebitCard(name=name_input, account_number=account_number_input, security_code=security_code_input, expiry_date=expiry_date_input)
+
+    @staticmethod
+    def create_business_card():
+        """
+        Creates a business card from the given inputs
+        :return: a BusinessCard object
+        """
+        name_input, company_input, email_address_input = BusinessCard.get_input()
+        return BusinessCard(name=name_input, company=company_input, email_address=email_address_input)
 
     @staticmethod
     def create_gift_card():
@@ -128,7 +153,7 @@ class Controller:
         Creates a gift card from the given inputs
         :return: a Gift Card object
         """
-        name_input, amount_input, code_input = Prompt.prompt_gift_card()
+        name_input, amount_input, code_input = GiftCard.get_input()
         return GiftCard(name=name_input, amount=amount_input, code=code_input)
 
     def give_options(self):
@@ -171,6 +196,7 @@ class InvalidOptionError(Exception):
     """
     An error called when the user tried to select an option that is not displayed
     """
+
     def __init__(self, name):
         """
         Initializes the error

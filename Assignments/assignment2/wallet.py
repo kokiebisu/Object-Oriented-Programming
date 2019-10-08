@@ -6,6 +6,7 @@ class Wallet:
     """
     A Wallet that holds a list of cards. It can perform tasks on the cards you hold.
     """
+
     def __init__(self):
         """
         Initializes the Wallet class.
@@ -26,11 +27,15 @@ class Wallet:
         """
         for card in self._cards_list:
             if card.id == id_:
+                print(f"id: {card.id}")
                 index = self._cards_list.index(card)
-                self._cards_list.remove(card)
+                print(f"index: {index}")
+                self._cards_list.pop(index)
         for card in self._cards_list:
             if self._cards_list.index(card) >= index:
                 card.id -= 1
+
+        return True
 
     def search(self, id_):
         """
@@ -60,4 +65,3 @@ class Wallet:
     @property
     def cards_list(self):
         return self._cards_list
-
