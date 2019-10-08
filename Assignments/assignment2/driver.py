@@ -4,7 +4,7 @@ from controller import Controller
 
 def main():
     """
-    Drives the program
+    Starts the program
     """
     Controller().run()
 

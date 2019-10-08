@@ -38,10 +38,10 @@ class Card(ABC):
         String representation of the created instance
         :return: a string
         """
-        return f"ID: {self._id} Type: {self.__class__.__name__} Name: {self.name} "
+        return f"ID: {self.id} Type: {self.__class__.__name__} Name: {self.name} "
 
 
-class ExpiryCard(Card):
+class Expires:
     """
     This class holds the attributes of the Expiry Card which adds a Expiry date atttributes to the card
     """
@@ -56,6 +56,10 @@ class ExpiryCard(Card):
         super().__init__(**kwargs)
 
     def __str__(self):
+        """
+        A String representation of the created instance
+        :return: a string
+        """
         return super().__str__() + f"Expiry Date: {self._expiry_date} "
 
     @staticmethod
@@ -67,7 +71,7 @@ class ExpiryCard(Card):
         return input("When is the expiry date?\n")
 
 
-class CreditCard(ExpiryCard, Card):
+class CreditCard(Expires, Card):
     """
     This class holds the attributes of the Credit Card
     """
@@ -102,7 +106,7 @@ class CreditCard(ExpiryCard, Card):
         return super().__str__() + f"Account_number: {self._account_number}, Security code: {self._security_code}"
 
 
-class DebitCard(ExpiryCard, Card):
+class DebitCard(Expires, Card):
     """
     This class holds the attributes of a Debit Card
     """
@@ -123,10 +127,14 @@ class DebitCard(ExpiryCard, Card):
         return [name_input, account_number_input, security_code_input]
 
     def __str__(self):
+        """
+        A String representation of a created instance
+        :return: a string
+        """
         return super().__str__() + f"Account_number: {self._account_number}, Security code: {self._security_code}"
 
 
-class MemberShipCard(ExpiryCard, Card):
+class MemberShipCard(Expires, Card):
     """
     This class holds the attributes of a Membership Card
     """
@@ -146,7 +154,7 @@ class MemberShipCard(ExpiryCard, Card):
     def get_input():
         """
         Retrieves the necessary input to create a Membership Card
-        :return:
+        :return: a list
         """
         name_input = input("What is the name of the card?\n")
         organization_input = input("What is the organization?\n")

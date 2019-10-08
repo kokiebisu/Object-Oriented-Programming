@@ -26,15 +26,10 @@ class Wallet:
         Deletes the card based on the id given by the user
         :param id_: an int
         """
+        self._cards_list = [card for card in self._cards_list if card.id != id_]
         for card in self._cards_list:
-            if card.id == id_:
-                print(f"id: {card.id}")
-                index = self._cards_list.index(card)
-                print(f"index: {index}")
-                self._cards_list.pop(index)
-        for card in self._cards_list:
-            if self._cards_list.index(card) >= index:
-                card.id -= 1
+            print(card)
+
         if not self._cards_list:
             Card.card_id = 0
 
@@ -66,8 +61,16 @@ class Wallet:
                 write_file.write("%s\n" % item)
 
     def __len__(self):
+        """
+        Returns the size of the list of cards the wallet holds
+        :return: an int
+        """
         return len(self._cards_list)
 
     @property
     def cards_list(self):
+        """
+        Gets the list of cards the wallet instance holds
+        :return: a list
+        """
         return self._cards_list

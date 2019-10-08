@@ -1,2 +1,0 @@
-ID: 0 Type: BusinessCard Name: ken Company: lala, Email Address: lala
-ID: 1 Type: DebitCard Name: visa Expiry Date: 1 Account_number: 2394820, Security code: 23

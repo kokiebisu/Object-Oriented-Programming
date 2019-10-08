@@ -1,1 +1,0 @@
-ID: 0 Type: CreditCard Name: 1 Expiry Date: 1 Account_number: 1, Security code: 1

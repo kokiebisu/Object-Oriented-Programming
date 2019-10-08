@@ -1,1 +1,0 @@
-ID: 0 Type: CreditCard Name: VIsa Expiry Date: 2019/08/19 Account_number: 3241, Security code: 42314

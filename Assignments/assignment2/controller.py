@@ -1,6 +1,6 @@
 """ This module runs the sequence of instructions for the program to function"""
 from wallet import Wallet
-from card import CreditCard, ExpiryCard, MemberShipCard, GiftCard, DebitCard, BusinessCard
+from card import CreditCard, Expires, MemberShipCard, GiftCard, DebitCard, BusinessCard
 from prompt import Prompt
 
 
@@ -111,7 +111,7 @@ class Controller:
         :return: a CreditCard object
         """
         name_input, account_number_input, security_code_input = CreditCard.get_input()
-        expiry_date_input = ExpiryCard.get_input()
+        expiry_date_input = Expires.get_input()
         return CreditCard(
             name=name_input, account_number=account_number_input, security_code=security_code_input, expiry_date=expiry_date_input)
 
@@ -122,8 +122,9 @@ class Controller:
         :return: a MembershipCard object
         """
         name_input, organization_input, membership_input = MemberShipCard.get_input()
-        expiry_date_input = ExpiryCard.get_input()
-        return MemberShipCard(name=name_input, organization=organization_input, membership_number=membership_input, expiry_date=expiry_date_input)
+        expiry_date_input = Expires.get_input()
+        return MemberShipCard(name=name_input, organization=organization_input, membership_number=membership_input,
+                              expiry_date=expiry_date_input)
 
     @staticmethod
     def create_debit_card():
@@ -132,8 +133,9 @@ class Controller:
         :return: a DebitCard object
         """
         name_input, account_number_input, security_code_input = DebitCard.get_input()
-        expiry_date_input = ExpiryCard.get_input()
-        return DebitCard(name=name_input, account_number=account_number_input, security_code=security_code_input, expiry_date=expiry_date_input)
+        expiry_date_input = Expires.get_input()
+        return DebitCard(name=name_input, account_number=account_number_input,
+                         security_code=security_code_input, expiry_date=expiry_date_input)
 
     @staticmethod
     def create_business_card():
@@ -148,7 +150,7 @@ class Controller:
     def create_gift_card():
         """
         Creates a gift card from the given inputs
-        :return: a Gift Card object
+        :return: a GiftCard object
         """
         name_input, amount_input, code_input = GiftCard.get_input()
         return GiftCard(name=name_input, amount=amount_input, code=code_input)
@@ -159,7 +161,8 @@ class Controller:
                 card_type = Prompt.prompt_card_type()
                 self.add_card(card_type)
             elif option_input == 2:
-                self.search_card()
+                id_input = Prompt.prompt_id()
+                self.search_card(id_input)
             elif option_input == 3:
                 id_input = Prompt.prompt_id()
                 self.delete_card(id_input)

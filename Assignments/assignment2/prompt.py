@@ -10,7 +10,6 @@ class Prompt:
     def welcome():
         """
         Welcomes the user
-        :return:
         """
         print(
             "\nWelcome to the wallet\n"
