@@ -1,5 +1,6 @@
 """ This module interacts with the cards """
 from datetime import datetime
+from card import Card
 
 
 class Wallet:
@@ -34,6 +35,8 @@ class Wallet:
         for card in self._cards_list:
             if self._cards_list.index(card) >= index:
                 card.id -= 1
+        if not self._cards_list:
+            Card.card_id = 0
 
         return True
 
