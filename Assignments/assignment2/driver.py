@@ -6,7 +6,7 @@ def main():
     """
     Drives the program
     """
-    Controller()
+    Controller().run()
 
 
 if __name__ == "__main__":

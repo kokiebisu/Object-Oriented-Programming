@@ -65,6 +65,9 @@ class Wallet:
             for item in self._cards_list:
                 write_file.write("%s\n" % item)
 
+    def __len__(self):
+        return len(self._cards_list)
+
     @property
     def cards_list(self):
         return self._cards_list

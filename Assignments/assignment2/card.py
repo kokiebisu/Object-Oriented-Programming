@@ -20,6 +20,9 @@ class Card(ABC):
 
     @abstractstaticmethod
     def get_input():
+        """
+        Retrieves input to create the card
+        """
         pass
 
     @property
@@ -57,12 +60,16 @@ class ExpiryCard(Card):
 
     @staticmethod
     def get_input():
+        """
+        Retrieves the expiry date to create the card
+        :return: a string
+        """
         return input("When is the expiry date?\n")
 
 
 class CreditCard(ExpiryCard, Card):
     """
-    This class holds the attributes of the Credit Card instance which is the subclass of the ExpiryCard class
+    This class holds the attributes of the Credit Card
     """
 
     def __init__(self, account_number, security_code, **kwargs):
@@ -96,6 +103,9 @@ class CreditCard(ExpiryCard, Card):
 
 
 class DebitCard(ExpiryCard, Card):
+    """
+    This class holds the attributes of a Debit Card
+    """
     def __init__(self, account_number, security_code, **kwargs):
         self._account_number = account_number
         self._security_code = security_code
@@ -118,7 +128,7 @@ class DebitCard(ExpiryCard, Card):
 
 class MemberShipCard(ExpiryCard, Card):
     """
-    This class holds the attributes of the Membership Card instance which is the subclass of the ExpiryCard class
+    This class holds the attributes of a Membership Card
     """
 
     def __init__(self, organization, membership_number, **kwargs):
@@ -134,6 +144,10 @@ class MemberShipCard(ExpiryCard, Card):
 
     @staticmethod
     def get_input():
+        """
+        Retrieves the necessary input to create a Membership Card
+        :return:
+        """
         name_input = input("What is the name of the card?\n")
         organization_input = input("What is the organization?\n")
         membership_input = input("What is the membership number?\n")
@@ -149,7 +163,7 @@ class MemberShipCard(ExpiryCard, Card):
 
 class GiftCard(Card):
     """
-    This class holds the attributes of the Gift Card instance which is the subclass of the Card class
+    This class holds the attributes of a Gift Card
     """
 
     def __init__(self, amount, code, **kwargs):
@@ -166,7 +180,7 @@ class GiftCard(Card):
     @staticmethod
     def get_input():
         """
-        Asks the user the card information to be stored
+        Retrieves the necessary input to create a Gift Card
         :return: a list
         """
         name_input = input("What is the name of the card?\n")
@@ -183,7 +197,16 @@ class GiftCard(Card):
 
 
 class BusinessCard(Card):
+    """
+    This class holds the attributes of a Business Card
+    """
     def __init__(self, company, email_address, **kwargs):
+        """
+        Initializes the business card instance
+        :param company: a string
+        :param email_address: a string
+        :param kwargs: keyword arguments
+        """
         self._company = company
         self._email_address = email_address
         super().__init__(**kwargs)
@@ -200,4 +223,8 @@ class BusinessCard(Card):
         return [name_input, company_input, email_address_input]
 
     def __str__(self):
+        """
+        A String representation of the created instance
+        :return: a string
+        """
         return super().__str__() + f"Company: {self._company}, Email Address: {self._email_address}"

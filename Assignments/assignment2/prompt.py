@@ -57,56 +57,6 @@ class Prompt:
         )
         return int(input())
 
-    # @staticmethod
-    # def prompt_credit_card():
-    #     """
-    #     Asks the user the card information to be stored
-    #     :return: a list
-    #     """
-    #     name_input = input("What is the name of the card?\n")
-    #     account_number_input = int(input("What is the account number\n"))
-    #     security_code_input = int(input("What is the security code?\n"))
-    #     expiry_date_input = input("When is the expiry date?\n")
-    #     return [name_input, account_number_input, security_code_input, expiry_date_input]
-
-    # @staticmethod
-    # def prompt_debit_card():
-    #     """
-    #     Asks the user the card information to be stored
-    #     :return: a list
-    #     """
-    #     name_input = input("What is the name of the card?\n")
-    #     account_number_input = int(input("What is the account number\n"))
-    #     security_code_input = int(input("What is the security code?\n"))
-    #     expiry_date_input = input("When is the expiry date?\n")
-    #     return [name_input, account_number_input, security_code_input, expiry_date_input]
-
-    # @staticmethod
-    # def prompt_business_card():
-    #     """
-    #     Asks the user the card information to be stored
-    #     :return: a list
-    #     """
-    #     name_input = input("Who's business card is it?\n")
-    #     company_input = int(input("What is the name of the company?\n"))
-    #     email_address_input = input("What is the email address?\n")
-    #     return [name_input, company_input, email_address_input]
-
-    # @staticmethod
-    # def prompt_membership_card():
-    #     name_input = input("What is the name of the card?\n")
-    #     organization_input = input("What is the organization?\n")
-    #     membership_input = input("What is the membership number?\n")
-    #     expiry_date_input = input("When is the expiry date?\n")
-    #     return [name_input, organization_input, membership_input, expiry_date_input]
-
-    # @staticmethod
-    # def prompt_gift_card():
-    #     name_input = input("What is the name of the card?\n")
-    #     amount_input = int(input("What is the amount?\n"))
-    #     code_input = input("What is the code?\n")
-    #     return [name_input, amount_input, code_input]
-
     @staticmethod
     def prompt_id():
         """

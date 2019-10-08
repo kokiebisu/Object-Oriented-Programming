@@ -12,7 +12,6 @@ class Controller:
     def __init__(self):
         """ Initializes the Controller class """
         self._wallet = None
-        self.run()
 
     def run(self):
         """
@@ -23,14 +22,14 @@ class Controller:
             self._wallet = Wallet()
             print("\nSuccessfully created wallet")
             while True:
-                self.give_options()
+                option_input = Prompt.display_options()
+                self.give_options(option_input)
 
-    def add_card(self):
+    def add_card(self, card_type):
         """
         Calls the add_method inside the wallet with the retrieved input from the user
         """
         try:
-            card_type = Prompt.prompt_card_type()
             if card_type == 1:
                 card = self.create_credit_card()
             elif card_type == 2:
@@ -50,7 +49,7 @@ class Controller:
             self._wallet.add(card)
             print("Successfully added")
 
-    def search_card(self):
+    def search_card(self, id_input):
         """
         Calls the search method inside the wallet with the retrieved input from the user
         """
@@ -58,12 +57,11 @@ class Controller:
             if not self._wallet.cards_list:
                 raise EmptyWalletError(
                     "There are no cards to search in your wallet!")
-            id_input = Prompt.prompt_id()
             self._wallet.search(id_input)
         except EmptyWalletError as e:
             print(e)
 
-    def delete_card(self):
+    def delete_card(self, id_input):
         """
         Calls the delete method inside the wallet with the retrieved input from the user
         """
@@ -74,7 +72,6 @@ class Controller:
         except EmptyWalletError as e:
             print(e)
         else:
-            id_input = Prompt.prompt_id()
             if self._wallet.delete(id_input):
                 print("Successfully deleted")
             else:
@@ -156,15 +153,16 @@ class Controller:
         name_input, amount_input, code_input = GiftCard.get_input()
         return GiftCard(name=name_input, amount=amount_input, code=code_input)
 
-    def give_options(self):
+    def give_options(self, option_input):
         try:
-            option_input = Prompt.display_options()
             if option_input == 1:
-                self.add_card()
+                card_type = Prompt.prompt_card_type()
+                self.add_card(card_type)
             elif option_input == 2:
                 self.search_card()
             elif option_input == 3:
-                self.delete_card()
+                id_input = Prompt.prompt_id()
+                self.delete_card(id_input)
             elif option_input == 4:
                 self.export_card()
             elif option_input == 5:
@@ -176,7 +174,6 @@ class Controller:
                 raise ValueError
         except ValueError:
             print("Select from within the provided options!")
-            self.give_options()
 
 
 class EmptyWalletError(Exception):
