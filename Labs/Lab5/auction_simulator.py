@@ -24,6 +24,55 @@ class Auction:
               )
 
 
+class Auctioneer:
+    """
+    Maintains a list of bidders and notifies when it accepts new bid. Auctioneers
+    can accept new bids if it is greater than the highest current bid. When highest
+    current bid updates, it will notify all the bidders except for the bidder that
+    placed the new bid.
+    """
+
+    def __init__(self, highest_current_bid, highest_current_bidder):
+        self._highest_current_bid = highest_current_bid
+        self._highest_current_bidder = highest_current_bidder
+        self._bidders = []
+
+    def register_bidders(self, observer):
+        self._bidders.append(observer)
+
+    def __len__(self):
+        return len(self._bidders)
+
+    @property
+    def highest_current_bid(self):
+        return self._highest_current_bid
+
+    @property
+    def highest_current_bidder(self):
+        return self._highest_current_bidder
+
+    def update_info(self, bid, bidder):
+        if self._highest_current_bid != bid:
+            self._highest_current_bid = bid
+            self._highest_current_bidder = bidder
+            self.notify_bidders()
+
+    @property
+    def bidders(self):
+        return self._bidders
+
+    def notify_bidders(self):
+        # notify the observers
+        for observer in self._bidders:
+            updated_info = observer(self)
+            if updated_info != None:
+                updated_bidder, updated_bid = updated_info
+                print(
+                    f"{updated_bidder} bidded ${updated_bid} in response to {self._highest_current_bidder}'s bid of ${self._highest_current_bid}'")
+                self.update_info(updated_bid, updated_bidder)
+        return [self.highest_current_bidder, self.highest_current_bid]
+
+
 def main():
     item_name = input("What is the name of the item?\n")
     starting_price = int(input("What is the starting price?\n"))
