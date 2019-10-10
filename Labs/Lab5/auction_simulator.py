@@ -1,3 +1,29 @@
+import random
+
+
+class Auction:
+    """
+    Holds the attribute of an Auction object. Sets up the auction for an item with the given
+    starting price
+    """
+
+    def __init__(self, bidders, item, starting_price):
+        """
+        :param bidders: a list of participating bidder objects
+        :param item: a string representing the name of the item being auctioned
+        :param starting_price: an int
+        """
+        self._bidders = bidders
+        self._item = item
+        self._starting_price = starting_price
+
+    def start(self):
+        print("Starting Auction!!!\n"
+              "-------------------\n"
+              f"Auctioning {self._item} starting at {self._starting_price}"
+              )
+
+
 def main():
     item_name = input("What is the name of the item?\n")
     starting_price = int(input("What is the starting price?\n"))
