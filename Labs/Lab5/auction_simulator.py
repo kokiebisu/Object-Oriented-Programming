@@ -25,7 +25,7 @@ class Auction:
         """
         print("Starting Auction!!!\n"
               "-------------------\n"
-              f"Auctioning {self._item} starting at {self._starting_price}"
+              f"Auctioning {self._item} starting at ${self._starting_price}"
               )
 
 
@@ -46,6 +46,7 @@ class Auctioneer:
         self._highest_current_bid = highest_current_bid
         self._highest_current_bidder = highest_current_bidder
         self._bidders = []
+        self._result_bidders = {}
 
     def register_bidders(self, bidder):
         """
@@ -94,14 +95,8 @@ class Auctioneer:
         Notifies all the bidders there was an update on the highest bid
         :return: a list
         """
-        for observer in self._bidders:
-            updated_info = observer(self)
-            if updated_info != None:
-                updated_bidder, updated_bid = updated_info
-                print(
-                    f"{updated_bidder} bidded ${updated_bid} in response to {self._highest_current_bidder}'s bid of ${self._highest_current_bid}'")
-                self.update_info(updated_bid, updated_bidder)
-        return [self.highest_current_bidder, self.highest_current_bid]
+        for bidder in self.bidders:
+            bidder(self)
 
 
 class Bidder:
@@ -111,7 +106,7 @@ class Bidder:
     should be notified.
     """
 
-    def __init__(self, name, budget, bid_probability, bid_increase_perc, highest_bid):
+    def __init__(self, name, budget, bid_increase_perc, highest_bid):
         """
         Initializes the Bidder instance
         :param name: a string
@@ -122,7 +117,7 @@ class Bidder:
         """
         self._name = name
         self._budget = budget
-        self._bid_probability = bid_probability
+        self._bid_probability = random.random()
         self._bid_increase_perc = bid_increase_perc
         self._highest_bid = highest_bid
 
@@ -131,15 +126,22 @@ class Bidder:
         Allows the bidder to place a new bid with the auctioneer
         :param auctioneer: an auction object
         """
-        if self._name != auctioneer.highest_current_bidder:
-            if random.random() < self._bid_probability:
-                updated_bid = auctioneer._highest_current_bid * self._bid_increase_perc
-                if updated_bid < self._budget:
-                    self._highest_bid = updated_bid
-                    updated_bidder = self._name
-                    return [updated_bidder, updated_bid]
-            else:
-                return None
+        if self == auctioneer.highest_current_bidder:
+            pass
+        elif self._budget < auctioneer.highest_current_bid * self._bid_increase_perc:
+            auctioneer._highest_current_bid = self.highest_bid
+            auctioneer.bidders.remove(self)
+        else:
+            if self._bid_probability < random.random():
+                bid_amount = auctioneer.highest_current_bid * self._bid_increase_perc
+                print(f"{self.name} has bidded ${bid_amount} in response"
+                      f" to {auctioneer.highest_current_bidder} bid of {auctioneer.highest_current_bid}"
+                      )
+                auctioneer._highest_current_bidder = self._name
+                auctioneer._highest_current_bid = bid_amount
+                if bid_amount > self._highest_bid:
+                    self._highest_bid = bid_amount
+        auctioneer._result_bidders[self._name] = auctioneer._highest_current_bid
 
     @property
     def name(self):
@@ -169,24 +171,15 @@ def main():
     for bidder in range(number_of_bidders):
         bidder_name = input("What is the name of the bidder?\n")
         budget = int(input("How much can you spend?\n"))
-        bid_probability = random.random()
-        bid_increase_percent = random.uniform(1, 2)
-        bidder = Bidder(bidder_name, budget, bid_probability,
-                        bid_increase_percent, 0)
+        bid_increase_percent = float(input("What is the increase percentage?"))
+        bidder = Bidder(bidder_name, budget, bid_increase_percent, 0)
         auctioneer.register_bidders(bidder)
-
     auction = Auction(auctioneer.bidders, item_name, starting_price)
     auction.start()
-    bidder, bid = auctioneer.notify_bidders()
-    if bidder != "Starting Bid":
-        print(f"The Winner of the auction is: {bidder} at ${bid}")
-    else:
-        print(f"Seems like no one was interested with the item_name")
-
-    bidders_result = {
-        bidder.name: bidder.highest_bid for bidder in auctioneer.bidders}
-    for bidder, bid in bidders_result.items():
-        print(f"{bidder}'s highest bid was ${bid}'")
+    while len(auctioneer.bidders) > 1:
+        auctioneer.notify_bidders()
+    for bidder, bid in auctioneer._result_bidders.items():
+        print(f"{bidder}'s highest bid was ${bid}")
 
 
 if __name__ == '__main__':
