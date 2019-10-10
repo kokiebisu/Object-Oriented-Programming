@@ -18,6 +18,7 @@ class Auction:
         self._bidders = bidders
         self._item = item
         self._starting_price = starting_price
+        self.auctioneer = Auctioneer(starting_price)
 
     def start(self):
         """
@@ -27,6 +28,7 @@ class Auction:
               "-------------------\n"
               f"Auctioning {self._item} starting at ${self._starting_price}"
               )
+        self.auctioneer.notify_bidders()
 
 
 class Auctioneer:
@@ -37,14 +39,14 @@ class Auctioneer:
     placed the new bid.
     """
 
-    def __init__(self, highest_current_bid, highest_current_bidder):
+    def __init__(self, value):
         """
         Initializes the attributes for an auctioneer instance
         :param highest_current_bid: a float
         :param highest_current_bidder: a string
         """
-        self._highest_current_bid = highest_current_bid
-        self._highest_current_bidder = highest_current_bidder
+        self._highest_current_bid = value
+        self._highest_current_bidder = "House start bidder"
         self._bidders = []
         self._result_bidders = {}
 
@@ -71,16 +73,12 @@ class Auctioneer:
         """
         return self._highest_current_bidder
 
-    def update_info(self, bid, bidder):
-        """
-        Updates the highest bid and the highest bidder
-        :param bid: a float
-        :param bidder: a string
-        """
-        if self._highest_current_bid != bid:
-            self._highest_current_bid = bid
-            self._highest_current_bidder = bidder
-            self.notify_bidders()
+    @highest_current_bidder.setter
+    def highest_current_bidder(self, value):
+        self._highest_current_bidder = value
+        self._highest_current_bid = value._highest_bid
+        print("A bid was made!")
+        self.notify_bidders()
 
     @property
     def bidders(self):
@@ -95,7 +93,7 @@ class Auctioneer:
         Notifies all the bidders there was an update on the highest bid
         :return: a list
         """
-        for bidder in self.bidders:
+        for bidder in self._bidders:
             bidder(self)
 
 
@@ -106,7 +104,7 @@ class Bidder:
     should be notified.
     """
 
-    def __init__(self, name, budget, bid_increase_perc, highest_bid):
+    def __init__(self, name, budget, bid_increase_perc):
         """
         Initializes the Bidder instance
         :param name: a string
@@ -119,29 +117,23 @@ class Bidder:
         self._budget = budget
         self._bid_probability = random.random()
         self._bid_increase_perc = bid_increase_perc
-        self._highest_bid = highest_bid
+        self._highest_bid = 0
 
     def __call__(self, auctioneer):
         """
         Allows the bidder to place a new bid with the auctioneer
         :param auctioneer: an auction object
         """
-        if self == auctioneer.highest_current_bidder:
-            pass
-        elif self._budget < auctioneer.highest_current_bid * self._bid_increase_perc:
-            auctioneer._highest_current_bid = self.highest_bid
-            auctioneer.bidders.remove(self)
-        else:
-            if self._bid_probability < random.random():
-                bid_amount = auctioneer.highest_current_bid * self._bid_increase_perc
-                print(f"{self.name} has bidded ${bid_amount} in response"
-                      f" to {auctioneer.highest_current_bidder} bid of {auctioneer.highest_current_bid}"
-                      )
-                auctioneer._highest_current_bidder = self._name
-                auctioneer._highest_current_bid = bid_amount
-                if bid_amount > self._highest_bid:
-                    self._highest_bid = bid_amount
-        auctioneer._result_bidders[self._name] = auctioneer._highest_current_bid
+        if self != auctioneer.highest_current_bidder:
+            if self._budget > auctioneer.highest_current_bid * self._bid_increase_perc:
+                if self._bid_probability >= random.random():
+                    self._highest_bid = auctioneer.highest_current_bid * \
+                        self._bid_increase_perc
+                    print(f"{self.name} bidded ${self._highest_bid} in response to "
+                          f"{auctioneer.highest_current_bidder} bid of "
+                          f"${auctioneer.highest_current_bid}!")
+
+                    auctioneer.highest_current_bidder = self
 
     @property
     def name(self):
@@ -159,27 +151,32 @@ class Bidder:
         """
         return self._highest_bid
 
+    def __str__(self):
+        return f"{self._name}"
+
 
 def main():
     """
     Runs the program
     """
-    item_name = input("What is the name of the item?\n")
-    starting_price = int(input("What is the starting price?\n"))
-    auctioneer = Auctioneer(starting_price, "Starting Bid")
+    item_name = "vase"
+    starting_price = 10
     number_of_bidders = int(input("How many bidders are there?\n"))
+    auction = Auction(number_of_bidders, item_name, starting_price)
     for bidder in range(number_of_bidders):
         bidder_name = input("What is the name of the bidder?\n")
-        budget = int(input("How much can you spend?\n"))
-        bid_increase_percent = float(input("What is the increase percentage?"))
-        bidder = Bidder(bidder_name, budget, bid_increase_percent, 0)
-        auctioneer.register_bidders(bidder)
-    auction = Auction(auctioneer.bidders, item_name, starting_price)
+        budget = 10000
+        bid_increase_percent = 1.6
+        auction.auctioneer.register_bidders(
+            Bidder(bidder_name, budget, bid_increase_percent, ))
     auction.start()
-    while len(auctioneer.bidders) > 1:
-        auctioneer.notify_bidders()
-    for bidder, bid in auctioneer._result_bidders.items():
-        print(f"{bidder}'s highest bid was ${bid}")
+
+    results = {
+        bidder._name: bidder._highest_bid for bidder in auction.auctioneer.bidders}
+    for key, value in results.items():
+        print(f"{key}'s highest bid was ${value}")
+    print(
+        f"The highest bid was {auction.auctioneer.highest_current_bid} by {auction.auctioneer._highest_current_bidder}")
 
 
 if __name__ == '__main__':
