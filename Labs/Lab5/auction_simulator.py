@@ -73,6 +73,46 @@ class Auctioneer:
         return [self.highest_current_bidder, self.highest_current_bid]
 
 
+class Bidder:
+    """
+    Observer
+    callable object -> object that can be called as a function
+    Class that holds the attributes of the people who place the bids
+    during the auction. Every time the auctioner accepts a bid, all the bidders
+    should be notified.
+    """
+
+    def __init__(self, name, budget, bid_probability, bid_increase_perc, highest_bid):
+        """
+        Initializes the Bidder instance
+        :param name: a string
+        :param budget: an int
+        :param bid_probability: a float
+        :param bid_increase_perc: a float
+        :param highest_bid: a float
+        """
+        self._name = name
+        self._budget = budget
+        self._bid_probability = bid_probability
+        self._bid_increase_perc = bid_increase_perc
+        self._highest_bid = highest_bid
+
+    def __call__(self, auctioneer):
+        """
+        Allows the bidder to place a new bid with the auctioneer
+        :param auctioneer: an auction object
+        """
+        if self._name != auctioneer.highest_current_bidder:
+            if random.random() < self._bid_probability:
+                updated_bid = auctioneer._highest_current_bid * self._bid_increase_perc
+                if updated_bid < self._budget:
+                    self._highest_bid = updated_bid
+                    updated_bidder = self._name
+                    return [updated_bidder, updated_bid]
+            else:
+                return None
+
+
 def main():
     item_name = input("What is the name of the item?\n")
     starting_price = int(input("What is the starting price?\n"))
