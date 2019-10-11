@@ -159,14 +159,15 @@ def main():
     """
     Runs the program
     """
-    item_name = "vase"
-    starting_price = 10
+    item_name = input("What is the name of the item?\n")
+    starting_price = int(input("How much is the starting price?\n"))
     number_of_bidders = int(input("How many bidders are there?\n"))
     auction = Auction(number_of_bidders, item_name, starting_price)
     for bidder in range(number_of_bidders):
         bidder_name = input("What is the name of the bidder?\n")
-        budget = 10000
-        bid_increase_percent = 1.6
+        budget = int(input("How much can he/she pay?\n"))
+        bid_increase_percent = float(
+            input("How much is the bid increase rate?\n"))
         auction.auctioneer.register_bidders(
             Bidder(bidder_name, budget, bid_increase_percent, ))
     auction.start()
@@ -176,7 +177,7 @@ def main():
     for key, value in results.items():
         print(f"{key}'s highest bid was ${value}")
     print(
-        f"The highest bid was {auction.auctioneer.highest_current_bid} by {auction.auctioneer._highest_current_bidder}")
+        f"The highest bid was ${auction.auctioneer.highest_current_bid} by {auction.auctioneer._highest_current_bidder}")
 
 
 if __name__ == '__main__':
