@@ -75,6 +75,9 @@ class Auctioneer:
 
     @highest_current_bidder.setter
     def highest_current_bidder(self, value):
+        """
+        Sets the highest bidder and the highest bid
+        """
         self._highest_current_bidder = value
         self._highest_current_bid = value._highest_bid
         print("A bid was made!")
@@ -152,6 +155,9 @@ class Bidder:
         return self._highest_bid
 
     def __str__(self):
+        """
+        A string representation of the instance
+        """
         return f"{self._name}"
 
 
@@ -159,25 +165,28 @@ def main():
     """
     Runs the program
     """
-    item_name = input("What is the name of the item?\n")
-    starting_price = int(input("How much is the starting price?\n"))
-    number_of_bidders = int(input("How many bidders are there?\n"))
-    auction = Auction(number_of_bidders, item_name, starting_price)
-    for bidder in range(number_of_bidders):
-        bidder_name = input("What is the name of the bidder?\n")
-        budget = int(input("How much can he/she pay?\n"))
-        bid_increase_percent = float(
-            input("How much is the bid increase rate?\n"))
-        auction.auctioneer.register_bidders(
-            Bidder(bidder_name, budget, bid_increase_percent, ))
-    auction.start()
+    try:
+        item_name = input("What is the name of the item?\n")
+        starting_price = int(input("How much is the starting price?\n"))
+        number_of_bidders = int(input("How many bidders are there?\n"))
+        auction = Auction(number_of_bidders, item_name, starting_price)
+        for bidder in range(number_of_bidders):
+            bidder_name = input("What is the name of the bidder?\n")
+            budget = int(input("How much can he/she pay?\n"))
+            bid_increase_percent = float(
+                input("How much is the bid increase rate?\n"))
+            auction.auctioneer.register_bidders(
+                Bidder(bidder_name, budget, bid_increase_percent, ))
+        auction.start()
 
-    results = {
-        bidder._name: bidder._highest_bid for bidder in auction.auctioneer.bidders}
-    for key, value in results.items():
-        print(f"{key}'s highest bid was ${value}")
-    print(
-        f"The highest bid was ${auction.auctioneer.highest_current_bid} by {auction.auctioneer._highest_current_bidder}")
+        results = {
+            bidder._name: bidder._highest_bid for bidder in auction.auctioneer.bidders}
+        for key, value in results.items():
+            print(f"{key}'s highest bid was ${value}")
+        print(
+            f"The highest bid was ${auction.auctioneer.highest_current_bid} by {auction.auctioneer._highest_current_bidder}")
+    except ValueError:
+        print("Invalid Value! Check again!")
 
 
 if __name__ == '__main__':
