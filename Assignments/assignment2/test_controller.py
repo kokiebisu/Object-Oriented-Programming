@@ -56,7 +56,7 @@ class TestController(TestCase):
         self.controller = Controller()
         self.assertRaises(InvalidOptionError, self.controller.give_options("string"))
 
-    def test_empty_delete(self):
+    def test_empty_wallet_delete(self):
         self.controller = Controller()
         self.controller._wallet = Wallet()
         index = 0

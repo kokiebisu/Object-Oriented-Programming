@@ -1,6 +1,5 @@
 """ This module runs the sequence of instructions for the program to function"""
 from wallet import Wallet
-from card import CreditCard, Expires, MemberShipCard, GiftCard, DebitCard, BusinessCard
 from prompt import Prompt
 
 
@@ -31,22 +30,21 @@ class Controller:
         """
         try:
             if card_type == 1:
-                card = self.create_credit_card()
+                self.create_credit_card()
             elif card_type == 2:
-                card = self.create_membership_card()
+                self.create_membership_card()
             elif card_type == 3:
-                card = self.create_gift_card()
+                self.create_gift_card()
             elif card_type == 4:
-                card = self.create_business_card()
+                self.create_business_card()
             elif card_type == 5:
-                card = self.create_debit_card()
+                self.create_debit_card()
             else:
                 raise InvalidOptionError("Select from the given options!")
         except InvalidOptionError as e:
             print(e)
             self.add_card()
         else:
-            self._wallet.add(card)
             print("Successfully added")
 
     def search_card(self, id_input):
@@ -57,9 +55,11 @@ class Controller:
             if not self._wallet.cards_list:
                 raise EmptyWalletError(
                     "There are no cards to search in your wallet!")
-            self._wallet.search(id_input)
         except EmptyWalletError as e:
             print(e)
+        else:
+            if not self._wallet.search(id_input):
+                print("Cannot find id!")
 
     def delete_card(self, id_input):
         """
@@ -104,58 +104,88 @@ class Controller:
         else:
             self._wallet.display_all_cards()
 
-    @staticmethod
-    def create_credit_card():
+    def create_credit_card(self):
         """
-        Creates a credit card from the given inputs
-        :return: a CreditCard object
+        Forwards the credit card information being added by the user to the wallet
         """
-        name_input, account_number_input, security_code_input = CreditCard.get_input()
-        expiry_date_input = Expires.get_input()
-        return CreditCard(
-            name=name_input, account_number=account_number_input, security_code=security_code_input, expiry_date=expiry_date_input)
+        try:
+            name_input = input("What is the name of the card?\n")
+            account_number_input = int(input("What is the account number\n"))
+            security_code_input = int(input("What is the security code?\n"))
+            expiry_date_input = int(input("When is the expiry date?\n"))
+        except ValueError:
+            print("There was an invalid value")
+            self.create_credit_card()
+        else:
+            self._wallet.add_credit_card(
+                [name_input, account_number_input, security_code_input, expiry_date_input])
 
-    @staticmethod
-    def create_membership_card():
+    def create_membership_card(self):
         """
-        Creates a membership card from the given inputs
-        :return: a MembershipCard object
+        Forwards the membership information being added by the user to the wallet
         """
-        name_input, organization_input, membership_input = MemberShipCard.get_input()
-        expiry_date_input = Expires.get_input()
-        return MemberShipCard(name=name_input, organization=organization_input, membership_number=membership_input,
-                              expiry_date=expiry_date_input)
+        try:
+            name_input = input("What is the name of the card?\n")
+            organization_input = input("What is the organization?\n")
+            membership_input = input("What is the membership number?\n")
+            expiry_date_input = int(input("When is the expiry date?\n"))
+        except ValueError:
+            print("There was an invalid value")
+            self.create_membership_card()
+        else:
+            self._wallet.add_membership_card(
+                [name_input, organization_input, membership_input, expiry_date_input])
 
-    @staticmethod
-    def create_debit_card():
+    def create_business_card(self):
         """
-        Creates a debit card from the given inputs
-        :return: a DebitCard object
+        Forwards the business information being added by the user to the wallet
         """
-        name_input, account_number_input, security_code_input = DebitCard.get_input()
-        expiry_date_input = Expires.get_input()
-        return DebitCard(name=name_input, account_number=account_number_input,
-                         security_code=security_code_input, expiry_date=expiry_date_input)
+        try:
+            name_input = input("Who's business card is it?\n")
+            company_input = input("What is the name of the company?\n")
+            email_address_input = input("What is the email address?\n")
+        except ValueError:
+            print("There was an invalid value")
+            self.create_business_card()
+        else:
+            self._wallet.add_business_card(
+                [name_input, company_input, email_address_input])
 
-    @staticmethod
-    def create_business_card():
+    def create_gift_card(self):
         """
-        Creates a business card from the given inputs
-        :return: a BusinessCard object
+        Forwards the giftcard information being added by the user to the wallet
         """
-        name_input, company_input, email_address_input = BusinessCard.get_input()
-        return BusinessCard(name=name_input, company=company_input, email_address=email_address_input)
+        try:
+            name_input = input("What is the name of the card?\n")
+            amount_input = int(input("What is the amount?\n"))
+            code_input = input("What is the code?\n")
+        except ValueError:
+            print("There was an invalid value")
+            self.create_gift_card()
+        else:
+            self._wallet.add_gift_card(
+                [name_input, amount_input, code_input])
 
-    @staticmethod
-    def create_gift_card():
+    def create_debit_card(self):
         """
-        Creates a gift card from the given inputs
-        :return: a GiftCard object
+        Forwards the debitcard information being added by the user to the wallet
         """
-        name_input, amount_input, code_input = GiftCard.get_input()
-        return GiftCard(name=name_input, amount=amount_input, code=code_input)
+        try:
+            name_input = input("What is the name of the card?\n")
+            account_number_input = int(input("What is the account number\n"))
+            security_code_input = int(input("What is the security code?\n"))
+            expiry_date_input = int(input("What is the expiry_date"))
+        except ValueError:
+            print("There was an invalid value")
+            self.create_debit_card()
+        else:
+            self._wallet.add_debit_card(
+                [name_input, account_number_input, security_code_input, expiry_date_input])
 
     def give_options(self, option_input):
+        """
+        Displays the options for the users to select
+        """
         try:
             if option_input == 1:
                 card_type = Prompt.prompt_card_type()

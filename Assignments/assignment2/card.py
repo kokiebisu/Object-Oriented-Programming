@@ -18,13 +18,6 @@ class Card(ABC):
         self._id = Card.card_id
         Card.card_id += 1
 
-    @abstractstaticmethod
-    def get_input():
-        """
-        Retrieves input to create the card
-        """
-        pass
-
     @property
     def id(self):
         """
@@ -62,14 +55,6 @@ class Expires:
         """
         return super().__str__() + f"Expiry Date: {self._expiry_date} "
 
-    @staticmethod
-    def get_input():
-        """
-        Retrieves the expiry date to create the card
-        :return: a string
-        """
-        return input("When is the expiry date?\n")
-
 
 class CreditCard(Expires, Card):
     """
@@ -87,17 +72,6 @@ class CreditCard(Expires, Card):
         self._security_code = security_code
         super().__init__(**kwargs)
 
-    @staticmethod
-    def get_input():
-        """
-        Asks the user the card information to be stored
-        :return: a list
-        """
-        name_input = input("What is the name of the card?\n")
-        account_number_input = int(input("What is the account number\n"))
-        security_code_input = int(input("What is the security code?\n"))
-        return [name_input, account_number_input, security_code_input]
-
     def __str__(self):
         """
         A String representation of the instance
@@ -110,21 +84,11 @@ class DebitCard(Expires, Card):
     """
     This class holds the attributes of a Debit Card
     """
+
     def __init__(self, account_number, security_code, **kwargs):
         self._account_number = account_number
         self._security_code = security_code
         super().__init__(**kwargs)
-
-    @staticmethod
-    def get_input():
-        """
-        Asks the user the card information to be stored
-        :return: a list
-        """
-        name_input = input("What is the name of the card?\n")
-        account_number_input = int(input("What is the account number\n"))
-        security_code_input = int(input("What is the security code?\n"))
-        return [name_input, account_number_input, security_code_input]
 
     def __str__(self):
         """
@@ -150,17 +114,6 @@ class MemberShipCard(Expires, Card):
         self._membership_number = membership_number
         super().__init__(**kwargs)
 
-    @staticmethod
-    def get_input():
-        """
-        Retrieves the necessary input to create a Membership Card
-        :return: a list
-        """
-        name_input = input("What is the name of the card?\n")
-        organization_input = input("What is the organization?\n")
-        membership_input = input("What is the membership number?\n")
-        return [name_input, organization_input, membership_input]
-
     def __str__(self):
         """
         A String representation of the instance
@@ -185,17 +138,6 @@ class GiftCard(Card):
         self._code = code
         super().__init__(**kwargs)
 
-    @staticmethod
-    def get_input():
-        """
-        Retrieves the necessary input to create a Gift Card
-        :return: a list
-        """
-        name_input = input("What is the name of the card?\n")
-        amount_input = int(input("What is the amount?\n"))
-        code_input = input("What is the code?\n")
-        return [name_input, amount_input, code_input]
-
     def __str__(self):
         """
         A String representation of the instance
@@ -208,6 +150,7 @@ class BusinessCard(Card):
     """
     This class holds the attributes of a Business Card
     """
+
     def __init__(self, company, email_address, **kwargs):
         """
         Initializes the business card instance
@@ -218,17 +161,6 @@ class BusinessCard(Card):
         self._company = company
         self._email_address = email_address
         super().__init__(**kwargs)
-
-    @staticmethod
-    def get_input():
-        """
-        Asks the user the card information to be stored
-        :return: a list
-        """
-        name_input = input("Who's business card is it?\n")
-        company_input = input("What is the name of the company?\n")
-        email_address_input = input("What is the email address?\n")
-        return [name_input, company_input, email_address_input]
 
     def __str__(self):
         """
