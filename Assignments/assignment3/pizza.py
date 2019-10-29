@@ -1,7 +1,7 @@
 """
 This module implements a decorator pattern to decorate a pizza.
 
-Each pizza should start with one infredient, the sinature crust and have a starting price of $4.99.
+Each pizza should start with one ingredient, the signature crust and have a starting price of $4.99.
 All subsequent ingredients should be decorators that wrap around a pizza.
 Pick and implement 1 cheese and 2 toppings.
 """
@@ -74,13 +74,15 @@ class ParmigianoReggianoDecorator(AbstractPizzaDecorator):
     """
 
     def get_ingredients(self):
-        self.add_ingredient()
         return super().get_ingredients()
 
     def get_cost(self):
         return super().get_cost() + 4.99
 
     def add_ingredient(self):
+        """
+        Adds the ingredient 'Parmigiano Reggiano'
+        """
         super().add_ingredient('Parmigiano Reggiano')
 
 
@@ -90,28 +92,32 @@ class FreshMozzarellaDecorator(AbstractPizzaDecorator):
     """
 
     def get_ingredients(self):
-        self.add_ingredient()
         return super().get_ingredients()
 
     def get_cost(self):
         return super().get_cost() + 3.99
 
     def add_ingredient(self):
+        """
+        Adds the ingredient 'Fresh Mozzarella'
+        """
         super().add_ingredient('Fresh Mozzarella')
 
 
-def main():
+class VeganCheeseDecorator(AbstractPizzaDecorator):
     """
-    Prompt the user to find out if compression and encryption is enabled.
-    Accordingly wrap the FileDataSource and write "Hello world" to a
-    file.
+    Decorator that adds 'ParmigianoReggianoDecorator' to the Pizza
     """
-    pizza = ConcretePizza()
-    pizza = ParmigianoReggianoDecorator(pizza)
 
-    print(
-        f"Pizza Ingredients: {str(pizza.get_ingredients())}, Pizza Cost: {pizza.get_cost()}")
+    def get_ingredients(self):
+        self.add_ingredient()
+        return super().get_ingredients()
 
+    def get_cost(self):
+        return super().get_cost() + 5.99
 
-if __name__ == '__main__':
-    main()
+    def add_ingredient(self):
+        """
+        Adds the ingredient 'Vegan Cheese'
+        """
+        super().add_ingredient('Vegan Cheese')
