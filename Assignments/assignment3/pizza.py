@@ -68,19 +68,20 @@ class AbstractPizzaDecorator(AbstractPizza):
         self.decorated_pizza.add_ingredient(ingredient)
 
 
-class CheeseDecorator(AbstractPizzaDecorator):
+class ParmigianoReggianoDecorator(AbstractPizzaDecorator):
     """
-    Decorator that adds 'Cheese' to the Pizza
+    Decorator that adds 'ParmigianoReggianoDecorator' to the Pizza
     """
 
     def get_ingredients(self):
+        self.add_ingredient()
         return super().get_ingredients()
 
     def get_cost(self):
         return super().get_cost() + 3.99
 
     def add_ingredient(self):
-        super().add_ingredient('Cheese')
+        super().add_ingredient('Parmigiano Reggiano')
 
 
 def main():
@@ -90,7 +91,7 @@ def main():
     file.
     """
     pizza = ConcretePizza()
-    pizza = CheeseDecorator(pizza)
+    pizza = ParmigianoReggianoDecorator(pizza)
 
     print(
         f"Pizza Ingredients: {str(pizza.get_ingredients())}, Pizza Cost: {pizza.get_cost()}")
