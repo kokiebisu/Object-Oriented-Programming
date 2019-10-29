@@ -78,10 +78,26 @@ class ParmigianoReggianoDecorator(AbstractPizzaDecorator):
         return super().get_ingredients()
 
     def get_cost(self):
-        return super().get_cost() + 3.99
+        return super().get_cost() + 4.99
 
     def add_ingredient(self):
         super().add_ingredient('Parmigiano Reggiano')
+
+
+class FreshMozzarellaDecorator(AbstractPizzaDecorator):
+    """
+    Decorator that adds 'ParmigianoReggianoDecorator' to the Pizza
+    """
+
+    def get_ingredients(self):
+        self.add_ingredient()
+        return super().get_ingredients()
+
+    def get_cost(self):
+        return super().get_cost() + 3.99
+
+    def add_ingredient(self):
+        super().add_ingredient('Fresh Mozzarella')
 
 
 def main():
