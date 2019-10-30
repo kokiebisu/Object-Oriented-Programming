@@ -21,24 +21,36 @@ class Controller:
     def prompt(self, user_input):
         try:
             if user_input == 1:
-                ingredient_input = int(input(f"What do you want to add for topping?\n"
-                                             "1. Parmigiano Reggiano\n"
-                                             "2. Fresh Mozarella\n"
-                                             "3. Vegan Cheese\n"
-                                             "4. Peppers\n"
-                                             "5. Pineapple\n"
-                                             "6. Mushrooms\n"
-                                             "7. Fresh Basil\n"
-                                             "8. Spinach\n"
-                                             "9. Pepperoni\n"
-                                             "10. Beyond Meat\n"
-                                             ))
-                self.add_ingredient(ingredient_input)
+                cheese_or_topping_input = input(
+                    f"Would you like to add cheese or topping?\n").strip().lower()
+                try:
+                    if cheese_or_topping_input == "cheese":
+                        cheese_input = int(input(f"Which Cheese do you want to add?\n"
+                                                 "1. Parmigiano Reggiano\n"
+                                                 "2. Fresh Mozarella\n"
+                                                 "3. Vegan Cheese\n"
+                                                 ))
+                        self.add_cheese(cheese_input)
+                    elif cheese_or_topping_input == "topping":
+                        topping_input = int(input(f"Which Topping do you want to add\n"
+                                                  "1. Peppers: $1.5\n"
+                                                  "2. Pineapple: $2\n"
+                                                  "3. Mushrooms: \n"
+                                                  "4. Fresh Basil\n"
+                                                  "5. Spinach\n"
+                                                  "6. Pepperoni\n"
+                                                  "7. Beyond Meat\n"
+                                                  ))
+                        self.add_topping(topping_input)
+                    else:
+                        raise TypeError
+                except TypeError:
+                    print("Not a valid option!")
                 option_input = Controller.display_options()
                 self.prompt(option_input)
                 return True
             elif user_input == 2:
-                return self.pay()
+                print(self.pay())
             else:
                 raise ValueError
         except ValueError:
@@ -55,30 +67,37 @@ class Controller:
                          f"2. Pay\n"
                          ))
 
-    def add_ingredient(self, ingredient_input):
+    def add_cheese(self, cheese_input):
         """
         Provided option that allows adding toppings to the pizza
         """
         try:
-            if ingredient_input == 1:
+            if cheese_input == 1:
                 self.pizza = ParmigianoReggianoDecorator(self.pizza)
-            elif ingredient_input == 2:
+            elif cheese_input == 2:
                 self.pizza = FreshMozzarellaDecorator(self.pizza)
-            elif ingredient_input == 3:
+            elif cheese_input == 3:
                 self.pizza = VeganCheeseDecorator(self.pizza)
-            elif ingredient_input == 4:
+            else:
+                raise TypeError
+        except TypeError:
+            print("Doesn't seem like a valid number! Try Again!")
+
+    def add_topping(self, topping_input):
+        try:
+            if topping_input == 1:
                 self.pizza = PeppersDecorator(self.pizza)
-            elif ingredient_input == 5:
+            elif topping_input == 2:
                 self.pizza = PineappleDecorator(self.pizza)
-            elif ingredient_input == 6:
+            elif topping_input == 3:
                 self.pizza = MushroomsDecorator(self.pizza)
-            elif ingredient_input == 7:
+            elif topping_input == 4:
                 self.pizza = FreshBasilDecorator(self.pizza)
-            elif ingredient_input == 8:
+            elif topping_input == 5:
                 self.pizza = SpinachDecorator(self.pizza)
-            elif ingredient_input == 9:
+            elif topping_input == 6:
                 self.pizza = PepperoniDecorator(self.pizza)
-            elif ingredient_input == 10:
+            elif topping_input == 7:
                 self.pizza = BeyondMeatDecorator(self.pizza)
             else:
                 raise TypeError
@@ -89,7 +108,7 @@ class Controller:
         """
         Provided option to the user to finish the transaction by paying the total cost
         """
-        print(f"{self.pizza.get_description()} \nTotal Cost: {self.pizza.get_cost()}\n")
+        return f"{self.pizza.get_description()} \nTotal Cost: {self.pizza.get_cost()} \n"
 
 
 if __name__ == '__main__':

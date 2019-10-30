@@ -27,30 +27,39 @@ class TestController(TestCase):
         controller.prompt(-1)
         self.assertRaises(ValueError)
 
-    def test_prompt_with_invalid_ingredient_number(self):
+    def test_prompt_with_invalid_cheese_number(self):
+        controller = Controller()
+        controller.add_cheese(4)
+        self.assertRaises(ValueError)
+
+    def test_prompt_with_invalid_topping_number(self):
         """
         Checks when a ingredient that doesn't exist is entered in the add ingredient screen
         """
         controller = Controller()
-        controller.add_ingredient(11)
+        controller.add_topping(8)
         self.assertRaises(ValueError)
 
-    def test_prompt_with_valid_ingredient_number(self):
+    def test_prompt_with_valid_cheese_number(self):
+        controller = Controller()
+        controller.add_cheese(1)
+        self.assertEqual(controller.pay(), "Pizza Ingredients: \nSignature Crust \nParmigiano Reggiano"
+                                           " \nTotal Cost: 9.98 \n")
+
+    def test_prompt_with_valid_topping_number(self):
         """
         Checks when a valid ingredient number is entered in the add ingredient screen
         """
         controller = Controller()
-        controller.add_ingredient(10)
-        controller.pay()
-        self.assertTrue("Pizza Ingredients: \nBeyond Meat \nTotal Cost: 8.99")
+        controller.add_topping(1)
+        self.assertEqual(controller.pay(), "Pizza Ingredients: \nSignature Crust \nPeppers \nTotal Cost: 6.49 \n")
 
     def test_prompt_with_multiple_ingredients(self):
         """
         Checks when multiple valid ingredients are added to the pizza
         """
         controller = Controller()
-        controller.add_ingredient(10)
-        controller.add_ingredient(1)
-        controller.pay()
-        self.assertTrue(
-            "Pizza Ingredients: \nParmigiano Reggiano \nBeyond Meat \nTotal Cost: 13.98")
+        controller.add_cheese(1)
+        controller.add_topping(1)
+        self.assertEqual(controller.pay(), "Pizza Ingredients: \nSignature Crust \nParmigiano Reggiano "
+                         "\nPeppers \nTotal Cost: 11.48 \n")

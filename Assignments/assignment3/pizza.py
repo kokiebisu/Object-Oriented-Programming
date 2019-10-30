@@ -39,19 +39,22 @@ class ConcretePizza(AbstractPizza):
     Pizza class. This is the object that we want to add optional
     behaviours to.
     """
+
     def get_description(self):
         """
         Gets the ingredients of the pizza
         :return: a string
         """
-        return "Pizza Ingredients:"
+        ingredient = "Signature Crust"
+        return f"Pizza Ingredients: \n{ingredient}"
 
     def get_cost(self):
         """
         Gets the base cost of the pizza
         :return: an int
         """
-        return 4.99
+        cost = 4.99
+        return cost
 
 
 class IngredientDecorator(AbstractPizza, abc.ABC):
@@ -85,14 +88,16 @@ class ParmigianoReggianoDecorator(IngredientDecorator):
         Gets the ingredients with Parmigiano Reggiano added
         :return: a string
         """
-        return f"{self.pizza.get_description()} \nParmigiano Reggiano"
+        ingredient = "Parmigiano Reggiano"
+        return f"{self.pizza.get_description()} \n{ingredient}"
 
     def get_cost(self):
         """
         Gets the cost with Parmigiano Reggiano added
         :return: an int
         """
-        return self.pizza.get_cost() + 4.99
+        cost = 4.99
+        return self.pizza.get_cost() + cost
 
 
 class FreshMozzarellaDecorator(IngredientDecorator):
@@ -112,14 +117,16 @@ class FreshMozzarellaDecorator(IngredientDecorator):
         Gets the ingredient with Fresh Mozzarella added
         :return: a string
         """
-        return f"{self.pizza.get_description()} \nFresh Mozzarella"
+        ingredient = "Fresh Mozzarella"
+        return f"{self.pizza.get_description()} \n{ingredient}"
 
     def get_cost(self):
         """
         Gets the cost with Fresh Mozzarella added
         :return:
         """
-        return self.pizza.get_cost() + 3.99
+        cost = 3.99
+        return self.pizza.get_cost() + cost
 
 
 class VeganCheeseDecorator(IngredientDecorator):
@@ -139,14 +146,16 @@ class VeganCheeseDecorator(IngredientDecorator):
         Gets the ingredient with Vegan Cheese added
         :return: a string
         """
-        return f"{self.pizza.get_description()} \nVegan Cheese"
+        ingredient = "Vegan Cheese"
+        return f"{self.pizza.get_description()} \n{ingredient}"
 
     def get_cost(self):
         """
         Gets the cost with Vegan Cheese added
         :return: an int
         """
-        return self.pizza.get_cost() + 5.99
+        cost = 5.99
+        return self.pizza.get_cost() + cost
 
 
 class PeppersDecorator(IngredientDecorator):
@@ -166,14 +175,16 @@ class PeppersDecorator(IngredientDecorator):
         Gets the ingredient with Peppers added
         :return: a string
         """
-        return f"{self.pizza.get_description()} \nPeppers"
+        ingredient = "Peppers"
+        return f"{self.pizza.get_description()} \n{ingredient}"
 
     def get_cost(self):
         """
         Gets the cost with Peppers added
         :return: an int
         """
-        return self.pizza.get_cost() + 1.5
+        cost = 1.5
+        return self.pizza.get_cost() + cost
 
 
 class PineappleDecorator(IngredientDecorator):
@@ -193,14 +204,16 @@ class PineappleDecorator(IngredientDecorator):
         Gets the ingredients with Pineapple added
         :return: a string
         """
-        return f"{self.pizza.get_description()} \nPineapple"
+        ingredient = "Pineapple"
+        return f"{self.pizza.get_description()} \n{ingredient}"
 
     def get_cost(self):
         """
         Gets the cost with Pineapple added
         :return: an int
         """
-        return self.pizza.get_cost() + 2
+        cost = 2
+        return self.pizza.get_cost() + cost
 
 
 class MushroomsDecorator(IngredientDecorator):
@@ -220,14 +233,16 @@ class MushroomsDecorator(IngredientDecorator):
         Gets the ingredients with Mushrooms added
         :return: a string
         """
-        return f"{self.pizza.get_description()} \nMushrooms"
+        ingredient = "Mushrooms"
+        return f"{self.pizza.get_description()} \n{ingredient}"
 
     def get_cost(self):
         """
         Gets the cost with Mushrooms added
         :return: an int
         """
-        return self.pizza.get_cost() + 1.5
+        cost = 1.5
+        return self.pizza.get_cost() + cost
 
 
 class FreshBasilDecorator(IngredientDecorator):
@@ -247,14 +262,16 @@ class FreshBasilDecorator(IngredientDecorator):
         Gets the ingredients with Fresh Basil added
         :return: a string
         """
-        return f"{self.pizza.get_description()} \nFresh Basil"
+        ingredient = "Fresh Basil"
+        return f"{self.pizza.get_description()} \n{ingredient}"
 
     def get_cost(self):
         """
         Gets the cost with Fresh Basil added
         :return: an int
         """
-        return self.pizza.get_cost() + 2
+        cost = 2
+        return self.pizza.get_cost() + cost
 
 
 class SpinachDecorator(IngredientDecorator):
@@ -274,14 +291,16 @@ class SpinachDecorator(IngredientDecorator):
         Gets the ingredients with Spinach added
         :return: a string
         """
-        return f"{self.pizza.get_description()} \nSpinach"
+        ingredient = "Spinach"
+        return f"{self.pizza.get_description()} \n{ingredient}"
 
     def get_cost(self):
         """
         Gets the cost with Spinach added
         :return: an int
         """
-        return self.pizza.get_cost() + 1
+        cost = 1
+        return self.pizza.get_cost() + cost
 
 
 class PepperoniDecorator(IngredientDecorator):
@@ -301,14 +320,16 @@ class PepperoniDecorator(IngredientDecorator):
         Gets the ingredients with Pepperoni added
         :return: a string
         """
-        return f"{self.pizza.get_description()} \nPepperoni"
+        ingredient = "Pepperoni"
+        return f"{self.pizza.get_description()} \n{ingredient}"
 
     def get_cost(self):
         """
         Gets the cost with Pepperoni added
         :return: an int
         """
-        return self.pizza.get_cost() + 3
+        cost = 3
+        return self.pizza.get_cost() + cost
 
 
 class BeyondMeatDecorator(IngredientDecorator):
@@ -328,11 +349,13 @@ class BeyondMeatDecorator(IngredientDecorator):
         Gets the ingredients with Beyond Meat added
         :return: a string
         """
-        return f"{self.pizza.get_description()} \nBeyond Meat"
+        ingredient = "Beyond Meat"
+        return f"{self.pizza.get_description()} \n{ingredient}"
 
     def get_cost(self):
         """
         Gets the cost with Beyond Meat added
         :return: an int
         """
-        return self.pizza.get_cost() + 4
+        cost = 4
+        return self.pizza.get_cost() + cost
