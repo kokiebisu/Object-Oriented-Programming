@@ -3,7 +3,7 @@ This module is responsible for holding a badly written (but not so bad
 that you won't find this in the workplace) BookAnalyzer class that needs
 to be profiled and optimized.
 """
-
+import cProfile
 
 class BookAnalyzer:
     """
@@ -93,4 +93,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    cProfile.run('main()')
