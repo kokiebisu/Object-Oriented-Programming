@@ -50,7 +50,7 @@ class TestController(TestCase):
         controller = Controller()
         controller.add_cheese(1)
         self.assertEqual(controller.pay(), "Pizza Ingredients: \nSignature Crust \nParmigiano Reggiano"
-                                           " \nTotal Cost: 9.98 \n")
+                                           " \nTotal Cost: $9.98 \n")
 
     def test_prompt_with_valid_topping_number(self):
         """
@@ -59,7 +59,7 @@ class TestController(TestCase):
         controller = Controller()
         controller.add_topping(1)
         self.assertEqual(controller.pay(
-        ), "Pizza Ingredients: \nSignature Crust \nPeppers \nTotal Cost: 6.49 \n")
+        ), "Pizza Ingredients: \nSignature Crust \nPeppers \nTotal Cost: $6.49 \n")
 
     def test_prompt_with_multiple_ingredients(self):
         """
@@ -69,4 +69,4 @@ class TestController(TestCase):
         controller.add_cheese(1)
         controller.add_topping(1)
         self.assertEqual(controller.pay(), "Pizza Ingredients: \nSignature Crust \nParmigiano Reggiano "
-                         "\nPeppers \nTotal Cost: 11.48 \n")
+                         "\nPeppers \nTotal Cost: $11.48 \n")

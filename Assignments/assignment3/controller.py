@@ -26,20 +26,20 @@ class Controller:
                 try:
                     if cheese_or_topping_input == "cheese":
                         cheese_input = int(input(f"Which Cheese do you want to add?\n"
-                                                 "1. Parmigiano Reggiano\n"
-                                                 "2. Fresh Mozarella\n"
-                                                 "3. Vegan Cheese\n"
+                                                 "1. Parmigiano Reggiano: $4.99\n"
+                                                 "2. Fresh Mozarella: $3.99\n"
+                                                 "3. Vegan Cheese: $5.99\n"
                                                  ))
                         self.add_cheese(cheese_input)
                     elif cheese_or_topping_input == "topping":
                         topping_input = int(input(f"Which Topping do you want to add\n"
                                                   "1. Peppers: $1.5\n"
                                                   "2. Pineapple: $2\n"
-                                                  "3. Mushrooms: \n"
-                                                  "4. Fresh Basil\n"
-                                                  "5. Spinach\n"
-                                                  "6. Pepperoni\n"
-                                                  "7. Beyond Meat\n"
+                                                  "3. Mushrooms: $1.5\n"
+                                                  "4. Fresh Basil: $2\n"
+                                                  "5. Spinach: $1\n"
+                                                  "6. Pepperoni: $3\n"
+                                                  "7. Beyond Meat: $4\n"
                                                   ))
                         self.add_topping(topping_input)
                     else:
@@ -108,7 +108,7 @@ class Controller:
         """
         Provided option to the user to finish the transaction by paying the total cost
         """
-        return f"{self.pizza.get_description()} \nTotal Cost: {self.pizza.get_cost()} \n"
+        return f"{self.pizza.get_ingredient()} \nTotal Cost: ${self.pizza.get_cost()} \n"
 
 
 if __name__ == '__main__':
