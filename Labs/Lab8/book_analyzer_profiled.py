@@ -3,6 +3,7 @@ This module is responsible for holding a badly written (but not so bad
 that you won't find this in the workplace) BookAnalyzer class that needs
 to be profiled and optimized.
 """
+import cProfile
 
 
 class BookAnalyzer:
@@ -60,8 +61,10 @@ class BookAnalyzer:
         :param word_list: a sequence of words
         :return: True if not found, false otherwise
         """
+        word_lower = word.lower()
         for a_word in word_list:
-            if word.lower() == a_word.lower():
+            a_word_lower = a_word.lower()
+            if word_lower == a_word_lower:
                 return False
         return True
 
@@ -72,10 +75,15 @@ class BookAnalyzer:
         """
         temp_text = self.text
         unique_words = []
+        non_unique_words = []
         while temp_text:
             word = temp_text.pop()
+            if word in non_unique_words:
+                continue
             if self.is_unique(word, temp_text):
                 unique_words.append(word)
+            else:
+                non_unique_words.append(word)
         return unique_words
 
 
@@ -92,4 +100,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    cProfile.run('main()')
