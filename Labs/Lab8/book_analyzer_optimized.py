@@ -3,6 +3,7 @@ This module is responsible for holding a badly written (but not so bad
 that you won't find this in the workplace) BookAnalyzer class that needs
 to be profiled and optimized.
 """
+import cProfile
 
 
 class BookAnalyzer:
@@ -51,30 +52,31 @@ class BookAnalyzer:
             temp_text.append(temp_word)
         self.text = temp_text
 
-    @staticmethod
-    def is_unique(word, word_list):
-        """
-        Checks to see if the given word appears in the provided sequence.
-        This check is case in-sensitive.
-        :param word: a string
-        :param word_list: a sequence of words
-        :return: True if not found, false otherwise
-        """
-        for a_word in word_list:
-            if word.lower() == a_word.lower():
-                return False
-        return True
+    # @staticmethod
+    # def is_unique(word, word_list):
+    #     """
+    #     Checks to see if the given word appears in the provided sequence.
+    #     This check is case in-sensitive.
+    #     :param word: a string
+    #     :param word_list: a sequence of words
+    #     :return: True if not found, false otherwise
+    #     """
+    #     word_list_lower = [word.lower() for word in word_list]
+    #     return word not in word_list_lower
 
     def find_unique_words(self):
         """
         Filters out all the words that only appear once in the text.
         :return: a list of all the unique words.
         """
-        temp_text = self.text
+        temp_text = [word.lower() for word in self.text]
+        temp_text_count = {word: 0 for word in temp_text}
         unique_words = []
         while temp_text:
             word = temp_text.pop()
-            if self.is_unique(word, temp_text):
+            temp_text_count[word] += 1
+        for word, count in temp_text_count.items():
+            if temp_text_count[word] == 1:
                 unique_words.append(word)
         return unique_words
 
@@ -92,4 +94,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    cProfile.run('main()')

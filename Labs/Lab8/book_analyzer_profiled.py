@@ -61,12 +61,8 @@ class BookAnalyzer:
         :param word_list: a sequence of words
         :return: True if not found, false otherwise
         """
-        word_lower = word.lower()
-        for a_word in word_list:
-            a_word_lower = a_word.lower()
-            if word_lower == a_word_lower:
-                return False
-        return True
+        word_list_lower = [word.lower() for word in word_list]
+        return word not in word_list_lower
 
     def find_unique_words(self):
         """
@@ -77,7 +73,7 @@ class BookAnalyzer:
         unique_words = []
         non_unique_words = []
         while temp_text:
-            word = temp_text.pop()
+            word = temp_text.pop().lower()
             if word in non_unique_words:
                 continue
             if self.is_unique(word, temp_text):
