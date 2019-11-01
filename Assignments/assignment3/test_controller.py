@@ -1,5 +1,5 @@
 from unittest import TestCase
-from controller import Controller
+from controller import Controller, AddIngredientError
 
 
 class TestController(TestCase):
@@ -70,3 +70,11 @@ class TestController(TestCase):
         controller.add_topping(1)
         self.assertEqual(controller.pay(), "Pizza Ingredients: \nSignature Crust \nParmigiano Reggiano "
                          "\nPeppers \nTotal Cost: $11.48 \n")
+
+    def test_prompt_with_no_ingredient(self):
+        """
+        Checks when you try to finish transaction without any ingredient
+        """
+        controller = Controller()
+        controller.pay()
+        self.assertRaises(AddIngredientError)

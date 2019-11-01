@@ -108,7 +108,18 @@ class Controller:
         """
         Provided option to the user to finish the transaction by paying the total cost
         """
-        return f"{self.pizza.get_ingredient()} \nTotal Cost: ${self.pizza.get_cost()} \n"
+        try:
+            if self.pizza.get_cost() == 4.99:
+                raise AddIngredientError("OOPS! Add at least one ingredient!")
+            else:
+                return f"{self.pizza.get_ingredient()} \nTotal Cost: ${self.pizza.get_cost()} \n"
+        except AddIngredientError as e:
+            print(e)
+
+
+class AddIngredientError(Exception):
+    def __init__(self, phrase):
+        super().__init__(phrase)
 
 
 if __name__ == '__main__':
