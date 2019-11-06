@@ -20,3 +20,5 @@ If you select 'Topping', you can choose from the following topping:
 
 2. By selecting the 'pay' option, you can finish the transaction by getting
 the included ingredients and the total cost
+
+Caution: You cannot pay without adding extra ingredients!
