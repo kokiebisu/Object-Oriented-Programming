@@ -59,7 +59,7 @@ class Dvd(LibraryItem):
         super().__init__(**kwargs)
 
     def __str__(self):
-        return f"Category: {self.__class__.__name__}, {super().__init__()}, Release Date: {self._release_date}, Region Code: {self._region_code}"
+        return f"Category: {self.__class__.__name__}, {super().__str__()}, Release Date: {self._release_date}, Region Code: {self._region_code}"
 
 
 class Book(LibraryItem):
@@ -76,7 +76,7 @@ class Book(LibraryItem):
         String representation of the created Book object
         :return: a string
         """
-        return f"Category: {self.__class__.__name__}, {super().__init__()}, Author: {self._author}"
+        return f"Category: {self.__class__.__name__}, {super().__str__()}, Author: {self._author}"
 
 
 class LibraryItemFactory(abc.ABC):

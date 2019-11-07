@@ -1,4 +1,4 @@
-from items import JournalFactory, BookFactory, DvdFactory
+from items import LibraryItemFactory, JournalFactory, BookFactory, DvdFactory
 import difflib
 
 
@@ -23,54 +23,26 @@ class Library:
         self.catalogue.search(name_input)
 
     def generate_item(self):
-        item = LibraryItemGenerator.retrieve_common_attributes()
-        self.catalogue.add_item(item)
+        factory = LibraryItemGenerator().register_item()
+        self.catalogue.add_item(factory.create_item())
 
 
 class LibraryItemGenerator:
-    @staticmethod
-    def retrieve_common_attributes():
+    def __init__(self):
+        self.choice_factory_mapping = {
+            1: BookFactory,
+            2: JournalFactory,
+            3: DvdFactory
+        }
+
+    def register_item(self) -> LibraryItemFactory:
         print("Which type of item do you want to create?")
         print("1. Book")
         print("2. Journal")
         print("3. DVD")
         user_input = int(input())
-        if user_input == 1:
-            return BookFactory.create_item()
-        elif user_input == 2:
-            return JournalFactory.create_item()
-        elif user_input == 3:
-            return DvdFactory.create_item()
-        else:
-            print("Invalid Input")
-
-    @staticmethod
-    def get_common_information():
-        call_number = input("What is the Call Number? ")
-        title = input("What is the title?  ")
-        num_copies = int(input("How many copies are there? "))
-        bundle = [call_number, title, num_copies]
-        return bundle
-
-    @staticmethod
-    def create_book():
-        call_number, title, num_copies = LibraryItemGenerator.get_common_information()
-        author = input("Who is the Author? ")
-        return Book(call_number=call_number, name=title, num_copies=num_copies, author=author)
-
-    @staticmethod
-    def create_journal():
-        call_number, title, num_copies = LibraryItemGenerator.get_common_information()
-        publisher = input("Who is the publisher? ")
-        issue_number = input("What is the issue number? ")
-        return Journal(call_number=call_number, name=title, num_copies=num_copies, publisher=publisher, issue_number=issue_number)
-
-    @staticmethod
-    def create_dvd():
-        call_number, title, num_copies = LibraryItemGenerator.get_common_information()
-        release_date = input("When is the release date? ")
-        region_code = input("What is the region code? ")
-        return Dvd(call_number=call_number, name=title, num_copies=num_copies, release_date=release_date, region_code=region_code)
+        factory_class = self.choice_factory_mapping.get(user_input, None)
+        return factory_class()
 
 
 class Catalogue:
