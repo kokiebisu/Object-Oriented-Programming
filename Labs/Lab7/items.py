@@ -150,7 +150,8 @@ class JournalFactory(LibraryItemFactory):
             print("Must be int")
             return
         else:
-            return Journal(name=name_input, call_number=call_number_input, issue_number=issue_number_input, publisher=publisher_input)
+            return Journal(name=name_input, call_number=call_number_input
+                           , issue_number=issue_number_input, publisher=publisher_input)
 
 
 class DvdFactory(LibraryItemFactory):
@@ -163,4 +164,5 @@ class DvdFactory(LibraryItemFactory):
         call_number_input = input("What is the call number? ")
         release_date_input = input("When is the release date? ")
         region_code_input = input("What is the region code? ")
-        return Dvd(name=name_input, call_number=call_number_input, release_date=release_date_input, region_code=region_code_input)
+        return Dvd(name=name_input, call_number=call_number_input
+                   , release_date=release_date_input, region_code=region_code_input)
