@@ -18,6 +18,30 @@ class LibraryItem(abc.ABC):
         self._call_number = call_number
         self._num_copies = num_copies
 
+    @property
+    def name(self) -> str:
+        """
+        Gets the name attribute of the object
+        :return: a string
+        """
+        return self._name
+
+    @property
+    def call_number(self) -> int:
+        """
+        Gets the call number attribute of the object
+        :return: an int
+        """
+        return self._call_number
+
+    @property
+    def num_copies(self) -> int:
+        """
+        Gets the number of copies attribute of the object
+        :return:
+        """
+        return self._num_copies
+
     def check_availability(self) -> bool:
         """
         Checks if the item is available in the catalogue or not
@@ -25,7 +49,11 @@ class LibraryItem(abc.ABC):
         """
         return self._num_copies == 0
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """
+        String representation of the created object
+        :return: a string
+        """
         return f"Name: {self._name}, Call Number: {self._call_number}, Number of Copies: {self._num_copies}"
 
 
@@ -40,11 +68,13 @@ class Journal(LibraryItem):
         self._publisher = publisher
         super().__init__(**kwargs)
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         String representation of the created object
+        :return: a string
         """
-        return f"Category: {self.__class__.__name__}, {super().__str__()}, Issue Number: {self._issue_number}, Publisher: {self._publisher}"
+        return f"Category: {self.__class__.__name__}, {super().__str__()}, Issue Number: {self._issue_number}" \
+               f", Publisher: {self._publisher}"
 
 
 class Dvd(LibraryItem):
@@ -58,8 +88,13 @@ class Dvd(LibraryItem):
         self._region_code = region_code
         super().__init__(**kwargs)
 
-    def __str__(self):
-        return f"Category: {self.__class__.__name__}, {super().__init__()}, Release Date: {self._release_date}, Region Code: {self._region_code}"
+    def __str__(self) -> str:
+        """
+        String representation of the created object
+        :return: a string
+        """
+        return f"Category: {self.__class__.__name__}, {super().__init__()}, Release Date: {self._release_date}" \
+               f", Region Code: {self._region_code}"
 
 
 class Book(LibraryItem):
@@ -71,7 +106,7 @@ class Book(LibraryItem):
         self._author = author
         super().__init__(**kwargs)
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         String representation of the created Book object
         :return: a string
@@ -80,6 +115,9 @@ class Book(LibraryItem):
 
 
 class LibraryItemFactory(abc.ABC):
+    """
+    Abstract Factory that includes the method to create library items
+    """
     @abc.abstractmethod
     def create_item(self) -> LibraryItem:
         pass
@@ -87,8 +125,12 @@ class LibraryItemFactory(abc.ABC):
 
 class BookFactory(LibraryItemFactory):
     def create_item(self) -> LibraryItem:
+        """
+        Creates a book object from user input
+        :return: a book object
+        """
         name_input = input("What is the name? ")
-        call_number_input = int(input("What is the call number? "))
+        call_number_input = input("What is the call number? ")
         num_copies_input = int(input("How many number of copies are there? "))
         author_input = input("Who is the author? ")
         return Book(name=name_input, call_number=call_number_input, num_copies=num_copies_input, author=author_input)
@@ -96,8 +138,12 @@ class BookFactory(LibraryItemFactory):
 
 class JournalFactory(LibraryItemFactory):
     def create_item(self) -> LibraryItem:
+        """
+        Creates a journal object from user input
+        :return: a journal object
+        """
         name_input = input("What is the name? ")
-        call_number_input = int(input("What is the call number? "))
+        call_number_input = input("What is the call number? ")
         num_copies_input = int(input("How many number of copies are there? "))
         issue_number_input = int(input("What is the issue number? "))
         publisher_input = int(input("Who is the publisher? "))
@@ -105,9 +151,13 @@ class JournalFactory(LibraryItemFactory):
 
 
 class DvdFactory(LibraryItemFactory):
-    def create_item(self, name, call_number, num_copies, release_date, region_code) -> LibraryItem:
+    def create_item(self) -> LibraryItem:
+        """
+        Creates a dvd object from user input
+        :return: a dvd object
+        """
         name_input = input("What is the name? ")
-        call_number_input = int(input("What is the call number? "))
+        call_number_input = input("What is the call number? ")
         num_copies_input = int(input("How many number of copies are there? "))
         release_date_input = input("When is the release date? ")
         region_code_input = input("What is the region code? ")
