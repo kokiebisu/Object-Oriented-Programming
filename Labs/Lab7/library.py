@@ -1,4 +1,4 @@
-from items import Journal, Dvd, Book
+from items import JournalFactory, BookFactory, DvdFactory
 import difflib
 
 
@@ -36,11 +36,11 @@ class LibraryItemGenerator:
         print("3. DVD")
         user_input = int(input())
         if user_input == 1:
-            return LibraryItemGenerator.create_book()
+            return BookFactory.create_item()
         elif user_input == 2:
-            return LibraryItemGenerator.create_journal()
+            return JournalFactory.create_item()
         elif user_input == 3:
-            return LibraryItemGenerator.create_dvd()
+            return DvdFactory.create_item()
         else:
             print("Invalid Input")
 
