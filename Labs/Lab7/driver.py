@@ -27,21 +27,20 @@ def main():
     """
     flag = True
     catalogue = Catalogue()
-    generating_item(catalogue)
-
+    library = Library(catalogue)
     while flag:
         prompt()
         option_input = int(input())
         if option_input == 1:
-            Library.display_available_items(catalogue)
+            library.display_available_items()
         elif option_input == 2:
-            Library.return_item(catalogue)
+            library.return_item()
         elif option_input == 3:
-            Library.check_out_item(catalogue)
+            library.check_out_item()
         elif option_input == 4:
-            generating_item(catalogue)
+            library.generate_item()
         elif option_input == 5:
-            Library.find_items(catalogue)
+            library.find_items()
         else:
             print("Invalid input")
 
