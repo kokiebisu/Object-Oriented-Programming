@@ -15,8 +15,8 @@ class Library:
         self.catalogue.decrement_num_copies(call_number_input)
 
     def display_available_items(self):
-        for key, value in self.catalogue.items.items():
-            print(f"Call Number: {key}, {value}")
+        for value in self.catalogue.items.values():
+            print(f"{value}")
 
     def find_items(self):
         name_input = input("What is the name? ")
