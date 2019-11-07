@@ -7,7 +7,7 @@ class LibraryItem(abc.ABC):
     """
 
     @abc.abstractmethod
-    def __init__(self, name: str, call_number: int, num_copies: int) -> None:
+    def __init__(self, name: str, call_number: int) -> None:
         """
         Initializes the created instance
         :param name: a string
@@ -16,7 +16,7 @@ class LibraryItem(abc.ABC):
         """
         self._name = name
         self._call_number = call_number
-        self._num_copies = num_copies
+        self._num_copies = 1
 
     @property
     def name(self) -> str:
@@ -93,7 +93,7 @@ class Dvd(LibraryItem):
         String representation of the created object
         :return: a string
         """
-        return f"Category: {self.__class__.__name__}, {super().__init__()}, Release Date: {self._release_date}" \
+        return f"Category: {self.__class__.__name__}, {super().__str__()}, Release Date: {self._release_date}" \
                f", Region Code: {self._region_code}"
 
 
@@ -131,9 +131,8 @@ class BookFactory(LibraryItemFactory):
         """
         name_input = input("What is the name? ")
         call_number_input = input("What is the call number? ")
-        num_copies_input = int(input("How many number of copies are there? "))
         author_input = input("Who is the author? ")
-        return Book(name=name_input, call_number=call_number_input, num_copies=num_copies_input, author=author_input)
+        return Book(name=name_input, call_number=call_number_input, author=author_input)
 
 
 class JournalFactory(LibraryItemFactory):
@@ -144,10 +143,14 @@ class JournalFactory(LibraryItemFactory):
         """
         name_input = input("What is the name? ")
         call_number_input = input("What is the call number? ")
-        num_copies_input = int(input("How many number of copies are there? "))
-        issue_number_input = int(input("What is the issue number? "))
-        publisher_input = int(input("Who is the publisher? "))
-        return Journal(name=name_input, call_number=call_number_input, num_copies=num_copies_input, issue_number=issue_number_input, publisher=publisher_input)
+        publisher_input = input("Who is the publisher? ")
+        try:
+            issue_number_input = int(input("What is the issue number? "))
+        except ValueError:
+            print("Must be int")
+            return
+        else:
+            return Journal(name=name_input, call_number=call_number_input, issue_number=issue_number_input, publisher=publisher_input)
 
 
 class DvdFactory(LibraryItemFactory):
@@ -158,7 +161,6 @@ class DvdFactory(LibraryItemFactory):
         """
         name_input = input("What is the name? ")
         call_number_input = input("What is the call number? ")
-        num_copies_input = int(input("How many number of copies are there? "))
         release_date_input = input("When is the release date? ")
         region_code_input = input("What is the region code? ")
-        return Dvd(name=name_input, call_number=call_number_input, num_copies=num_copies_input, release_date=release_date_input, region_code=region_code_input)
+        return Dvd(name=name_input, call_number=call_number_input, release_date=release_date_input, region_code=region_code_input)

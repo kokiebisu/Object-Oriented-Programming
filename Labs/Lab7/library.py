@@ -23,7 +23,6 @@ class Catalogue:
         :param name_input: a string
         """
         name_dict = {key: value.name for key, value in self.item_dict.items()}
-        print("here")
         try:
             print(self.item_dict[name_input])
         except KeyError:
@@ -64,7 +63,8 @@ class Catalogue:
         :param call_number_input: a string
         """
         if call_number_input in self.item_dict.keys():
-            self.item_dict[call_number_input].num_copies += 1
+            self.item_dict[call_number_input]._num_copies += 1
+            print("Successfully checked out")
         else:
             similar_words = difflib.get_close_matches(
                 call_number_input, self.item_dict.keys())
@@ -75,8 +75,11 @@ class Catalogue:
         Decrement the number of copies for specified item
         :param call_number_input: a string
         """
-        if call_number_input in self.item_dict.keys():
-            self.item_dict[call_number_input].num_copies -= 1
+        if call_number_input in self.item_dict.keys() and self.item_dict[call_number_input]._num_copies >= 1:
+            self.item_dict[call_number_input]._num_copies -= 1
+            print("Successfully checked out")
+        elif call_number_input in self.item_dict.keys():
+            print("There are no available books to check out")
         else:
             print("not")
             similar_words = difflib.get_close_matches(
@@ -91,6 +94,46 @@ class Library:
         :param catalogue: a catalogue object
         """
         self.catalogue = catalogue
+
+    def prompt(self) -> None:
+        """
+        Asks the user what actions they want to take
+        """
+        print("What is your option?")
+        print("1: Display all items")
+        print("2: Return a item")
+        print("3: Checkout a item")
+        print("4: Add new Item")
+        print("5: Find item")
+
+    def select_option(self, option_input) -> None:
+        if option_input == 1:
+            self.display_available_items()
+        elif option_input == 2:
+            self.return_item()
+        elif option_input == 3:
+            self.check_out_item()
+        elif option_input == 4:
+            self.generate_item()
+        elif option_input == 5:
+            self.find_items()
+        else:
+            print("Invalid input")
+
+    def run(self):
+        self.prompt()
+        option_input = int(input())
+        self.select_option(option_input)
+        print("Would you like to continue?")
+        print("1. Yes")
+        print("2. No")
+        continue_input = int(input())
+        if continue_input == 1:
+            pass
+        elif continue_input == 2:
+            return False
+        else:
+            print("Invalid Input")
 
     def return_item(self) -> None:
         """
@@ -110,7 +153,11 @@ class Library:
         """
         Prints all the available items in the library
         """
-        for value in self.catalogue.items.values():
+        available_items = {key: value for key,
+                           value in self.catalogue.items.items() if value.num_copies >= 1}
+        if not available_items:
+            print("Sorry there are no available items")
+        for value in available_items.values():
             print(f"{value}")
 
     def find_items(self) -> None:
