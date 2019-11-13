@@ -51,11 +51,11 @@ class ShirtMen(abc.ABC):
     abstract factory pettern is responsible to create.
     """
 
-    def __init__(self, style: str, size: SizeEnum, colour: str, texttile: str) -> None:
+    def __init__(self, style: str, size: SizeEnum, colour: str, textile: str) -> None:
         self.style = style
         self.size = size  # S, M, L, XL, XXL
         self.colour = colour
-        self.texttile = texttile
+        self.textile = textile
 
 
 class ShirtWomen(abc.ABC):
@@ -64,11 +64,11 @@ class ShirtWomen(abc.ABC):
     abstract factory pettern is responsible to create.
     """
 
-    def __init__(self, style: str, size: SizeEnum, colour: str, texttile: str) -> None:
+    def __init__(self, style: str, size: SizeEnum, colour: str, textile: str) -> None:
         self.style = style
         self.size = size  # XS, S, M, L, XL, XXL
         self.colour = colour
-        self.texttile = texttile
+        self.textile = textile
 
 
 class SockPairUnisex(abc.ABC):
@@ -77,11 +77,11 @@ class SockPairUnisex(abc.ABC):
     abstract factory pettern is responsible to create.
     """
 
-    def __init__(self, style: str, size: SizeEnum, colour: str, texttile: str) -> None:
+    def __init__(self, style: str, size: SizeEnum, colour: str, textile: str) -> None:
         self.style = style
         self.size = size  # S, M, L
         self.colour = colour
-        self.texttile = texttile
+        self.textile = textile
 
 ### Factory ###
 
@@ -112,23 +112,26 @@ class LuluLimeFactory(BrandFactory):
     ShirtWomenLuluLime, SockPairUnisexLuluLime
     """
 
-    def create_shirt_men(self, name, ) -> ShirtMen:
+    def create_shirt_men(self, **kwargs) -> ShirtMen:
         """
+        Creates a ShirtMenLuluLime object
         :return: a ShirtMen
         """
-        return ShirtMen()
+        return ShirtMenLuluLime(**kwargs)
 
-    def create_shirt_women(self) -> ShirtWomen:
+    def create_shirt_women(self, **kwargs) -> ShirtWomen:
         """
+        Creates a ShirtWomenLuluLime object
         :return: a ShirtWomen
         """
-        return ShirtWomen()
+        return ShirtWomenLuluLime(**kwargs)
 
-    def create_socks_unisex(self) -> SockPairUnisex:
+    def create_socks_unisex(self, **kwargs) -> SockPairUnisex:
         """
+        Creates a SockPairUnisexLuluLime object
         :return: a SockPairUnisex
         """
-        return SockPairUnisex()
+        return SockPairUnisexLuluLime(**kwargs)
 
 
 class PineappleRepublicFactory(BrandFactory):
@@ -138,23 +141,26 @@ class PineappleRepublicFactory(BrandFactory):
     ShirtWomenPineappleRepublic, SockPairUnisexPineappleRepublic
     """
 
-    def create_shirt_men(self, ) -> ShirtMen:
+    def create_shirt_men(self, **kwargs) -> ShirtMen:
         """
+        Creates a ShirtMenPineappleRepublic instance
         :return: a ShirtMen
         """
-        return ShirtMen()
+        return ShirtMenPineappleRepublic(**kwargs)
 
-    def create_shirt_women(self) -> ShirtWomen:
+    def create_shirt_women(self, **kwargs) -> ShirtWomen:
         """
+        Creates a ShirtWomenPineappleRepublic instance
         :return: a ShirtWomen
         """
-        return ShirtWomen()
+        return ShirtWomenPineappleRepublic(**kwargs)
 
-    def create_socks_unisex(self) -> SockPairUnisex:
+    def create_socks_unisex(self, **kwargs) -> SockPairUnisex:
         """
+        Creates a SockPairUnisexPineappleRepublic instance
         :return: a SockPairUnisex
         """
-        return SockPairUnisex()
+        return SockPairUnisexPineappleRepublic(**kwargs)
 
 
 class NikaFactory(BrandFactory):
@@ -164,23 +170,26 @@ class NikaFactory(BrandFactory):
     ShirtWomenNika, SockPairUnisexNika
     """
 
-    def create_shirt_men(self) -> ShirtMen:
+    def create_shirt_men(self, **kwargs) -> ShirtMen:
         """
+        Creates a ShirtMenNika instance
         :return: a ShirtMen
         """
-        return ShirtMen()
+        return ShirtMenNika(**kwargs)
 
-    def create_shirt_women(self) -> ShirtWomen:
+    def create_shirt_women(self, **kwargs) -> ShirtWomen:
         """
+        Creates a ShirtWomenNika instance
         :return: a ShirtWomen
         """
-        return ShirtWomen()
+        return ShirtWomenNika(**kwargs)
 
-    def create_socks_unisex(self) -> SockPairUnisex:
+    def create_socks_unisex(self, **kwargs) -> SockPairUnisex:
         """
+        Creates a SockPairUnisezNika instance
         :return: a SockPairUnisex
         """
-        return SockPairUnisex()
+        return SockPairUnisexNika(**kwargs)
 
 ### Shirt Men ###
 
@@ -191,6 +200,9 @@ class ShirtMenLuluLime(ShirtMen):
     """
 
     def __init__(self, garment_designed_for: GarmentPurposeEnum, pockets: int, **kwargs) -> None:
+        """
+        Initializes the ShirtMenLuluLime instance
+        """
         self.garment_designed_for = garment_designed_for  # yoga or running
         self.pockets = pockets
         super.__init__(**kwargs)
@@ -307,6 +319,8 @@ class ClothesPopulator:
 
 class OrderProcessor:
     """
+    Responsible for processing the Excel spreadsheet. 
+    It is instantiated by the GarmentMaker class.
     """
 
     def __init__(self) -> None:
@@ -326,12 +340,18 @@ class OrderProcessor:
 
     def open_order_sheet(self, file_name: str) -> None:
         """
-        Reads the excel file from the given filepath and sets it as an attribute
+        Reads the excel file from the given filepath and 
+        extracts the orders from the spreadsheet, one row at a time
         """
         dataframe = pd.read_excel(file_name)
         self.data = dataframe
 
     def process_next_order(self) -> Order:
+        """
+        Responsible for identifying the correct factory to use for each order.
+        It stores the order details and the associated factory in an object of type Order and returns it
+        :return: an Order object
+        """
         i = 0
         while i < 10:
             data = self.data.iloc[i]
@@ -363,6 +383,7 @@ class OrderProcessor:
 
 class Order:
     """
+    Class that holds the associated factory and the details of the order
     """
 
     def __init__(self, factory: BrandFactory, details: dict) -> None:
