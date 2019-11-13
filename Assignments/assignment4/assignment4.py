@@ -11,37 +11,6 @@ class BrandEnum(enum.Enum):
     PINEAPPLEREPUBLIC = 1,
     NIKA = 2
 
-
-class SizeEnum(enum.Enum):
-    """
-    This enum specifies the different distinct size types.
-    """
-    XS = 0,
-    S = 1,
-    M = 2,
-    L = 3,
-    XL = 4,
-    XXL = 5
-
-
-class GarmentPurposeEnum(enum.Enum):
-    """
-    This enum specifies the different distinct garment purpose types.
-    """
-    YOGA = 0,
-    RUNNING = 1,
-    INDOOR = 2,
-    OUTDOOR = 3
-
-
-class SockLengthEnum(enum.Enum):
-    """
-    This enum specifies the different distinct sock length types.
-    """
-    ANKLE = 0,
-    CALF = 1,
-    KNEE = 2
-
 ### Abstract Clothes ###
 
 
@@ -51,7 +20,7 @@ class ShirtMen(abc.ABC):
     abstract factory pettern is responsible to create.
     """
 
-    def __init__(self, style: str, size: SizeEnum, colour: str, textile: str, **kwargs) -> None:
+    def __init__(self, style: str, size: str, colour: str, textile: str, **kwargs) -> None:
         self.style = style
         self.size = size  # S, M, L, XL, XXL
         self.colour = colour
@@ -67,7 +36,7 @@ class ShirtWomen(abc.ABC):
     abstract factory pettern is responsible to create.
     """
 
-    def __init__(self, style: str, size: SizeEnum, colour: str, textile: str, **kwargs) -> None:
+    def __init__(self, style: str, size: str, colour: str, textile: str, **kwargs) -> None:
         self.style = style
         self.size = size  # XS, S, M, L, XL, XXL
         self.colour = colour
@@ -83,7 +52,7 @@ class SockPairUnisex(abc.ABC):
     abstract factory pettern is responsible to create.
     """
 
-    def __init__(self, style: str, size: SizeEnum, colour: str, textile: str, **kwargs) -> None:
+    def __init__(self, style: str, size: str, colour: str, textile: str, **kwargs) -> None:
         self.style = style
         self.size = size  # S, M, L
         self.colour = colour
@@ -98,7 +67,7 @@ class SockPairUnisex(abc.ABC):
 class BrandFactory(abc.ABC):
     """
     The base factory class. All clothes expect this factory class to
-    generate clothes. The CharacterFactory class defines an interface
+    generate clothes. The BrandFactory class defines an interface
     to create clothes based on different brands.
     """
     @abc.abstractmethod
@@ -208,7 +177,7 @@ class ShirtMenLuluLime(ShirtMen):
     ShirtMenLuluLime is a type of ShirtMen branded by LuluLime
     """
 
-    def __init__(self, sport: GarmentPurposeEnum, pockets: int, **kwargs) -> None:
+    def __init__(self, sport: str, pockets: int, **kwargs) -> None:
         """
         Initializes the ShirtMenLuluLime instance
         """
@@ -239,7 +208,7 @@ class ShirtMenNika(ShirtMen):
     ShirtMenNika is a type of ShirtMen branded by Nike
     """
 
-    def __init__(self, garment: GarmentPurposeEnum, **kwargs) -> None:
+    def __init__(self, garment: str, **kwargs) -> None:
         self.garment = garment  # indoor or outdoor sports
         super().__init__(**kwargs)
 
@@ -254,7 +223,7 @@ class ShirtWomenLuluLime(ShirtWomen):
     ShirtWomenLuluLime is a type of ShirtWomen branded by Lululime
     """
 
-    def __init__(self, garment: GarmentPurposeEnum, pockets: int, **kwargs) -> None:
+    def __init__(self, garment: str, pockets: int, **kwargs) -> None:
         self.garment = garment  # yoga or running
         self.pockets = pockets
         super().__init__(**kwargs)
@@ -282,7 +251,7 @@ class ShirtWomenNika(ShirtWomen):
     ShirtWomenNika is a type of ShirtWomen branded by Nika
     """
 
-    def __init__(self, garment: GarmentPurposeEnum, **kwargs) -> None:
+    def __init__(self, garment: str, **kwargs) -> None:
         self.garment = garment  # indoor or outdoor sports
         super().__init__(**kwargs)
 
@@ -325,7 +294,7 @@ class SockPairUnisexNika(SockPairUnisex):
     SockPairUnisexNika is a type of SockPairUnisex branded by Nika
     """
 
-    def __init__(self, articulated: bool, length: SockLengthEnum, **kwargs) -> None:
+    def __init__(self, articulated: bool, length: str, **kwargs) -> None:
         self.articulated = articulated
         self.length = length  # ankle, calf, knee
         super().__init__(**kwargs)
@@ -367,11 +336,6 @@ class OrderProcessor:
             "Lululime": BrandEnum.LULULIME,
             "PineappleRepublic": BrandEnum.PINEAPPLEREPUBLIC,
             "Nika": BrandEnum.NIKA
-        }
-        self.garments = {
-            "ShirtMen": ShirtMen,
-            "ShirtWomen": ShirtWomen,
-            "SockPairUnisex": SockPairUnisex
         }
         self.item_list = []
 
@@ -426,12 +390,6 @@ class Order:
     def __init__(self, factory: BrandFactory, details: dict) -> None:
         self._factory = factory
         self._details = details
-
-    def __str__(self):
-        """
-        A String representation of the object
-        """
-        print(f"Factory is {type(self._factory)}")
 
 
 class GarmentMaker:
@@ -489,6 +447,10 @@ class GarmentMaker:
                                            )
 
     def operate_order(self, order_list: list):
+        """
+        Responsible for checking the order list and generating the respective items.
+        It stores the items into respective lists.
+        """
         for order in order_list:
             garment = order._details['Garment']
             if (garment == 'ShirtMen'):
@@ -505,8 +467,8 @@ class GarmentMaker:
         """
         Drives the program
         """
-        # filename = input("Which excel file do you want to extract from? ")
-        # self.processor.open_order_sheet(f"./{filename}")
+        filename = input("Which excel file do you want to extract from? ")
+        self.processor.open_order_sheet(f"./{filename}.xlsx")
         self.processor.open_order_sheet("./a4.xlsx")
         order_list = []
         for next_order in self.processor.process_next_order():
