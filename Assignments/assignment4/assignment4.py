@@ -502,7 +502,8 @@ class GarmentMaker:
         """
         Drives the program
         """
-        self.processor.open_order_sheet("./COMP_3522_A4_orders.xlsx")
+        filename=input("Which excel file do you want to extract from?")
+        self.processor.open_order_sheet(f"./{filename}")
         order_list = []
         for next_order in self.processor.process_next_order():
             order_list.append(next_order)
