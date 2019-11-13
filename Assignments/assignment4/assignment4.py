@@ -51,11 +51,14 @@ class ShirtMen(abc.ABC):
     abstract factory pettern is responsible to create.
     """
 
-    def __init__(self, style: str, size: SizeEnum, colour: str, textile: str) -> None:
+    def __init__(self, style: str, size: SizeEnum, colour: str, textile: str, **kwargs) -> None:
         self.style = style
         self.size = size  # S, M, L, XL, XXL
         self.colour = colour
         self.textile = textile
+
+    def __str__(self):
+        return f"Style: {self.style} \nSize: {self.size} \nColor: {self.colour} \nTextile: {self.textile}"
 
 
 class ShirtWomen(abc.ABC):
@@ -64,11 +67,14 @@ class ShirtWomen(abc.ABC):
     abstract factory pettern is responsible to create.
     """
 
-    def __init__(self, style: str, size: SizeEnum, colour: str, textile: str) -> None:
+    def __init__(self, style: str, size: SizeEnum, colour: str, textile: str, **kwargs) -> None:
         self.style = style
         self.size = size  # XS, S, M, L, XL, XXL
         self.colour = colour
         self.textile = textile
+
+    def __str__(self):
+        return f"Style: {self.style} \nSize: {self.size} \nColor: {self.colour} \nTextile: {self.textile}"
 
 
 class SockPairUnisex(abc.ABC):
@@ -77,11 +83,14 @@ class SockPairUnisex(abc.ABC):
     abstract factory pettern is responsible to create.
     """
 
-    def __init__(self, style: str, size: SizeEnum, colour: str, textile: str) -> None:
+    def __init__(self, style: str, size: SizeEnum, colour: str, textile: str, **kwargs) -> None:
         self.style = style
         self.size = size  # S, M, L
         self.colour = colour
         self.textile = textile
+
+    def __str__(self):
+        return f"Style: {self.style} \nSize: {self.size} \nColor: {self.colour} \nTextile: {self.textile}"
 
 ### Factory ###
 
@@ -199,13 +208,16 @@ class ShirtMenLuluLime(ShirtMen):
     ShirtMenLuluLime is a type of ShirtMen branded by LuluLime
     """
 
-    def __init__(self, garment_designed_for: GarmentPurposeEnum, pockets: int, **kwargs) -> None:
+    def __init__(self, sport: GarmentPurposeEnum, pockets: int, **kwargs) -> None:
         """
         Initializes the ShirtMenLuluLime instance
         """
-        self.garment_designed_for = garment_designed_for  # yoga or running
+        self.sport = sport  # yoga or running
         self.pockets = pockets
-        super.__init__(**kwargs)
+        super().__init__(**kwargs)
+
+    def __str__(self):
+        return f"Brand: LuluLime \nGarment Produced: ShirtMen \n{super().__str__()} \nSport: {self.sport} \nPockets: {self.pockets}"
 
 
 class ShirtMenPineappleRepublic(ShirtMen):
@@ -216,7 +228,10 @@ class ShirtMenPineappleRepublic(ShirtMen):
     def __init__(self, ironing: bool, button: int, **kwargs) -> None:
         self.ironing = ironing
         self.button = button
-        super.__init__(**kwargs)
+        super().__init__(**kwargs)
+
+    def __str__(self):
+        return f"Brand: PineappleRepublic \nGarment Produced: ShirtMen \n{super().__str__()} \nIroning: {self.ironing} \nButton: {self.button}"
 
 
 class ShirtMenNika(ShirtMen):
@@ -226,7 +241,10 @@ class ShirtMenNika(ShirtMen):
 
     def __init__(self, garment: GarmentPurposeEnum, **kwargs) -> None:
         self.garment = garment  # indoor or outdoor sports
-        super.__init__(**kwargs)
+        super().__init__(**kwargs)
+
+    def __str__(self):
+        return f"Brand: Nika \nGarment Produced: ShirtMen \n{super().__str__()} \nGarment: {self.garment}"
 
 ### Shirt Women ###
 
@@ -236,10 +254,13 @@ class ShirtWomenLuluLime(ShirtWomen):
     ShirtWomenLuluLime is a type of ShirtWomen branded by Lululime
     """
 
-    def __init__(self, garment: str, pockets: int, **kwargs) -> None:
+    def __init__(self, garment: GarmentPurposeEnum, pockets: int, **kwargs) -> None:
         self.garment = garment  # yoga or running
         self.pockets = pockets
-        super.__init__(**kwargs)
+        super().__init__(**kwargs)
+
+    def __str__(self):
+        return f"Brand: LuluLime \nGarment Produced: ShirtWomen \n{super().__str__()} \nGarment: {self.garment} \nPockets: {self.pockets}"
 
 
 class ShirtWomenPineappleRepublic(ShirtWomen):
@@ -250,7 +271,10 @@ class ShirtWomenPineappleRepublic(ShirtWomen):
     def __init__(self, ironing: bool, button: int, **kwargs):
         self.ironing = ironing
         self.button = button
-        super.__init__(**kwargs)
+        super().__init__(**kwargs)
+
+    def __str__(self):
+        return f"Brand: PineappleRepublic \nGarment Produced: ShirtWomen \n{super().__str__()} \nIroning: {self.ironing} \nButton: {self.button}"
 
 
 class ShirtWomenNika(ShirtWomen):
@@ -260,7 +284,11 @@ class ShirtWomenNika(ShirtWomen):
 
     def __init__(self, garment: GarmentPurposeEnum, **kwargs) -> None:
         self.garment = garment  # indoor or outdoor sports
-        super.__init__(**kwargs)
+        super().__init__(**kwargs)
+
+    def __str__(self):
+        return f"Brand: Nika \nGarment Produced: ShirtWomen \n{super().__str__()} \n Garment: {self.garment}"
+
 
 ### SockPairUnisex ###
 
@@ -270,10 +298,13 @@ class SockPairUnisexLuluLime(SockPairUnisex):
     SockPairUnisexLuluLime is a type of SockPairUnisex branded by Lululime
     """
 
-    def __init__(self, garment_contains_odour: bool, color_of_stripe: str, **kwargs) -> None:
-        self.garment_contains_odour = garment_contains_odour
-        self.color_of_stripe = color_of_stripe
-        super.__init__(**kwargs)
+    def __init__(self, silver: bool, stripe: str, **kwargs) -> None:
+        self.silver = silver
+        self.stripe = stripe
+        super().__init__(**kwargs)
+
+    def __str__(self):
+        return f"Brand: LuluLime \nGarment Produced: SockPairUnisex \n{super().__str__()} \nSilver: {self.silver} \nStripe: {self.stripe}"
 
 
 class SockPairUnisexPineappleRepublic(SockPairUnisex):
@@ -281,9 +312,12 @@ class SockPairUnisexPineappleRepublic(SockPairUnisex):
     SockPairUnisexPineappleRepublic is a type of SockPairUnisex branded by PineappleRepublic
     """
 
-    def __init__(self, require_dry_cleaning: bool, **kwargs) -> None:
-        self.require_dry_cleaning = require_dry_cleaning
-        super.__init__(**kwargs)
+    def __init__(self, dry_cleaning: bool, **kwargs) -> None:
+        self.dry_cleaning = dry_cleaning
+        super().__init__(**kwargs)
+
+    def __str__(self):
+        return f"Brand: PineappleRepublic \nGarment Produced: SockPairUnisex \n{super().__str__()} \nDry Cleaning: {self.dry_cleaning}"
 
 
 class SockPairUnisexNika(SockPairUnisex):
@@ -291,10 +325,13 @@ class SockPairUnisexNika(SockPairUnisex):
     SockPairUnisexNika is a type of SockPairUnisex branded by Nika
     """
 
-    def __init__(self, sock_is_articulated: bool, sock_length: SockLengthEnum, **kwargs) -> None:
-        self.sock_is_articulated = sock_is_articulated
-        self.sock_length = sock_length  # ankle, calf, knee
-        super.__init__(**kwargs)
+    def __init__(self, articulated: bool, length: SockLengthEnum, **kwargs) -> None:
+        self.articulated = articulated
+        self.length = length  # ankle, calf, knee
+        super().__init__(**kwargs)
+
+    def __str__(self):
+        return f"Brand: Nika \nGarment Produced: SockPairUnisex \n{super().__str__()} \nArticulated: {self.articulated} \nLength: {self.length}"
 
 
 class ClothesPopulator:
@@ -319,7 +356,7 @@ class ClothesPopulator:
 
 class OrderProcessor:
     """
-    Responsible for processing the Excel spreadsheet. 
+    Responsible for processing the Excel spreadsheet.
     It is instantiated by the GarmentMaker class.
     """
 
@@ -340,20 +377,20 @@ class OrderProcessor:
 
     def open_order_sheet(self, file_name: str) -> None:
         """
-        Reads the excel file from the given filepath and 
+        Reads the excel file from the given filepath and
         extracts the orders from the spreadsheet, one row at a time
         """
         dataframe = pd.read_excel(file_name)
         self.data = dataframe
 
-    def process_next_order(self) -> Order:
+    def process_next_order(self) -> None:
         """
         Responsible for identifying the correct factory to use for each order.
         It stores the order details and the associated factory in an object of type Order and returns it
         :return: an Order object
         """
         i = 0
-        while i < 10:
+        while i < len(self.data.index):
             data = self.data.iloc[i]
             detail_dict = {}
             detail_dict['Date'] = data['Date']
@@ -403,30 +440,73 @@ class GarmentMaker:
     """
 
     def __init__(self):
+        """
+        Initializes three arraylist instance variables shirtsMen, shirts
+        """
+        self.clothes_populator = ClothesPopulator()
         self.processor = OrderProcessor()
-        self.shirtmen_list = []
-        self.shirtwomen_list = []
-        self.sockunisex_list = []
+        self.shirts_men = []
+        self.shirts_women = []
+        self.sock_unisex = []
+
+    def shirt_men_maker(self, shirt_men_order: Order):
+        factory = shirt_men_order._factory
+        return factory.create_shirt_men(style=shirt_men_order._details['Style name'],
+                                        size=shirt_men_order._details['Size'],
+                                        colour=shirt_men_order._details['Colour'],
+                                        textile=shirt_men_order._details['Textile'],
+                                        sport=shirt_men_order._details['Sport'],
+                                        pockets=shirt_men_order._details['Hidden Zipper Pockets'],
+                                        ironing=shirt_men_order._details['Requires Ironing'],
+                                        button=shirt_men_order._details['Buttons'],
+                                        garment=shirt_men_order._details['Indoor/Outdoor'],
+                                        )
+
+    def shirt_women_maker(self, shirt_women_order: Order):
+        factory = shirt_women_order._factory
+        return factory.create_shirt_women(style=shirt_women_order._details['Style name'],
+                                          size=shirt_women_order._details['Size'],
+                                          colour=shirt_women_order._details['Colour'],
+                                          textile=shirt_women_order._details['Textile'],
+                                          sport=shirt_women_order._details['Sport'],
+                                          pockets=shirt_women_order._details['Hidden Zipper Pockets'],
+                                          ironing=shirt_women_order._details['Requires Ironing'],
+                                          button=shirt_women_order._details['Buttons'],
+                                          garment=shirt_women_order._details['Indoor/Outdoor'],
+                                          )
+
+    def socks_unisex_maker(self, socks_unisex_order: Order):
+        factory = socks_unisex_order._factory
+        return factory.create_socks_unisex(style=socks_unisex_order._details['Style name'],
+                                           size=socks_unisex_order._details['Size'],
+                                           colour=socks_unisex_order._details['Colour'],
+                                           textile=socks_unisex_order._details['Textile'],
+                                           silver=socks_unisex_order._details['Silver'],
+                                           stripe=socks_unisex_order._details['Stripe'],
+                                           dry_cleaning=socks_unisex_order._details['Dry Cleaning'],
+                                           articulated=socks_unisex_order._details['Articulated'],
+                                           length=socks_unisex_order._details['Length'],
+                                           )
+
+    def operate_order(self, order_list: list):
+        for order in order_list:
+            garment = order._details['Garment']
+            if (garment == 'ShirtMen'):
+                self.shirts_men.append(self.shirt_men_maker(order))
+            elif (garment == 'ShirtWomen'):
+                self.shirts_women.append(self.shirt_women_maker(order))
+            elif (garment == 'SockPairUnisex'):
+                self.sock_unisex.append(self.socks_unisex_maker(order))
 
     def main(self):
         """
         Drives the program
         """
-        self.order.open_order_sheet("./COMP_3522_A4_orders.xlsx")
+        self.processor.open_order_sheet("./COMP_3522_A4_orders.xlsx")
         order_list = []
-        for next_order in order.process_next_order():
-            garment = next_order._details['Garment']
-            if (garment == 'ShirtMen'):
-                self.shirtmen_list.append(next_order)
-                print("added to shirtmen")
-            elif (garment == 'ShirtWomen'):
-                self.shirtwomen_list.append(next_order)
-                print("added to shirtwomen")
-            elif (garment == 'SockPairUnisex'):
-                self.sockunisex_list.append(next_order)
-                print("added to sockpairunisex")
-            else:
-                print("failed")
+        for next_order in self.processor.process_next_order():
+            order_list.append(next_order)
+        self.operate_order(order_list)
 
         # send everything at the end of each working day
 
@@ -439,7 +519,20 @@ class GarmentMaker:
         # brand
         # garment produced
 
+    def create_report(self):
+        print("--- Report ---\n")
+        print("--- ShirtMen ---\n\n")
+        for item in self.shirts_men:
+            print(f"{item} \n")
+        print("--- ShirtWomen ---\n\n")
+        for item in self.shirts_women:
+            print(f"{item}\n")
+        print("--- SockPairUnisex ---\n\n")
+        for item in self.sock_unisex:
+            print(f"{item}\n")
+
 
 if __name__ == '__main__':
     garment = GarmentMaker()
     garment.main()
+    garment.create_report()
