@@ -492,33 +492,26 @@ class GarmentMaker:
         for order in order_list:
             garment = order._details['Garment']
             if (garment == 'ShirtMen'):
-                self.shirts_men.append(self.shirt_men_maker(order))
+                for i in range(order._details['Count'].item()):
+                    self.shirts_men.append(self.shirt_men_maker(order))
             elif (garment == 'ShirtWomen'):
-                self.shirts_women.append(self.shirt_women_maker(order))
+                for i in range(order._details['Count'].item()):
+                    self.shirts_women.append(self.shirt_women_maker(order))
             elif (garment == 'SockPairUnisex'):
-                self.sock_unisex.append(self.socks_unisex_maker(order))
+                for i in range(order._details['Count'].item()):
+                    self.sock_unisex.append(self.socks_unisex_maker(order))
 
     def main(self):
         """
         Drives the program
         """
-        filename=input("Which excel file do you want to extract from?")
-        self.processor.open_order_sheet(f"./{filename}")
+        # filename = input("Which excel file do you want to extract from? ")
+        # self.processor.open_order_sheet(f"./{filename}")
+        self.processor.open_order_sheet("./a4.xlsx")
         order_list = []
         for next_order in self.processor.process_next_order():
             order_list.append(next_order)
         self.operate_order(order_list)
-
-        # send everything at the end of each working day
-
-        # prompt user for name of file
-
-        # receive order object from orderprocessor
-        # invoce either three make object
-
-        # produce a report summarizing the day's work
-        # brand
-        # garment produced
 
     def create_report(self):
         print("--- Report ---\n")
