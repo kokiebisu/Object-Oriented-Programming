@@ -202,31 +202,6 @@ class OutputFileHandler(BaseRequestHandler):
         else:
             return "Invalid Output", False
 
-class EncryptWritingHandler(BaseRequestHandler):
-    def handle_request(self, request: Request):
-        print("Encrypt Writing")
-        if request.output.lower() != "print":
-            with open(f"./{request.output}", "wb") as file:
-                file.write(request.result)
-                if not self.next_handler:
-                    return f"Wrote to {request.output}", True
-                return self.next_handler.handle_request(request)
-        if not self.next_handler:
-            return f"{request.result}", True
-        return self.next_handler.handle_request(request)
-class DecryptWritingHandler(BaseRequestHandler):
-    def handle_request(self, request: Request):
-        print("Decrypt Writing")
-        if request.output.lower() != "print":
-            with open(request.output, "w") as file:
-                file.write(request.result)
-                if not self.next_handler:
-                    return f"Wrote to {request.output}", True
-                return self.next_handler.handle_request(request)
-        if not self.next_handler:
-            return f"{request.result}", True
-        return self.next_handler.handle_request(request)
-
 
 class ModeHandler(BaseRequestHandler):
     """
