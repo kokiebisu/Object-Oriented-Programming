@@ -261,26 +261,26 @@ class DecryptHandler(BaseRequestHandler):
     Responsible for decrypting the request
     """
 
-    def handle_request(self, request: Request) -> (str, bool):
+    def handle_request(self, request_: Request) -> (str, bool):
         """
         Decrypts either the given string or file
-        :param request: a Request
+        :param request_: a Request
         :return: a tuple
         """
         print("Decrypt Reading")
-        key = DesKey(request.key.encode('utf-8'))
-        if request.data_input:
-            data = r"{0}".format(request.data_input)
+        key = DesKey(request_.key.encode('utf-8'))
+        if request_.data_input:
+            data = r"{0}".format(request_.data_input)
             data = ast.literal_eval(data)
-            request.result = key.decrypt(data, padding=True).decode('utf-8')
+            request_.result = key.decrypt(data, padding=True).decode('utf-8')
         else:
-            with open(request.input_file, "r") as file:
+            with open(request_.input_file, "r") as file:
                 data = file.read()
                 data = ast.literal_eval(data)
-                request.result = key.decrypt(data, padding=True).decode('utf-8')
+                request_.result = key.decrypt(data, padding=True).decode('utf-8')
         if not self.next_handler:
             return "", True
-        return self.next_handler.handle_request(request)
+        return self.next_handler.handle_request(request_)
 
 
 class OutputtingHandler(BaseRequestHandler):
