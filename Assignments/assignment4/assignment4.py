@@ -1,7 +1,7 @@
 import pandas as pd
 import abc
 import enum
-
+import datetime
 
 class BrandEnum(enum.Enum):
     """
@@ -611,7 +611,7 @@ class GarmentMaker:
         # filename = input("Which excel file do you want to extract from? ")
         # self.processor.open_order_sheet(f"./{filename}.xlsx")
         try:
-            self.processor.open_order_sheet("./a5.xlsx")
+            self.processor.open_order_sheet("./a4.xlsx")
         except FileNotFoundError:
             print("File was not found")
             exit()
@@ -621,21 +621,26 @@ class GarmentMaker:
                 order_list.append(next_order)
             self.operate_order(order_list)
 
+    def display_result(self, garment_list: list):
+        brand = ""
+        for item in garment_list:
+            if brand != item.__class__.__name__:
+                print(f"-------- Order: {item.__class__.__name__} --------\n")
+                brand = item.__class__.__name__
+            print(f"{item}\n")
+
+
     def create_report(self):
         """
         Creates a daily report of the product that was made
         :return:
         """
-        print("--- Report ---\n")
-        print("--- ShirtMen ---\n\n")
-        for item in self.shirts_men:
-            print(f"{item} \n")
-        print("--- ShirtWomen ---\n\n")
-        for item in self.shirts_women:
-            print(f"{item}\n")
-        print("--- SockPairUnisex ---\n\n")
-        for item in self.sock_unisex:
-            print(f"{item}\n")
+        print(f"OOP Designs Inc. Factory Report - {datetime.datetime.now():%d-%m-%Y %H:%M:%S}\n\n")
+        self.display_result(self.shirts_men)
+        # print("\n")
+        # self.display_result(self.shirts_women)
+        # print("\n")
+        # self.display_result(self.sock_unisex)
 
 
 if __name__ == '__main__':
