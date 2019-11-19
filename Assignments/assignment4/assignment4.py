@@ -11,7 +11,7 @@ class BrandEnum(enum.Enum):
     PINEAPPLEREPUBLIC = 1,
     NIKA = 2
 
-### Abstract Clothes ###
+# Abstract Clothes #
 
 
 class ShirtMen(abc.ABC):
@@ -27,22 +27,38 @@ class ShirtMen(abc.ABC):
         self.textile = textile
 
     def __str__(self):
+        """
+        String representation of the object
+        :return: a string
+        """
         return f"Style: {self.style} \nSize: {self.size} \nColor: {self.colour} \nTextile: {self.textile}"
 
 
 class ShirtWomen(abc.ABC):
     """
     ShirtWomen defines the interface for one of the products the
-    abstract factory pettern is responsible to create.
+    abstract factory pattern is responsible to create.
     """
 
     def __init__(self, style: str, size: str, colour: str, textile: str, **kwargs) -> None:
+        """
+        Initializes the object
+        :param style: a string
+        :param size: a string
+        :param colour: a string
+        :param textile: a string
+        :param kwargs: keyword arguments
+        """
         self.style = style
         self.size = size  # XS, S, M, L, XL, XXL
         self.colour = colour
         self.textile = textile
 
     def __str__(self):
+        """
+        String representation of the object
+        :return: a string
+        """
         return f"Style: {self.style} \nSize: {self.size} \nColor: {self.colour} \nTextile: {self.textile}"
 
 
@@ -53,15 +69,28 @@ class SockPairUnisex(abc.ABC):
     """
 
     def __init__(self, style: str, size: str, colour: str, textile: str, **kwargs) -> None:
+        """
+        Initializes the object
+        :param style: a string
+        :param size: a string
+        :param colour: a string
+        :param textile: a string
+        :param kwargs: keyword arguments
+        """
         self.style = style
         self.size = size  # S, M, L
         self.colour = colour
         self.textile = textile
 
     def __str__(self):
+        """
+        String representation of the object
+        :return: a string
+        """
         return f"Style: {self.style} \nSize: {self.size} \nColor: {self.colour} \nTextile: {self.textile}"
 
-### Factory ###
+
+# Factory #
 
 
 class BrandFactory(abc.ABC):
@@ -169,8 +198,8 @@ class NikaFactory(BrandFactory):
         """
         return SockPairUnisexNika(**kwargs)
 
-### Shirt Men ###
 
+# Shirt Men #
 
 class ShirtMenLuluLime(ShirtMen):
     """
@@ -179,13 +208,20 @@ class ShirtMenLuluLime(ShirtMen):
 
     def __init__(self, sport: str, pockets: int, **kwargs) -> None:
         """
-        Initializes the ShirtMenLuluLime instance
+        Initializes the ShirtMenLuluLime object
+        :param sport: a string
+        :param pockets: an int
+        :param kwargs: keyword arguments
         """
         self.sport = sport  # yoga or running
         self.pockets = pockets
         super().__init__(**kwargs)
 
     def __str__(self):
+        """
+        String representation of the object
+        :return: a string
+        """
         return f"Brand: LuluLime \nGarment Produced: ShirtMen \n{super().__str__()} \nSport: {self.sport} \nPockets: {self.pockets}"
 
 
@@ -195,11 +231,21 @@ class ShirtMenPineappleRepublic(ShirtMen):
     """
 
     def __init__(self, ironing: bool, button: int, **kwargs) -> None:
+        """
+        Initializes the ShirtMenPineappleRepublic object
+        :param ironing: a bool
+        :param button: an int
+        :param kwargs: keyword arguments
+        """
         self.ironing = ironing
         self.button = button
         super().__init__(**kwargs)
 
     def __str__(self):
+        """
+        String representation of the object
+        :return: a string
+        """
         return f"Brand: PineappleRepublic \nGarment Produced: ShirtMen \n{super().__str__()} \nIroning: {self.ironing} \nButton: {self.button}"
 
 
@@ -209,13 +255,22 @@ class ShirtMenNika(ShirtMen):
     """
 
     def __init__(self, garment: str, **kwargs) -> None:
+        """
+        Initializes the ShirtMenNika object
+        :param garment: a string
+        :param kwargs: keyword arguments
+        """
         self.garment = garment  # indoor or outdoor sports
         super().__init__(**kwargs)
 
     def __str__(self):
+        """
+        String representation of the object
+        :return:
+        """
         return f"Brand: Nika \nGarment Produced: ShirtMen \n{super().__str__()} \nGarment: {self.garment}"
 
-### Shirt Women ###
+# Shirt Women #
 
 
 class ShirtWomenLuluLime(ShirtWomen):
@@ -224,11 +279,21 @@ class ShirtWomenLuluLime(ShirtWomen):
     """
 
     def __init__(self, garment: str, pockets: int, **kwargs) -> None:
+        """
+        Initializes the ShirtWomenLuluLime object
+        :param garment: a string
+        :param pockets: an int
+        :param kwargs: keyword arguments
+        """
         self.garment = garment  # yoga or running
         self.pockets = pockets
         super().__init__(**kwargs)
 
     def __str__(self):
+        """
+        String representation of the object
+        :return: a string
+        """
         return f"Brand: LuluLime \nGarment Produced: ShirtWomen \n{super().__str__()} \nGarment: {self.garment} \nPockets: {self.pockets}"
 
 
@@ -238,11 +303,21 @@ class ShirtWomenPineappleRepublic(ShirtWomen):
     """
 
     def __init__(self, ironing: bool, button: int, **kwargs):
+        """
+        Initializes the ShirtWomenPineappleRepublic object
+        :param ironing: a bool
+        :param button: an int
+        :param kwargs: keyword arguments
+        """
         self.ironing = ironing
         self.button = button
         super().__init__(**kwargs)
 
     def __str__(self):
+        """
+        String representation of the object
+        :return: a string
+        """
         return f"Brand: PineappleRepublic \nGarment Produced: ShirtWomen \n{super().__str__()} \nIroning: {self.ironing} \nButton: {self.button}"
 
 
@@ -252,14 +327,23 @@ class ShirtWomenNika(ShirtWomen):
     """
 
     def __init__(self, garment: str, **kwargs) -> None:
+        """
+        Initializes the ShirtWomenNika object
+        :param garment: a string
+        :param kwargs: keyword arguments
+        """
         self.garment = garment  # indoor or outdoor sports
         super().__init__(**kwargs)
 
     def __str__(self):
+        """
+        String representation of the object
+        :return: a string
+        """
         return f"Brand: Nika \nGarment Produced: ShirtWomen \n{super().__str__()} \n Garment: {self.garment}"
 
 
-### SockPairUnisex ###
+# SockPairUnisex #
 
 
 class SockPairUnisexLuluLime(SockPairUnisex):
@@ -268,11 +352,21 @@ class SockPairUnisexLuluLime(SockPairUnisex):
     """
 
     def __init__(self, silver: bool, stripe: str, **kwargs) -> None:
+        """
+        Initializes the SockPairUnisexLuluLime object
+        :param silver: a bool
+        :param stripe: a string
+        :param kwargs: keyword arguments
+        """
         self.silver = silver
         self.stripe = stripe
         super().__init__(**kwargs)
 
     def __str__(self):
+        """
+        String representation of the object
+        :return: a string
+        """
         return f"Brand: LuluLime \nGarment Produced: SockPairUnisex \n{super().__str__()} \nSilver: {self.silver} \nStripe: {self.stripe}"
 
 
@@ -282,10 +376,19 @@ class SockPairUnisexPineappleRepublic(SockPairUnisex):
     """
 
     def __init__(self, dry_cleaning: bool, **kwargs) -> None:
+        """
+        Initializes the SockPairUnisexPineappleRepublic object
+        :param dry_cleaning: a bool
+        :param kwargs: keyword arguments
+        """
         self.dry_cleaning = dry_cleaning
         super().__init__(**kwargs)
 
     def __str__(self):
+        """
+        String representation of the object
+        :return:
+        """
         return f"Brand: PineappleRepublic \nGarment Produced: SockPairUnisex \n{super().__str__()} \nDry Cleaning: {self.dry_cleaning}"
 
 
@@ -295,11 +398,21 @@ class SockPairUnisexNika(SockPairUnisex):
     """
 
     def __init__(self, articulated: bool, length: str, **kwargs) -> None:
+        """
+        Initializes the SockPairUnisexNika object
+        :param articulated: a bool
+        :param length: a string
+        :param kwargs: keyword arguments
+        """
         self.articulated = articulated
         self.length = length  # ankle, calf, knee
         super().__init__(**kwargs)
 
     def __str__(self):
+        """
+        String representation of the object
+        :return: a string
+        """
         return f"Brand: Nika \nGarment Produced: SockPairUnisex \n{super().__str__()} \nArticulated: {self.articulated} \nLength: {self.length}"
 
 
@@ -309,6 +422,9 @@ class ClothesPopulator:
     """
 
     def __init__(self):
+        """
+        Initializes the ClothesPopulator object
+        """
         self.brand_factory_mapper = {
             BrandEnum.LULULIME: LuluLimeFactory,
             BrandEnum.PINEAPPLEREPUBLIC: PineappleRepublicFactory,
@@ -317,7 +433,8 @@ class ClothesPopulator:
 
     def get_factory(self, brand_type: BrandEnum) -> BrandFactory:
         """
-        :return: Factory object
+        Gets the factory class from the given brand type
+        :return: a Factory object
         """
         factory_class = self.brand_factory_mapper.get(brand_type, None)
         return factory_class()
@@ -330,6 +447,9 @@ class OrderProcessor:
     """
 
     def __init__(self) -> None:
+        """
+        Initializes the OrderProcessor object
+        """
         self.data = None
         self.populator = ClothesPopulator()
         self.brands = {
@@ -388,6 +508,11 @@ class Order:
     """
 
     def __init__(self, factory: BrandFactory, details: dict) -> None:
+        """
+        Initializes the Order object
+        :param factory: a BrandFactory object
+        :param details: a dict
+        """
         self._factory = factory
         self._details = details
 
@@ -408,6 +533,11 @@ class GarmentMaker:
         self.sock_unisex = []
 
     def shirt_men_maker(self, shirt_men_order: Order):
+        """
+        Creates a ShirtMen object from the given order
+        :param shirt_men_order: an Order object
+        :return: a ShirtMen object
+        """
         factory = shirt_men_order._factory
         return factory.create_shirt_men(style=shirt_men_order._details['Style name'],
                                         size=shirt_men_order._details['Size'],
@@ -421,6 +551,11 @@ class GarmentMaker:
                                         )
 
     def shirt_women_maker(self, shirt_women_order: Order):
+        """
+        Creates a ShirtWomen object from the given order
+        :param shirt_women_order: an Order object
+        :return: a ShirtWomen object
+        """
         factory = shirt_women_order._factory
         return factory.create_shirt_women(style=shirt_women_order._details['Style name'],
                                           size=shirt_women_order._details['Size'],
@@ -434,6 +569,11 @@ class GarmentMaker:
                                           )
 
     def socks_unisex_maker(self, socks_unisex_order: Order):
+        """
+        Creates a SocksUnisex object from the given order
+        :param socks_unisex_order: an Order object
+        :return: a SocksUnisex object
+        """
         factory = socks_unisex_order._factory
         return factory.create_socks_unisex(style=socks_unisex_order._details['Style name'],
                                            size=socks_unisex_order._details['Size'],
@@ -450,6 +590,7 @@ class GarmentMaker:
         """
         Responsible for checking the order list and generating the respective items.
         It stores the items into respective lists.
+        :param order_list: a list
         """
         for order in order_list:
             garment = order._details['Garment']
@@ -467,15 +608,24 @@ class GarmentMaker:
         """
         Drives the program
         """
-        filename = input("Which excel file do you want to extract from? ")
-        self.processor.open_order_sheet(f"./{filename}.xlsx")
-        self.processor.open_order_sheet("./a4.xlsx")
-        order_list = []
-        for next_order in self.processor.process_next_order():
-            order_list.append(next_order)
-        self.operate_order(order_list)
+        # filename = input("Which excel file do you want to extract from? ")
+        # self.processor.open_order_sheet(f"./{filename}.xlsx")
+        try:
+            self.processor.open_order_sheet("./a5.xlsx")
+        except FileNotFoundError:
+            print("File was not found")
+            exit()
+        else:
+            order_list = []
+            for next_order in self.processor.process_next_order():
+                order_list.append(next_order)
+            self.operate_order(order_list)
 
     def create_report(self):
+        """
+        Creates a daily report of the product that was made
+        :return:
+        """
         print("--- Report ---\n")
         print("--- ShirtMen ---\n\n")
         for item in self.shirts_men:
