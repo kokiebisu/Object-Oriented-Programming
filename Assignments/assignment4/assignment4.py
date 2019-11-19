@@ -621,14 +621,19 @@ class GarmentMaker:
                 order_list.append(next_order)
             self.operate_order(order_list)
 
-    def display_result(self, garment_list: list):
+    @staticmethod
+    def display_result(garment_list: list) -> None:
+        """
+        Prints out the list in the format of a report
+        :param garment_list: a list
+        """
         brand = ""
         for item in garment_list:
             if brand != item.__class__.__name__:
                 print(f"-------- Order: {item.__class__.__name__} --------\n")
                 brand = item.__class__.__name__
             print(f"{item}\n")
-
+        print("\n")
 
     def create_report(self):
         """
@@ -636,11 +641,9 @@ class GarmentMaker:
         :return:
         """
         print(f"OOP Designs Inc. Factory Report - {datetime.datetime.now():%d-%m-%Y %H:%M:%S}\n\n")
-        self.display_result(self.shirts_men)
-        # print("\n")
-        # self.display_result(self.shirts_women)
-        # print("\n")
-        # self.display_result(self.sock_unisex)
+        GarmentMaker.display_result(self.shirts_men)
+        GarmentMaker.display_result(self.shirts_women)
+        GarmentMaker.display_result(self.sock_unisex)
 
 
 if __name__ == '__main__':
