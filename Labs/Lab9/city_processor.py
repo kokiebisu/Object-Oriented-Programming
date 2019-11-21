@@ -28,7 +28,7 @@ class City:
 
     """
 
-    def __init__(self, city_ascii: str, lat: float, lng: float):
+    def __init__(self, city_ascii: str, lat: float, lng: float) -> None:
         """
         Initialized a CityLocation object with the provided city name,
         latitude and longitude
@@ -54,7 +54,7 @@ class CityDatabase:
     Represents a list of cities and their locations.
     """
 
-    def __init__(self, file_path):
+    def __init__(self, file_path) -> None:
         """
         Initializes a CityDatabase object by reading an excel file of
         city information using pandas, converting the data into a City
@@ -89,11 +89,11 @@ class OverheadPassEvent:
     a DateTime object specifying the time and date it will be overhead
     """
 
-    def __init__(self, duration, risetime):
+    def __init__(self, duration, risetime) -> None:
         self.duration = duration
         self.risetime = datetime.datetime.fromtimestamp(risetime)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.risetime} for {self.duration} seconds"
 
 
@@ -105,7 +105,7 @@ class CityOverheadTimes:
     - passes: a list of OverheadPass objects
     """
 
-    def __init__(self, city: City, *args):
+    def __init__(self, city: City, *args) -> None:
         """
         Initializes a CityOverheadTimes object which stores the various
         times the ISS will pass over a city.
@@ -119,7 +119,7 @@ class CityOverheadTimes:
             # print(type(**arg))
             self.passes.append(OverheadPassEvent(**arg))
 
-    def __str__(self):
+    def __str__(self) -> str:
         times = []
         for iss_pass in self.passes:
             times.append(str(iss_pass))

@@ -1,4 +1,6 @@
 from city_processor import CityDatabase, CityOverheadTimes, ISSDataRequest
+import time
+import threading
 
 
 class CityOverheadTimeQueue:
@@ -33,12 +35,44 @@ class CityOverheadTimeQueue:
         return len(self.data_queue)
 
 
+class ProducerThread(threading.Thread):
+    def __init__(self, cities: list, queue: CityOverheadTimeQueue) -> None:
+        """
+        Initializes the class with a list of City Objects as well as a CityOverheadTimeQueue
+        """
+        super().__init__()
+        self.cities = cities
+        self.queue = queue
+
+    def run(self) -> None:
+        """
+        Executes when the thread starts. Loops over each City and pass it to the 
+        ISSDataRequest.get_overheadpass() method. It then proceeds to add the city to
+        the queue. After reading in 5 cities, the thread should sleep for 1 second.
+        """
+        count = 1
+        for city in self.cities:
+            if count == 5:
+                time.sleep(1)
+                count = 1
+            overhead_time = ISSDataRequest.get_overhead_pass(city)
+            self.queue.put(overhead_time)
+            print(f"Added {count}")
+            count += 1
+
+
+class ConsumerThread(threading.Thread):
+    pass
+
+
 def main():
     db = CityDatabase('./city_locations_test.xlsx')
     queue = CityOverheadTimeQueue()
     for city in db.city_db:
         queue.put(ISSDataRequest.get_overhead_pass(city))
-        print(queue.get())
+    pt = ProducerThread(db.city_db, queue)
+    pt.start()
+    pt.join()
 
 
 if __name__ == '__main__':
