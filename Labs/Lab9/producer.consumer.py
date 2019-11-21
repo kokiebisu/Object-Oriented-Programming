@@ -1,6 +1,7 @@
 from city_processor import CityDatabase, CityOverheadTimes, ISSDataRequest
 import time
 import threading
+import math
 
 
 class CityOverheadTimeQueue:
@@ -9,13 +10,15 @@ class CityOverheadTimeQueue:
         Instantiates an attribute called data_quere as an empty list
         """
         self.data_queue = []
+        self.access_queue_lock = threading.Lock()
 
     def put(self, overhead_time: CityOverheadTimes) -> None:
         """
         Responsible fir adding to the queue. Accept a overhead_time 
         parameter and append it to the data_queue list.
         """
-        self.data_queue.append(overhead_time)
+        with self.access_queue_lock:
+            self.data_queue.append(overhead_time)
 
     def get(self) -> CityOverheadTimes:
         """
@@ -24,11 +27,12 @@ class CityOverheadTimeQueue:
         delete the element as this will also automatically move all the other elements 
         so there will be no empty spaces.
         """
-        if not self.data_queue:
-            return
-        element = self.data_queue[0]
-        del self.data_queue[0]
-        return element
+        with self.access_queue_lock:
+            if not self.data_queue:
+                exit()
+            element = self.data_queue[0]
+            del self.data_queue[0]
+            return element
 
     def __len__(self) -> int:
         """
@@ -90,7 +94,6 @@ class ConsumerThread(threading.Thread):
         while self.data_incoming or len(self.queue) > 0:
             if not self.queue:
                 time.sleep(0.75)
-                exit()
             print(f"Consumer Thread: {self.queue.get()}")
             time.sleep(0.5)
 
@@ -101,18 +104,54 @@ class ConsumerThread(threading.Thread):
         self.data_incoming = False
 
 
+def divide_list(dividing_list, n):
+    """
+    Divides the list into smaller n sized lists
+    """
+    for i in range(0, len(dividing_list), n):
+        yield dividing_list[i:i + n]
+
+
 def main():
+    """
+    Drives the program
+    """
     db = CityDatabase('./city_locations_test.xlsx')
+    divided_list = list(divide_list(db.city_db, math.ceil(len(db.city_db)/4)))
+    first = divided_list[0]
+    second = divided_list[1]
+    third = divided_list[2]
+    fourth = divided_list[3]
     queue = CityOverheadTimeQueue()
     for city in db.city_db:
         queue.put(ISSDataRequest.get_overhead_pass(city))
-    pt = ProducerThread(db.city_db, queue)
+
+    # Creating Threads
+    pt1 = ProducerThread(first, queue)
+    pt2 = ProducerThread(second, queue)
+    pt3 = ProducerThread(third, queue)
+    pt4 = ProducerThread(fourth, queue)
     ct = ConsumerThread(queue)
-    pt.start()
+
+    # Starting Threads
+    pt1.start()
+    pt2.start()
+    pt3.start()
+    pt4.start()
     ct.start()
-    pt.run()
+
+    # Running Methods
+    pt1.run()
+    pt2.run()
+    pt3.run()
+    pt4.run()
     ct.run()
-    pt.join()
+
+    # Joining with main thread
+    pt1.join()
+    pt2.join()
+    pt3.join()
+    pt4.join()
     ct.stop_incoming()
     ct.join()
 
