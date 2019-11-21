@@ -30,8 +30,6 @@ class CityOverheadTimeQueue:
         :return: a CityOverheadTimes object
         """
         with self.access_queue_lock:
-            if not self.data_queue:
-                exit()
             element = self.data_queue[0]
             del self.data_queue[0]
             return element
@@ -45,6 +43,14 @@ class CityOverheadTimeQueue:
 
 
 class ProducerThread(threading.Thread):
+
+    id = 0
+
+    @classmethod
+    def increment_id(cls):
+        cls.id += 1
+        return cls.id
+
     def __init__(self, cities: list, queue: CityOverheadTimeQueue) -> None:
         """
         Initializes the class with a list of City Objects as well as a CityOverheadTimeQueue
@@ -54,6 +60,7 @@ class ProducerThread(threading.Thread):
         super().__init__()
         self.cities = cities
         self.queue = queue
+        self.my_id = self.increment_id()
 
     def run(self) -> None:
         """
@@ -66,9 +73,9 @@ class ProducerThread(threading.Thread):
             if count == 5:
                 time.sleep(1)
                 count = 1
-            overhead_time = ISSDataRequest.get_overhead_pass(city)
-            self.queue.put(overhead_time)
-            print(f"Producer Thread: {count}")
+            response = ISSDataRequest.get_overhead_pass(city)
+            print(f"Producer Thread ID: {self.my_id}")
+            self.queue.put(response)
             count += 1
 
 
@@ -98,10 +105,11 @@ class ConsumerThread(threading.Thread):
         seconds.
         """
         while self.data_incoming or len(self.queue) > 0:
-            if not self.queue:
+            if len(self.queue) == 0:
                 time.sleep(0.75)
-            print(f"Consumer Thread: {self.queue.get()}")
-            time.sleep(0.5)
+            else:
+                print(f"Consumer Thread: {self.queue.get()}")
+                time.sleep(0.5)
 
     def stop_incoming(self) -> None:
         """
@@ -110,7 +118,7 @@ class ConsumerThread(threading.Thread):
         self.data_incoming = False
 
 
-def divide_list(dividing_list: list, n: int) -> generator:
+def divide_list(dividing_list: list, n: int) -> list:
     """
     Divides the list into smaller n sized lists
     :param dividing_list: a list
@@ -120,11 +128,11 @@ def divide_list(dividing_list: list, n: int) -> generator:
         yield dividing_list[i:i + n]
 
 
-def main():
+def hello():
     """
     Drives the program
     """
-    db = CityDatabase('./city_locations_test.xlsx')
+    db = CityDatabase('./city_locations.xlsx')
     divided_list = list(divide_list(db.city_db, math.ceil(len(db.city_db)/4)))
     first = divided_list[0]
     second = divided_list[1]
@@ -142,18 +150,11 @@ def main():
     ct = ConsumerThread(queue)
 
     # Starting Threads
+    ct.start()
     pt1.start()
     pt2.start()
     pt3.start()
     pt4.start()
-    ct.start()
-
-    # Running Methods
-    pt1.run()
-    pt2.run()
-    pt3.run()
-    pt4.run()
-    ct.run()
 
     # Joining with main thread
     pt1.join()
@@ -165,4 +166,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    hello()
