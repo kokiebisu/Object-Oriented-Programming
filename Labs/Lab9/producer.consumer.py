@@ -16,6 +16,7 @@ class CityOverheadTimeQueue:
         """
         Responsible fir adding to the queue. Accept a overhead_time 
         parameter and append it to the data_queue list.
+        :param overhead_time: a CityOverheadTimes object
         """
         with self.access_queue_lock:
             self.data_queue.append(overhead_time)
@@ -26,6 +27,7 @@ class CityOverheadTimeQueue:
         return the element at index 0 and delete it from the list. Use the del keyword to
         delete the element as this will also automatically move all the other elements 
         so there will be no empty spaces.
+        :return: a CityOverheadTimes object
         """
         with self.access_queue_lock:
             if not self.data_queue:
@@ -37,6 +39,7 @@ class CityOverheadTimeQueue:
     def __len__(self) -> int:
         """
         Returns the length of the data_queue
+        :return: an int
         """
         return len(self.data_queue)
 
@@ -45,6 +48,8 @@ class ProducerThread(threading.Thread):
     def __init__(self, cities: list, queue: CityOverheadTimeQueue) -> None:
         """
         Initializes the class with a list of City Objects as well as a CityOverheadTimeQueue
+        :param cities: a list
+        :param queue: a CityOverheadTimeQueue object
         """
         super().__init__()
         self.cities = cities
@@ -78,6 +83,7 @@ class ConsumerThread(threading.Thread):
         It also implements a data_incoming boolean attribute that is set to True. This 
         attribute should change to False after the producer thread has joined the main
         thread and finished processing all the cities.
+        :param queue: a CityOverheadTimeQueue object
         """
         super().__init__()
         self.queue = queue
@@ -97,16 +103,18 @@ class ConsumerThread(threading.Thread):
             print(f"Consumer Thread: {self.queue.get()}")
             time.sleep(0.5)
 
-    def stop_incoming(self):
+    def stop_incoming(self) -> None:
         """
         Stops the run method.
         """
         self.data_incoming = False
 
 
-def divide_list(dividing_list, n):
+def divide_list(dividing_list: list, n: int) -> generator:
     """
     Divides the list into smaller n sized lists
+    :param dividing_list: a list
+    :param n: an int
     """
     for i in range(0, len(dividing_list), n):
         yield dividing_list[i:i + n]
