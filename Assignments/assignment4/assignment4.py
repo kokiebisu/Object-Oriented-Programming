@@ -642,8 +642,8 @@ class GarmentMaker:
         """
         print(f"OOP Designs Inc. Factory Report - {datetime.datetime.now():%d-%m-%Y %H:%M:%S}\n\n")
         GarmentMaker.display_result(self.shirts_men)
-        GarmentMaker.display_result(self.shirts_women)
-        GarmentMaker.display_result(self.sock_unisex)
+        # GarmentMaker.display_result(self.shirts_women)
+        # GarmentMaker.display_result(self.sock_unisex)
 
 
 if __name__ == '__main__':
