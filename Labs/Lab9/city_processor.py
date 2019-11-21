@@ -148,16 +148,7 @@ class ISSDataRequest:
         response = requests.get(
             cls.OPEN_NOTIFY_OVERHEAD_PASS_URL, params=parameters)
         pass_times = response.json()['response']
-        # print(pass_times)
-        print(CityOverheadTimes(city, *pass_times))
         return CityOverheadTimes(city, *pass_times)
         # DEBUG:
         # print(response)
         # jprint(pass_times)
-
-
-ISSDataRequest.get_overhead_pass(City('Selkirk', 50.15, -96.8833))
-
-# db = CityDatabase('./city_locations_test.xlsx')
-# for city in db.city_db:
-#     ISSDataRequest.get_overhead_pass(city)
