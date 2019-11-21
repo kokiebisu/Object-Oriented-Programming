@@ -24,6 +24,8 @@ class CityOverheadTimeQueue:
         delete the element as this will also automatically move all the other elements 
         so there will be no empty spaces.
         """
+        if not self.data_queue:
+            return
         element = self.data_queue[0]
         del self.data_queue[0]
         return element
@@ -57,12 +59,46 @@ class ProducerThread(threading.Thread):
                 count = 1
             overhead_time = ISSDataRequest.get_overhead_pass(city)
             self.queue.put(overhead_time)
-            print(f"Added {count}")
+            print(f"Producer Thread: {count}")
             count += 1
 
 
 class ConsumerThread(threading.Thread):
-    pass
+    """
+    Responsible for consuming data from the queue and printing it out to the console.
+    """
+
+    def __init__(self, queue: CityOverheadTimeQueue) -> None:
+        """
+        Initializes the ConsumerThread with the same queue as the one the producer has. 
+        It also implements a data_incoming boolean attribute that is set to True. This 
+        attribute should change to False after the producer thread has joined the main
+        thread and finished processing all the cities.
+        """
+        super().__init__()
+        self.queue = queue
+        self.data_incoming = True
+        # should change to False after the producer thread has joined the main thread
+        # and finished processing all the cities
+
+    def run(self) -> None:
+        """
+        Gets an item from the queue and print it to the console and then sleep for 0.5 seconds.
+        While processing the queue, if the queue is empty, it puts the thread to sleep for 0.75
+        seconds.
+        """
+        while self.data_incoming or len(self.queue) > 0:
+            if not self.queue:
+                time.sleep(0.75)
+                exit()
+            print(f"Consumer Thread: {self.queue.get()}")
+            time.sleep(0.5)
+
+    def stop_incoming(self):
+        """
+        Stops the run method.
+        """
+        self.data_incoming = False
 
 
 def main():
@@ -71,8 +107,14 @@ def main():
     for city in db.city_db:
         queue.put(ISSDataRequest.get_overhead_pass(city))
     pt = ProducerThread(db.city_db, queue)
+    ct = ConsumerThread(queue)
     pt.start()
+    ct.start()
+    pt.run()
+    ct.run()
     pt.join()
+    ct.stop_incoming()
+    ct.join()
 
 
 if __name__ == '__main__':
