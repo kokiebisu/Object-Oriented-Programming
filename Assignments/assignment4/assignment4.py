@@ -473,6 +473,13 @@ class OrderProcessor:
         It stores the order details and the associated factory in an object of type Order and returns it
         :return: an Order object
         """
+
+        for row in self.data.iloc:
+            for entry in row:
+                detail_dict = entry
+            # create order object
+            # yield order object
+
         i = 0
         while i < len(self.data.index):
             data = self.data.iloc[i]

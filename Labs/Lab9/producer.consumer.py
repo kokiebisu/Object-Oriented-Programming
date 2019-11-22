@@ -128,42 +128,47 @@ def divide_list(dividing_list: list, n: int) -> list:
         yield dividing_list[i:i + n]
 
 
-def hello():
+def main():
     """
     Drives the program
     """
     db = CityDatabase('./city_locations.xlsx')
-    divided_list = list(divide_list(db.city_db, math.ceil(len(db.city_db)/4)))
+    divided_list = list(divide_list(db.city_db, math.ceil(len(db.city_db)/2)))
     first = divided_list[0]
     second = divided_list[1]
-    third = divided_list[2]
-    fourth = divided_list[3]
+    # third = divided_list[2]
+    # fourth = divided_list[3]
     queue = CityOverheadTimeQueue()
-    for city in db.city_db:
-        queue.put(ISSDataRequest.get_overhead_pass(city))
+    # for city in db.city_db:
+    #     queue.put(ISSDataRequest.get_overhead_pass(city))
 
     # Creating Threads
     pt1 = ProducerThread(first, queue)
     pt2 = ProducerThread(second, queue)
-    pt3 = ProducerThread(third, queue)
-    pt4 = ProducerThread(fourth, queue)
+    # pt3 = ProducerThread(third, queue)
+    # pt4 = ProducerThread(fourth, queue)
     ct = ConsumerThread(queue)
 
     # Starting Threads
     ct.start()
     pt1.start()
     pt2.start()
-    pt3.start()
-    pt4.start()
+    # pt3.start()
+    # pt4.start()
+
+    start = time.time()
 
     # Joining with main thread
     pt1.join()
     pt2.join()
-    pt3.join()
-    pt4.join()
+    # pt3.join()
+    # pt4.join()
     ct.stop_incoming()
     ct.join()
 
+    end = time.time()
+    print(f"after time: f{end - start}")
+
 
 if __name__ == '__main__':
-    hello()
+    main()
