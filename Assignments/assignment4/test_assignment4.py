@@ -1,30 +1,28 @@
-from unittest.mock import patch
 from unittest import TestCase
-from assignment4 import GarmentMaker, BrandEnum, LuluLimeFactory
+from assignment4 import GarmentMaker, BrandEnum, LuluLimeFactory, PineappleRepublicFactory, NikaFactory, ClothesPopulator
+
 
 class TestGarmentFactory(TestCase):
-    # @patch('garment_abstract_factory.get_file_input',
-    #        return_value='invalidfile')
     def test_wrong_file_input(self):
         self.garment = GarmentMaker()
         with self.assertRaises(FileNotFoundError):
             self.garment.processor.open_order_sheet("./a5.xlsx")
-    # def test_item_generator_lululime(self):
-    #     self.item_generator = garment_abstract_factory.ItemGenerator()
-    #     lululime_factory = self.item_generator.retrieve_factory(BrandEnum.LULULIME)
-    #     self.assertTrue(isinstance(lululime_factory, LuluLimeFactory))
-    # def test_item_generator_pineapple_republic(self):
-    #     self.item_generator = garment_abstract_factory.ItemGenerator()
-    #     factory = self.item_generator.retrieve_factory(
-    #         garment_abstract_factory.ItemBrandEnum.PINEAPPLEREPUBLIC)
-    #     self.assertTrue(isinstance(factory, garment_abstract_factory
-    #                                .PineappleRepublicFactory))
-    # def test_item_generator_nika(self):
-    #     self.item_generator = garment_abstract_factory.ItemGenerator()
-    #     factory = self.item_generator.retrieve_factory(garment_abstract_factory
-    #                                                    .ItemBrandEnum.NIKA)
-    #     self.assertTrue(isinstance(factory, garment_abstract_factory
-    #                                .NikaFactory))
+
+    def test_item_generator_lululime(self):
+        self.item_generator = ClothesPopulator()
+        lululime_factory = self.item_generator.get_factory(BrandEnum.LULULIME)
+        self.assertTrue(isinstance(lululime_factory, LuluLimeFactory))
+
+    def test_item_generator_pineapple_republic(self):
+        self.item_generator = ClothesPopulator()
+        pineapple_republic_factory = self.item_generator.get_factory(
+            BrandEnum.PINEAPPLEREPUBLIC)
+        self.assertTrue(isinstance(pineapple_republic_factory, PineappleRepublicFactory))
+
+    def test_item_generator_nika(self):
+        self.item_generator = ClothesPopulator()
+        nika_factory = self.item_generator.get_factory(BrandEnum.NIKA)
+        self.assertTrue(isinstance(nika_factory, NikaFactory))
 
     def test_correct_processing(self):
         self.garment = GarmentMaker()
