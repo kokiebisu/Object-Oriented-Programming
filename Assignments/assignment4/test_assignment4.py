@@ -1,5 +1,6 @@
 from unittest import TestCase
-from assignment4 import GarmentMaker, BrandEnum, LuluLimeFactory, PineappleRepublicFactory, NikaFactory, ClothesPopulator
+from assignment4 import GarmentMaker, BrandEnum, LuluLimeFactory\
+    , PineappleRepublicFactory, NikaFactory, ClothesPopulator, Order
 
 
 class TestGarmentFactory(TestCase):

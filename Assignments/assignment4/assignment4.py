@@ -3,6 +3,7 @@ import abc
 import enum
 import datetime
 
+
 class BrandEnum(enum.Enum):
     """
     This enum specifies the different distinct brand types.
@@ -10,8 +11,6 @@ class BrandEnum(enum.Enum):
     LULULIME = 0,
     PINEAPPLEREPUBLIC = 1,
     NIKA = 2
-
-# Abstract Clothes #
 
 
 class ShirtMen(abc.ABC):
@@ -88,9 +87,6 @@ class SockPairUnisex(abc.ABC):
         :return: a string
         """
         return f"Style: {self.style} \nSize: {self.size} \nColor: {self.colour} \nTextile: {self.textile}"
-
-
-# Factory #
 
 
 class BrandFactory(abc.ABC):
@@ -193,13 +189,11 @@ class NikaFactory(BrandFactory):
 
     def create_socks_unisex(self, **kwargs) -> SockPairUnisex:
         """
-        Creates a SockPairUnisezNika instance
+        Creates a SockPairUnisexNika instance
         :return: a SockPairUnisex
         """
         return SockPairUnisexNika(**kwargs)
 
-
-# Shirt Men #
 
 class ShirtMenLuluLime(ShirtMen):
     """
@@ -270,8 +264,6 @@ class ShirtMenNika(ShirtMen):
         """
         return f"Brand: Nika \nGarment Produced: ShirtMen \n{super().__str__()} \nGarment: {self.garment}"
 
-# Shirt Women #
-
 
 class ShirtWomenLuluLime(ShirtWomen):
     """
@@ -326,13 +318,13 @@ class ShirtWomenNika(ShirtWomen):
     ShirtWomenNika is a type of ShirtWomen branded by Nika
     """
 
-    def __init__(self, garment: str, **kwargs) -> None:
+    def __init__(self, garment_: str, **kwargs) -> None:
         """
         Initializes the ShirtWomenNika object
         :param garment: a string
         :param kwargs: keyword arguments
         """
-        self.garment = garment  # indoor or outdoor sports
+        self._garment = garment_  # indoor or outdoor sports
         super().__init__(**kwargs)
 
     def __str__(self):
@@ -340,10 +332,7 @@ class ShirtWomenNika(ShirtWomen):
         String representation of the object
         :return: a string
         """
-        return f"Brand: Nika \nGarment Produced: ShirtWomen \n{super().__str__()} \n Garment: {self.garment}"
-
-
-# SockPairUnisex #
+        return f"Brand: Nika \nGarment Produced: ShirtWomen \n{super().__str__()} \n Garment: {self._garment}"
 
 
 class SockPairUnisexLuluLime(SockPairUnisex):
@@ -367,7 +356,8 @@ class SockPairUnisexLuluLime(SockPairUnisex):
         String representation of the object
         :return: a string
         """
-        return f"Brand: LuluLime \nGarment Produced: SockPairUnisex \n{super().__str__()} \nSilver: {self.silver} \nStripe: {self.stripe}"
+        return f"Brand: LuluLime \nGarment Produced: SockPairUnisex \n{super().__str__()} \nSilver: {self.silver} " \
+               f"\nStripe: {self.stripe}"
 
 
 class SockPairUnisexPineappleRepublic(SockPairUnisex):
@@ -389,7 +379,8 @@ class SockPairUnisexPineappleRepublic(SockPairUnisex):
         String representation of the object
         :return:
         """
-        return f"Brand: PineappleRepublic \nGarment Produced: SockPairUnisex \n{super().__str__()} \nDry Cleaning: {self.dry_cleaning}"
+        return f"Brand: PineappleRepublic \nGarment Produced: SockPairUnisex \n{super().__str__()} " \
+               f"\nDry Cleaning: {self.dry_cleaning}"
 
 
 class SockPairUnisexNika(SockPairUnisex):
@@ -405,7 +396,7 @@ class SockPairUnisexNika(SockPairUnisex):
         :param kwargs: keyword arguments
         """
         self.articulated = articulated
-        self.length = length  # ankle, calf, knee
+        self.length = length
         super().__init__(**kwargs)
 
     def __str__(self):
@@ -413,7 +404,8 @@ class SockPairUnisexNika(SockPairUnisex):
         String representation of the object
         :return: a string
         """
-        return f"Brand: Nika \nGarment Produced: SockPairUnisex \n{super().__str__()} \nArticulated: {self.articulated} \nLength: {self.length}"
+        return f"Brand: Nika \nGarment Produced: SockPairUnisex \n{super().__str__()} " \
+               f"\nArticulated: {self.articulated} \nLength: {self.length}"
 
 
 class ClothesPopulator:
@@ -477,26 +469,14 @@ class OrderProcessor:
         i = 0
         while i < len(self.data.index):
             data = self.data.iloc[i]
-            detail_dict = {}
-            detail_dict['Date'] = data['Date']
-            detail_dict['Order Number'] = data['Order Number']
-            detail_dict['Brand'] = data['Brand']
-            detail_dict['Garment'] = data['Garment']
-            detail_dict['Count'] = data['Count']
-            detail_dict['Style name'] = data['Style name']
-            detail_dict['Size'] = data['Size']
-            detail_dict['Colour'] = data['Colour']
-            detail_dict['Textile'] = data['Textile']
-            detail_dict['Sport'] = data['Sport']
-            detail_dict['Hidden Zipper Pockets'] = data['Hidden Zipper Pockets']
-            detail_dict['Dry Cleaning'] = data['Dry Cleaning']
-            detail_dict['Indoor/Outdoor'] = data['Indoor/Outdoor']
-            detail_dict['Requires Ironing'] = data['Requires Ironing']
-            detail_dict['Buttons'] = data['Buttons']
-            detail_dict['Articulated'] = data['Articulated']
-            detail_dict['Length'] = data['Length']
-            detail_dict['Silver'] = data['Silver']
-            detail_dict['Stripe'] = data['Stripe']
+            detail_dict = {'Date': data['Date'], 'Order Number': data['Order Number'], 'Brand': data['Brand'],
+                           'Garment': data['Garment'], 'Count': data['Count'], 'Style name': data['Style name'],
+                           'Size': data['Size'], 'Colour': data['Colour'], 'Textile': data['Textile'],
+                           'Sport': data['Sport'], 'Hidden Zipper Pockets': data['Hidden Zipper Pockets'],
+                           'Dry Cleaning': data['Dry Cleaning'], 'Indoor/Outdoor': data['Indoor/Outdoor'],
+                           'Requires Ironing': data['Requires Ironing'], 'Buttons': data['Buttons'],
+                           'Articulated': data['Articulated'], 'Length': data['Length'], 'Silver': data['Silver'],
+                           'Stripe': data['Stripe']}
             brand_factory = self.populator.get_factory(
                 self.brands[detail_dict['Brand']])
             yield Order(factory=brand_factory, details=detail_dict)
@@ -517,6 +497,14 @@ class Order:
         self._factory = factory
         self._details = details
 
+    @property
+    def details(self):
+        return self._details
+
+    @property
+    def factory(self):
+        return self._factory
+
 
 class GarmentMaker:
     """
@@ -533,58 +521,61 @@ class GarmentMaker:
         self.shirts_women = []
         self.sock_unisex = []
 
-    def shirt_men_maker(self, shirt_men_order: Order):
+    @staticmethod
+    def shirt_men_maker(shirt_men_order: Order):
         """
         Creates a ShirtMen object from the given order
         :param shirt_men_order: an Order object
         :return: a ShirtMen object
         """
-        factory = shirt_men_order._factory
-        return factory.create_shirt_men(style=shirt_men_order._details['Style name'],
-                                        size=shirt_men_order._details['Size'],
-                                        colour=shirt_men_order._details['Colour'],
-                                        textile=shirt_men_order._details['Textile'],
-                                        sport=shirt_men_order._details['Sport'],
-                                        pockets=shirt_men_order._details['Hidden Zipper Pockets'],
-                                        ironing=shirt_men_order._details['Requires Ironing'],
-                                        button=shirt_men_order._details['Buttons'],
-                                        garment=shirt_men_order._details['Indoor/Outdoor'],
+        factory = shirt_men_order.factory
+        return factory.create_shirt_men(style=shirt_men_order.details['Style name'],
+                                        size=shirt_men_order.details['Size'],
+                                        colour=shirt_men_order.details['Colour'],
+                                        textile=shirt_men_order.details['Textile'],
+                                        sport=shirt_men_order.details['Sport'],
+                                        pockets=shirt_men_order.details['Hidden Zipper Pockets'],
+                                        ironing=shirt_men_order.details['Requires Ironing'],
+                                        button=shirt_men_order.details['Buttons'],
+                                        garment=shirt_men_order.details['Indoor/Outdoor'],
                                         )
 
-    def shirt_women_maker(self, shirt_women_order: Order):
+    @staticmethod
+    def shirt_women_maker(shirt_women_order: Order):
         """
         Creates a ShirtWomen object from the given order
         :param shirt_women_order: an Order object
         :return: a ShirtWomen object
         """
-        factory = shirt_women_order._factory
-        return factory.create_shirt_women(style=shirt_women_order._details['Style name'],
-                                          size=shirt_women_order._details['Size'],
-                                          colour=shirt_women_order._details['Colour'],
-                                          textile=shirt_women_order._details['Textile'],
-                                          sport=shirt_women_order._details['Sport'],
-                                          pockets=shirt_women_order._details['Hidden Zipper Pockets'],
-                                          ironing=shirt_women_order._details['Requires Ironing'],
-                                          button=shirt_women_order._details['Buttons'],
-                                          garment=shirt_women_order._details['Indoor/Outdoor'],
+        factory = shirt_women_order.factory
+        return factory.create_shirt_women(style=shirt_women_order.details['Style name'],
+                                          size=shirt_women_order.details['Size'],
+                                          colour=shirt_women_order.details['Colour'],
+                                          textile=shirt_women_order.details['Textile'],
+                                          sport=shirt_women_order.details['Sport'],
+                                          pockets=shirt_women_order.details['Hidden Zipper Pockets'],
+                                          ironing=shirt_women_order.details['Requires Ironing'],
+                                          button=shirt_women_order.details['Buttons'],
+                                          garment=shirt_women_order.details['Indoor/Outdoor'],
                                           )
 
-    def socks_unisex_maker(self, socks_unisex_order: Order):
+    @staticmethod
+    def socks_unisex_maker(socks_unisex_order: Order):
         """
         Creates a SocksUnisex object from the given order
         :param socks_unisex_order: an Order object
         :return: a SocksUnisex object
         """
-        factory = socks_unisex_order._factory
-        return factory.create_socks_unisex(style=socks_unisex_order._details['Style name'],
-                                           size=socks_unisex_order._details['Size'],
-                                           colour=socks_unisex_order._details['Colour'],
-                                           textile=socks_unisex_order._details['Textile'],
-                                           silver=socks_unisex_order._details['Silver'],
-                                           stripe=socks_unisex_order._details['Stripe'],
-                                           dry_cleaning=socks_unisex_order._details['Dry Cleaning'],
-                                           articulated=socks_unisex_order._details['Articulated'],
-                                           length=socks_unisex_order._details['Length'],
+        factory = socks_unisex_order.factory
+        return factory.create_socks_unisex(style=socks_unisex_order.details['Style name'],
+                                           size=socks_unisex_order.details['Size'],
+                                           colour=socks_unisex_order.details['Colour'],
+                                           textile=socks_unisex_order.details['Textile'],
+                                           silver=socks_unisex_order.details['Silver'],
+                                           stripe=socks_unisex_order.details['Stripe'],
+                                           dry_cleaning=socks_unisex_order.details['Dry Cleaning'],
+                                           articulated=socks_unisex_order.details['Articulated'],
+                                           length=socks_unisex_order.details['Length'],
                                            )
 
     def operate_order(self, order_list: list):
@@ -594,33 +585,32 @@ class GarmentMaker:
         :param order_list: a list
         """
         for order in order_list:
-            garment = order._details['Garment']
-            if (garment == 'ShirtMen'):
-                for i in range(order._details['Count'].item()):
-                    self.shirts_men.append(self.shirt_men_maker(order))
-            elif (garment == 'ShirtWomen'):
-                for i in range(order._details['Count'].item()):
-                    self.shirts_women.append(self.shirt_women_maker(order))
-            elif (garment == 'SockPairUnisex'):
-                for i in range(order._details['Count'].item()):
-                    self.sock_unisex.append(self.socks_unisex_maker(order))
+            garment_type = order.details['Garment']
+            if garment_type == 'ShirtMen':
+                for i in range(order.details['Count']):
+                    self.shirts_men.append(GarmentMaker.shirt_men_maker(order))
+            elif garment_type == 'ShirtWomen':
+                for i in range(order.details['Count']):
+                    self.shirts_women.append(GarmentMaker.shirt_women_maker(order))
+            elif garment_type == 'SockPairUnisex':
+                for i in range(order.details['Count']):
+                    self.sock_unisex.append(GarmentMaker.socks_unisex_maker(order))
 
     def main(self):
         """
         Drives the program
         """
-        # filename = input("Which excel file do you want to extract from? ")
-        # self.processor.open_order_sheet(f"./{filename}.xlsx")
         try:
-            self.processor.open_order_sheet("./a4.xlsx")
+            filename = input("Which excel file do you want to extract from? ")
+            self.processor.open_order_sheet(f"./{filename}.xlsx")
         except FileNotFoundError:
             print("File was not found")
-            exit()
         else:
             order_list = []
             for next_order in self.processor.process_next_order():
                 order_list.append(next_order)
             self.operate_order(order_list)
+            self.create_report()
 
     @staticmethod
     def display_result(garment_list: list) -> None:
@@ -643,11 +633,10 @@ class GarmentMaker:
         """
         print(f"OOP Designs Inc. Factory Report - {datetime.datetime.now():%d-%m-%Y %H:%M:%S}\n\n")
         GarmentMaker.display_result(self.shirts_men)
-        # GarmentMaker.display_result(self.shirts_women)
-        # GarmentMaker.display_result(self.sock_unisex)
+        GarmentMaker.display_result(self.shirts_women)
+        GarmentMaker.display_result(self.sock_unisex)
 
 
 if __name__ == '__main__':
     garment = GarmentMaker()
     garment.main()
-    garment.create_report()
