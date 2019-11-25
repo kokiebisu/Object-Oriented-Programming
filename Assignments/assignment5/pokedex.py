@@ -1,7 +1,7 @@
 import argparse
 
 
-class Pokedox(enum.Enum):
+class PokedexMode(enum.Enum):
     """
     Lists the various modes that the Pokedex can run in
     """
@@ -23,23 +23,38 @@ class Pokedex():
 
 class Query():
     """
-    The query object represents a query to send to retrieve data from the pokedex api. The query object comes with certain
-    accompanying configuration options as well as a field that holds the result. The attributes are:
+    The query object represents a query to send to retrieve data from the pokedex api.
+    The query object comes with certain accompanying configuration options as well
+    as a field that holds the result. The attributes are:
         - mode: 'pokemon' or 'ability' or 'move'
-        - input_file: 
-        -
-
+        - input: This is the data that needs to be sent as a request.
+        - output: This is the method of output that is requested. 
+        At this moment the program supports printing to the console
+         or writing to another text file.
+        - result: Placehodler value to hold the result of the response. This does
+        not usually come in with the query.
     """
+
+    def __init__(self) -> None:
+        """
+        Initializes Query
+        """
+        self._mode = None
+        self._data = None
+        self._output = None
+        self._result = None
+
+    def __str__(self) -> str:
+        """
+        String representation of the object
+        """
+        return f"Query[ Mode: {self._mode}, Data: {self._data}, Output: {self._output}]"
 
 
 def validate_mode(mode_name: str):
     try:
-        if mode_name == "pokemon":
-            return PokemonMode(args.mode)
-        elif mode_name == "ability":
-            print("Ability selected")
-        elif mode_name == "move":
-            print("Move selected")
+        if mode_name == "pokemon" or mode_name == "ability" or mode_name == "move":
+            return PokedexMode(mode_name)
         else:
             raise Exception
     except Exception as e:
@@ -72,7 +87,7 @@ def accept_args() -> Query:
     try:
         args = parser.parse_args()
         query_ = Query()
-        validate_mode(args.mode)
+        pokedex_mode = validate_mode(args.mode)
         if validate_input_source(args.input):
             print(args.input)
         if args.expanded:
