@@ -1,6 +1,7 @@
 import argparse
 import enum
 import os
+import abc
 
 
 class PokedexMode(enum.Enum):
@@ -10,6 +11,88 @@ class PokedexMode(enum.Enum):
     POKEMON = "pokemon"
     ABILITY = "ability"
     MOVE = "move"
+
+
+class Query:
+    """
+    The query object represents a query to send to retrieve data from the pokedex api.
+    The query object comes with certain accompanying configuration options as well
+    as a field that holds the result. The attributes are:
+        - mode: 'pokemon' or 'ability' or 'move'
+        - input: This is the data that needs to be sent as a request.
+        - output: This is the method of output that is requested. 
+        At this moment the program supports printing to the console
+         or writing to another text file.
+        - result: Placehodler value to hold the result of the response. This does
+        not usually come in with the query.
+        - expand: A flag to determine the user wants an expanded version of the details
+        - 
+    """
+
+    def __init__(self) -> None:
+        """
+        Initializes Query
+        """
+        self._mode = None
+        self._data = None
+        self._input = None
+        self._output = None
+        self._result = None
+        self._expand = None
+
+    @property
+    def mode(self):
+        return self._mode
+
+    @mode.setter
+    def mode(self, mode):
+        self._mode = mode
+
+    @property
+    def data(self):
+        return self._data
+
+    @data.setter
+    def data(self, data):
+        self._data = data
+
+    @property
+    def input(self):
+        return self._input
+
+    @input.setter
+    def input(self, input):
+        self._input = input
+
+    @property
+    def output(self):
+        return self._output
+
+    @output.setter
+    def output(self, output):
+        self._output = output
+
+    @property
+    def result(self):
+        return self._result
+
+    @result.setter
+    def result(self, result):
+        self._result = result
+
+    @property
+    def expand(self):
+        return self._expand
+
+    @expand.setter
+    def expand(self, expand):
+        self._expand = expand
+
+    def __str__(self) -> str:
+        """
+        String representation of the object
+        """
+        return f"Query[ Mode: {self._mode}, Data: {self._data}, Input: {self._input}, Output: {self._output}, Expand: {self._expand}]"
 
 
 class Request():
@@ -22,9 +105,9 @@ class Request():
         """
         Sets up the Query and creates a chain of handlers to validate the query.
         """
-        self.query_start_handler = None
         self.input_handler = InputHandler()
-        # handlers here
+        self.output_handler = OutputHandler()
+        self.request_handler = RequestHandler()
 
     def execute_query(self, query_: Query) -> bool:
         """
@@ -36,7 +119,9 @@ class Request():
         result = (None, None)
 
         # set handlers
-        self.query_start_handler = self.input_handler()
+        self.input_handler.set_handler(self.output_handler)
+        self.output_handler.set_handler(self.request_handler)
+        self.input_handler.handle_query(query_)
 
 
 def accept_args() -> Query:
@@ -116,12 +201,13 @@ class InputHandler(BaseRequestHandler):
     Check if input is valid
     """
 
-    def handler_request(self, query_: Query) -> (str, bool):
+    def handle_query(self, query_: Query) -> (str, bool):
         """
         Validates input attribute of query
         :param query_: a Query
         :return: a tuple
         """
+        print("entered inputhandler")
         if os.path.exists(query_.input) and query_.input.lower().endswith('.txt'):
             if not self.next_handler:
                 return "", True
@@ -142,7 +228,9 @@ class OutputHandler(BaseRequestHandler):
     :param query_: a Query
     :return: a tuple
     """
-    pass
+
+    def handle_query(self, query_: Query) -> (str, bool):
+        pass
 
 
 class RequestHandler(BaseRequestHandler):
@@ -152,65 +240,8 @@ class RequestHandler(BaseRequestHandler):
     :precondition: the query must pass all the previous handlers successfully
     :return: a tuple
     """
-    pass
-
-
-class Query():
-    """
-    The query object represents a query to send to retrieve data from the pokedex api.
-    The query object comes with certain accompanying configuration options as well
-    as a field that holds the result. The attributes are:
-        - mode: 'pokemon' or 'ability' or 'move'
-        - input: This is the data that needs to be sent as a request.
-        - output: This is the method of output that is requested. 
-        At this moment the program supports printing to the console
-         or writing to another text file.
-        - result: Placehodler value to hold the result of the response. This does
-        not usually come in with the query.
-        - expand: A flag to determine the user wants an expanded version of the details
-        - 
-    """
-
-    def __init__(self) -> None:
-        """
-        Initializes Query
-        """
-        self._mode = None
-        self._data = None
-        self._input = None
-        self._output = None
-        self._result = None
-        self._expand = None
-
-    @property
-    def mode(self):
-        return self._mode
-
-    @property
-    def data(self):
-        return self._data
-
-    @property
-    def input(self):
-        return self._input
-
-    @property
-    def output(self):
-        return self._output
-
-    @property
-    def result(self):
-        return self._result
-
-    @property
-    def expand(self):
-        return self._expand
-
-    def __str__(self) -> str:
-        """
-        String representation of the object
-        """
-        return f"Query[ Mode: {self._mode}, Data: {self._data}, Input: {self._input}, Output: {self._output}, Expand: {self._expand}]"
+    def handle_query(self, query_: Query) -> (str, bool):
+        pass
 
 
 def validate_mode(mode_name: str):
@@ -238,6 +269,7 @@ def main(query_: Query) -> None:
     Drives the program
     :param query_: a Query
     """
+    print("entered main")
     request = Request()
     request.query_start_handler = InputHandler()
     request.execute_query(query_)
@@ -246,14 +278,3 @@ def main(query_: Query) -> None:
 if __name__ == '__main__':
     query = accept_args()
     main(query)
-
-    # args = parser.parse_args()
-    # query_ = Query()
-    # query._mode = validate_mode(args.mode)
-    # if args.expanded:
-    #     self._expand = True
-    # something = validate_input_source(args.input)
-    # self._data = convert_to_data(something)
-    # if args.output:
-    #     output = validate_output_source(args.output)
-    #     self._output = output
