@@ -136,6 +136,25 @@ class InputHandler(BaseRequestHandler):
                 return self.next_handler.handle_query(query_)
 
 
+class OutputHandler(BaseRequestHandler):
+    """
+    Checks if the output file has a valid extension
+    :param query_: a Query
+    :return: a tuple
+    """
+    pass
+
+
+class RequestHandler(BaseRequestHandler):
+    """
+    Creates the request based on on the given query
+    :param query_: a Query
+    :precondition: the query must pass all the previous handlers successfully
+    :return: a tuple
+    """
+    pass
+
+
 class Query():
     """
     The query object represents a query to send to retrieve data from the pokedex api.
@@ -203,10 +222,6 @@ def validate_mode(mode_name: str):
     except Exception as e:
         print("There was an error in validating mode")
         exit()
-
-
-def convert_to_data(something: str):
-    pass
 
 
 def validate_output_source(output_source: str):
