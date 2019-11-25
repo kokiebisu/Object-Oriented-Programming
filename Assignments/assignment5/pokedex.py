@@ -1,6 +1,15 @@
 import argparse
 
 
+class Pokedox(enum.Enum):
+    """
+    Lists the various modes that the Pokedex can run in
+    """
+    POKEMON = "pokemon"
+    ABILITY = "ability"
+    MOVE = "move"
+
+
 class Pokedex():
     def __init__(self):
         """
@@ -23,11 +32,22 @@ class Query():
     """
 
 
-def validate_mode(String: mode_name):
-    pass
+def validate_mode(mode_name: str):
+    try:
+        if mode_name == "pokemon":
+            return PokemonMode(args.mode)
+        elif mode_name == "ability":
+            print("Ability selected")
+        elif mode_name == "move":
+            print("Move selected")
+        else:
+            raise Exception
+    except Exception as e:
+        print("There was an error in validating mode")
+        exit()
 
 
-def validate_input_source(String: input_source):
+def validate_input_source(input_source: str):
     pass
 
 
@@ -52,12 +72,7 @@ def accept_args() -> Query:
     try:
         args = parser.parse_args()
         query_ = Query()
-        # if (args.mode != "pokemon" and args.mode != "ability" and args.mode != "move"):
-        #     raise Exception
-        # else:
-        #     print(args.mode)
-        if validate_mode(args.mode):
-            print(args.mode)
+        validate_mode(args.mode)
         if validate_input_source(args.input):
             print(args.input)
         if args.expanded:
