@@ -1,5 +1,6 @@
 import argparse
 import enum
+import os
 
 
 class PokedexMode(enum.Enum):
@@ -22,7 +23,7 @@ class Request():
         Sets up the Query and creates a chain of handlers to validate the query.
         """
         self.query_start_handler = None
-
+        self.input_handler = InputHandler()
         # handlers here
 
     def execute_query(self, query_: Query) -> bool:
@@ -35,6 +36,7 @@ class Request():
         result = (None, None)
 
         # set handlers
+        self.query_start_handler = self.input_handler()
 
 
 def accept_args() -> Query:
@@ -58,8 +60,8 @@ def accept_args() -> Query:
     try:
         args = parser.parse_args()
         query_ = Query()
-        query_._mode = PokedexMode(args.mode)
-        query_._input = args.input
+        query_.mode = PokedexMode(args.mode)
+        query_.input = args.input
         if args.expanded:
             query_._expand = True
         if args.output:
@@ -86,14 +88,14 @@ class BaseRequestHandler(abc.ABC):
         self.next_handler = next_handler
 
     @abc.abstractmethod
-    def handle_request(self, query_: Query) -> (str, bool):
+    def handle_query(self, query_: Query) -> (str, bool):
         """
         Each handler woudl have a specific implementation of how
-        it processes a request.
+        it processes a query.
         :param query_: a Query
         :return: a tuple where the first element is a string stating the
         outcome and the reason, and the second a bool indicating successful
-        handling of the request or not.
+        handling of the query or not.
         """
         pass
 
@@ -105,6 +107,33 @@ class BaseRequestHandler(abc.ABC):
         :param handler: a BaseRequestHandler
         """
         self.next_handler = handler
+
+# Handlers
+
+
+class InputHandler(BaseRequestHandler):
+    """
+    Check if input is valid
+    """
+
+    def handler_request(self, query_: Query) -> (str, bool):
+        """
+        Validates input attribute of query
+        :param query_: a Query
+        :return: a tuple
+        """
+        if os.path.exists(query_.input) and query_.input.lower().endswith('.txt'):
+            if not self.next_handler:
+                return "", True
+            else:
+                return self.next_handler.handle_query(query_)
+        else:
+            query_.data = query_.input
+            query_input = None
+            if not self.next_handler:
+                return "", True
+            else:
+                return self.next_handler.handle_query(query_)
 
 
 class Query():
@@ -134,6 +163,30 @@ class Query():
         self._result = None
         self._expand = None
 
+    @property
+    def mode(self):
+        return self._mode
+
+    @property
+    def data(self):
+        return self._data
+
+    @property
+    def input(self):
+        return self._input
+
+    @property
+    def output(self):
+        return self._output
+
+    @property
+    def result(self):
+        return self._result
+
+    @property
+    def expand(self):
+        return self._expand
+
     def __str__(self) -> str:
         """
         String representation of the object
@@ -156,16 +209,6 @@ def convert_to_data(something: str):
     pass
 
 
-def validate_input_source(input_source: str):
-    try:
-        if not input_source.endswith('.txt'):
-            raise Exception
-        # Check is the name/id is valid
-        return input_source
-    except Exception as e:
-        print("The input file extension is invalid")
-
-
 def validate_output_source(output_source: str):
     try:
         if not output_source.endswith('.txt'):
@@ -176,7 +219,13 @@ def validate_output_source(output_source: str):
 
 
 def main(query_: Query) -> None:
-    print(query_)
+    """
+    Drives the program
+    :param query_: a Query
+    """
+    request = Request()
+    request.query_start_handler = InputHandler()
+    request.execute_query(query_)
 
 
 if __name__ == '__main__':
