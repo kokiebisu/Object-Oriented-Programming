@@ -11,6 +11,10 @@ class PokedexMode(enum.Enum):
     MOVE = "move"
 
 
+class Request():
+    pass
+
+
 class Query():
     """
     The query object represents a query to send to retrieve data from the pokedex api.
@@ -99,7 +103,6 @@ def accept_args() -> Query:
 
     try:
         args = parser.parse_args()
-        print(args)
         query_ = Query()
         query_._mode = PokedexMode(args.mode)
         query_._input = args.input
@@ -107,20 +110,19 @@ def accept_args() -> Query:
             query_._expand = True
         if args.output:
             query_._output = args.output
-        print(query_)
         return query_
     except Exception as e:
         print(f"Error! Could not read arguments. \n{e}")
         quit()
 
 
-# def main(request_: Request) -> None:
-#     pass
+def main(query_: Query) -> None:
+    print(query_)
 
 
 if __name__ == '__main__':
     query = accept_args()
-    # main(query)
+    main(query)
 
     # args = parser.parse_args()
     # query_ = Query()
