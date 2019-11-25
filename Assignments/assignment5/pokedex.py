@@ -37,7 +37,10 @@ def accept_args() -> Query:
     try:
         args = parser.parse_args()
         query_ = Query()
-        print(args.mode)
+        if (args.mode != "pokemon" and args.mode != "ability" and args.mode != "move"):
+            raise Exception
+        else:
+            print(args.mode)
         print(args.input)
         if args.expanded:
             print(args.expanded)
