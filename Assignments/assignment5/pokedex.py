@@ -10,17 +10,6 @@ class PokedexMode(enum.Enum):
     MOVE = "move"
 
 
-class Pokedex():
-    def __init__(self):
-        """
-        Initializes the Pokedex
-        """
-        pass
-
-    def __str__(self):
-        return "A Pokedex"
-
-
 class Query():
     """
     The query object represents a query to send to retrieve data from the pokedex api.
@@ -33,6 +22,8 @@ class Query():
          or writing to another text file.
         - result: Placehodler value to hold the result of the response. This does
         not usually come in with the query.
+        - expand: A flag to determine the user wants an expanded version of the details
+        - 
     """
 
     def __init__(self) -> None:
@@ -43,6 +34,7 @@ class Query():
         self._data = None
         self._output = None
         self._result = None
+        self._expand = None
 
     def __str__(self) -> str:
         """
@@ -62,8 +54,27 @@ def validate_mode(mode_name: str):
         exit()
 
 
-def validate_input_source(input_source: str):
+def convert_to_data(something: str):
     pass
+
+
+def validate_input_source(input_source: str):
+    try:
+        if not input_source.endswith('.txt'):
+            raise Exception
+        # Check is the name/id is valid
+        return input_source
+    except Exception as e:
+        print("The input file extension is invalid")
+
+
+def validate_output_source(output_source: str):
+    try:
+        if not output_source.endswith('.txt'):
+            raise Exception
+        return output_source
+    except Exception as e:
+        print("The output file extension is invalid")
 
 
 def accept_args() -> Query:
@@ -87,13 +98,14 @@ def accept_args() -> Query:
     try:
         args = parser.parse_args()
         query_ = Query()
-        pokedex_mode = validate_mode(args.mode)
-        if validate_input_source(args.input):
-            print(args.input)
+        query._mode = validate_mode(args.mode)
         if args.expanded:
-            print(args.expanded)
+            self._expand = True
+        something = validate_input_source(args.input)
+        self._data = convert_to_data(something)
         if args.output:
-            print(args.output)
+            output = validate_output_source(args.output)
+            self._output = output
     except Exception as e:
         print(f"Error! Could not read arguments. \n{e}")
         quit()
