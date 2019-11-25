@@ -13,6 +13,21 @@ class Pokedex():
 
 
 class Query():
+    """
+    The query object represents a query to send to retrieve data from the pokedex api. The query object comes with certain
+    accompanying configuration options as well as a field that holds the result. The attributes are:
+        - mode: 'pokemon' or 'ability' or 'move'
+        - input_file: 
+        -
+
+    """
+
+
+def validate_mode(String: mode_name):
+    pass
+
+
+def validate_input_source(String: input_source):
     pass
 
 
@@ -37,11 +52,14 @@ def accept_args() -> Query:
     try:
         args = parser.parse_args()
         query_ = Query()
-        if (args.mode != "pokemon" and args.mode != "ability" and args.mode != "move"):
-            raise Exception
-        else:
+        # if (args.mode != "pokemon" and args.mode != "ability" and args.mode != "move"):
+        #     raise Exception
+        # else:
+        #     print(args.mode)
+        if validate_mode(args.mode):
             print(args.mode)
-        print(args.input)
+        if validate_input_source(args.input):
+            print(args.input)
         if args.expanded:
             print(args.expanded)
         if args.output:
