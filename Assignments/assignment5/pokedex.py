@@ -2,6 +2,8 @@ import argparse
 import enum
 import os
 import abc
+import aiohttp
+import asyncio
 
 
 class PokedexMode(enum.Enum):
@@ -117,11 +119,19 @@ class Request():
         :return: a bool
         """
         result = (None, None)
-
         # set handlers
-        self.input_handler.set_handler(self.output_handler)
-        self.output_handler.set_handler(self.request_handler)
-        self.input_handler.handle_query(query_)
+        print(f"{query_}")
+        if query_.output == "print":
+            self.input_handler.set_handler(self.request_handler)
+        else:
+            print("entered")
+            self.input_handler.set_handler(self.output_handler)
+            self.output_handler.set_handler(self.request_handler)
+        result = self.input_handler.handle_query(query_)
+        if result[1] == False:
+            print(result[0])
+        else:
+            print(result[0])
 
 
 def accept_args() -> Query:
@@ -193,8 +203,6 @@ class BaseRequestHandler(abc.ABC):
         """
         self.next_handler = handler
 
-# Handlers
-
 
 class InputHandler(BaseRequestHandler):
     """
@@ -207,19 +215,22 @@ class InputHandler(BaseRequestHandler):
         :param query_: a Query
         :return: a tuple
         """
-        print("entered inputhandler")
-        if os.path.exists(query_.input) and query_.input.lower().endswith('.txt'):
-            if not self.next_handler:
-                return "", True
-            else:
+        print("Validating Input...")
+        if query_.input.lower().endswith('.txt'):
+            # Checks if the file exists
+            if os.path.exists(query_.input):
+                # reads the file and puts into query._data
+                if not self.next_handler:
+                    return "", True
                 return self.next_handler.handle_query(query_)
+            else:
+                return "File doesn't exist", False
         else:
             query_.data = query_.input
             query_input = None
             if not self.next_handler:
                 return "", True
-            else:
-                return self.next_handler.handle_query(query_)
+            return self.next_handler.handle_query(query_)
 
 
 class OutputHandler(BaseRequestHandler):
@@ -230,7 +241,13 @@ class OutputHandler(BaseRequestHandler):
     """
 
     def handle_query(self, query_: Query) -> (str, bool):
-        pass
+        print("Validating Output...")
+        if query_.output.lower().endswith('.txt') or query_.output.lower() == "print":
+            if not self.next_handler:
+                return "", True
+            return self.next_handler.handle_query(query_)
+        else:
+            return "Invalid Output", False
 
 
 class RequestHandler(BaseRequestHandler):
@@ -240,6 +257,24 @@ class RequestHandler(BaseRequestHandler):
     :precondition: the query must pass all the previous handlers successfully
     :return: a tuple
     """
+
+    def handle_query(self, query_: Query) -> (str, bool):
+        print("Creating Request...")
+        url = f"https://pokeapi.co/api/v2/{query_.mode.value}/{query_.input}"
+        response = asyncio.run(process_single_request(1, url))
+        return response, True
+        # # if valid response
+        # if responses
+        #     # send it to format
+        #     return self.next_handler.handle_query(query_)
+        # # not valid
+        #     return "Did not receive a valid response", False
+
+
+class FormatHandler(BaseRequestHandler):
+    """
+    """
+
     def handle_query(self, query_: Query) -> (str, bool):
         pass
 
@@ -264,12 +299,28 @@ def validate_output_source(output_source: str):
         print("The output file extension is invalid")
 
 
+async def get_pokemon_data(id_: int, url: str, session: aiohttp.ClientSession) -> dict:
+    """
+    """
+    target_url = url.format(id_)
+    response = await session.request(method="GET", url=target_url)
+    json_dict = await response.json()
+    return json_dict
+
+
+async def process_single_request(id_, url: str) -> list:
+    """
+    """
+    async with aiohttp.ClientSession() as session:
+        response = await get_pokemon_data(id_, url, session)
+        return response
+
+
 def main(query_: Query) -> None:
     """
     Drives the program
     :param query_: a Query
     """
-    print("entered main")
     request = Request()
     request.query_start_handler = InputHandler()
     request.execute_query(query_)
