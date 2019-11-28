@@ -110,6 +110,10 @@ class Request():
         self.input_handler = InputHandler()
         self.output_handler = OutputHandler()
         self.request_handler = RequestHandler()
+        self.object_handler = ObjectHandler()
+        # self.pokemon_format_handler = PokemonFormatHandler()
+        # self.ability_format_handler = AbilityFormatHandler()
+        # self.move_format_handler = MoveFormatHandler()
 
     def execute_query(self, query_: Query) -> bool:
         """
@@ -120,13 +124,20 @@ class Request():
         """
         result = (None, None)
         # set handlers
-        print(f"{query_}")
+
         if query_.output == "print":
             self.input_handler.set_handler(self.request_handler)
         else:
             print("entered")
             self.input_handler.set_handler(self.output_handler)
             self.output_handler.set_handler(self.request_handler)
+        self.request_handler.set_handler(self.object_handler)
+        # if query_.mode == PokedexMode.POKEMON:
+        #     self.request_handler.set_handler(self.pokemon_format_handler)
+        # elif query_.mode == PokedexMode.ABILITY:
+        #     self.request_handler.set_handler(self.ability_format_handler)
+        # elif query_.mode == PokedexMode.MOVE:
+        #     self.request_handler.set_handler(self.move_format_handler)
         result = self.input_handler.handle_query(query_)
         if result[1] == False:
             print(result[0])
@@ -261,42 +272,50 @@ class RequestHandler(BaseRequestHandler):
     def handle_query(self, query_: Query) -> (str, bool):
         print("Creating Request...")
         url = f"https://pokeapi.co/api/v2/{query_.mode.value}/{query_.input}"
-        response = asyncio.run(process_single_request(1, url))
-        return response, True
-        # # if valid response
-        # if responses
-        #     # send it to format
-        #     return self.next_handler.handle_query(query_)
-        # # not valid
-        #     return "Did not receive a valid response", False
+        query_.data = asyncio.run(process_single_request(1, url))
+        print('entered')
+        return self.next_handler.handle_query(query_)
 
 
-class FormatHandler(BaseRequestHandler):
+class ObjectHandler(BaseRequestHandler):
     """
     """
 
     def handle_query(self, query_: Query) -> (str, bool):
-        pass
+        if query_.mode == PokedexMode.POKEMON:
+            pokemon = Pokemon(query_.data['name'], query_.data['id'], query_.data['height'], query_.data['weight'], query_.data['game_indices'],
+                              query_.data['stats'][0]['base_stat'], query_.data['types'][0]['type']['name'],
+                              query_.data['abilities'], query_.data['moves'][0]['move']['name'])
+            print(pokemon)
+        elif query_.mode == PokedexMode.ABILITY:
+            ability = Ability(query_.data['name'], query_.data['id'], query_.data['generation']['name'], query_.data['effect_entries']
+                              [0]['effect'], query_.data['effect_entries'][0]['short_effect'], query_.data['pokemon'])
+            print(ability)
+        elif query_.mode == PokedexMode.MOVE:
+            move = Move(query_.data['name'], query_.data['id'], query_.data['generation']['name'], query_.data['accuracy'], query_.data['pp'],
+                        query_.data['power'], query_.data['type'], query_.data['damage_class']['name'], query_.data['effect_entries'][0]['short_effect'])
+            print(move)
+        return "", True
 
 
-def validate_mode(mode_name: str):
-    try:
-        if mode_name == "pokemon" or mode_name == "ability" or mode_name == "move":
-            return PokedexMode(mode_name)
-        else:
-            raise Exception
-    except Exception as e:
-        print("There was an error in validating mode")
-        exit()
+# def validate_mode(mode_name: str):
+#     try:
+#         if mode_name == "pokemon" or mode_name == "ability" or mode_name == "move":
+#             return PokedexMode(mode_name)
+#         else:
+#             raise Exception
+#     except Exception as e:
+#         print("There was an error in validating mode")
+#         exit()
 
 
-def validate_output_source(output_source: str):
-    try:
-        if not output_source.endswith('.txt'):
-            raise Exception
-        return output_source
-    except Exception as e:
-        print("The output file extension is invalid")
+# def validate_output_source(output_source: str):
+#     try:
+#         if not output_source.endswith('.txt'):
+#             raise Exception
+#         return output_source
+#     except Exception as e:
+#         print("The output file extension is invalid")
 
 
 async def get_pokemon_data(id_: int, url: str, session: aiohttp.ClientSession) -> dict:
@@ -314,6 +333,51 @@ async def process_single_request(id_, url: str) -> list:
     async with aiohttp.ClientSession() as session:
         response = await get_pokemon_data(id_, url, session)
         return response
+
+
+class Pokemon():
+    def __init__(self, name, id, height, weight, generation, stats, types, abilities, moves):
+        self._name = name
+        self._id = id
+        self._height = height
+        self._weight = weight
+        self._generation = generation
+        self._stats = stats
+        self._types = types
+        self._abilities = abilities
+        self._moves = moves
+
+    def __str__(self):
+        return f"Name: {self._name}, ID: {self._id}, Height: {self._height}, Weight: {self._weight}, Generation: {self._generation}, Stats: {self._stats}, Types: {self._types}, Abilities: {self._abilities}, Move: {self._moves}"
+
+
+class Ability():
+    def __init__(self, name, id, generation, effect, effect_short, pokemon):
+        self._name = name
+        self._id = id
+        self._generation = generation
+        self._effect = effect
+        self._effect_short = effect_short
+        self._pokemon = pokemon
+
+    def __str__(self):
+        return f"Name: {self._name}, ID: {self._id}, Generation: {self._generation}, Effect: {self._effect}, Effect(Short): {self._effect_short}, Pokemon: {self._pokemon}"
+
+
+class Move():
+    def __init__(self, name, id, generation, accuracy, pp, power, type, damage_class, effect_short):
+        self._name = name
+        self._id = id
+        self._generation = generation
+        self._accuracy = accuracy
+        self._pp = pp
+        self._power = power
+        self._type = type
+        self._damage_class = damage_class
+        self._effect_short = effect_short
+
+    def __str__(self):
+        return f"Name: {self._name}, ID: {self._id}, Generation: {self._generation}, Accuracy: {self._accuracy}, PP: {self._pp}, Power: {self._power}, Type: {self._type}, Damage Class: {self._damage_class}, Effect(Short): {self._effect_short}"
 
 
 def main(query_: Query) -> None:
