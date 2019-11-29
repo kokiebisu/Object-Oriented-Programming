@@ -333,12 +333,12 @@ class ObjectHandler(BaseRequestHandler):
                               abilities=query_.data['abilities'], moves=query_.data['moves'][0]['move']['name'])
             query_.data = pokemon
         elif query_.mode == PokedexMode.ABILITY:
-            ability = Ability(query_.data['name'], query_.data['id'], query_.data['generation']['name'], query_.data['effect_entries']
-                              [0]['effect'], query_.data['effect_entries'][0]['short_effect'], query_.data['pokemon'])
+            ability = Ability(name=query_.data['name'], id=query_.data['id'], generation=query_.data['generation']['name'], effect=query_.data['effect_entries']
+                              [0]['effect'], effect_short=query_.data['effect_entries'][0]['short_effect'], pokemon=query_.data['pokemon'])
             query_.data = ability
         elif query_.mode == PokedexMode.MOVE:
-            move = Move(query_.data['name'], query_.data['id'], query_.data['generation']['name'], query_.data['accuracy'], query_.data['pp'],
-                        query_.data['power'], query_.data['type'], query_.data['damage_class']['name'], query_.data['effect_entries'][0]['short_effect'])
+            move = Move(name=query_.data['name'], id=query_.data['id'], generation=query_.data['generation']['name'], accuracy=query_.data['accuracy'], pp=query_.data['pp'],
+                        power=query_.data['power'], type_=query_.data['type'], damage_class=query_.data['damage_class']['name'], effect_short=query_.data['effect_entries'][0]['short_effect'])
             query_.data = move
         return self.next_handler.handle_query(query_)
 
@@ -402,7 +402,7 @@ class Move(Response):
         super().__init__(**kwargs)
 
     def __str__(self):
-        return f"{super().__init__()}, Accuracy: {self._accuracy}, PP: {self._pp}, Power: {self._power}, Type: {self._type}, Damage Class: {self._damage_class}, Effect(Short): {self._effect_short}"
+        return f"{super().__str__()}, Accuracy: {self._accuracy}, PP: {self._pp}, Power: {self._power}, Type: {self._type}, Damage Class: {self._damage_class}, Effect(Short): {self._effect_short}"
 
 
 def main(query_: Query) -> None:
