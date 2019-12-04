@@ -172,41 +172,6 @@ class Request():
             print(result[0])
 
 
-# def accept_args() -> Query:
-#     """
-#     Implements the argparse module to accept arguments via the command line.
-#     This function specifies what these arguments are and parses it into an
-#     object of type Query. If something goes wrong with provided arguments
-#     then the function prints an error message and exits the application.
-#     :return: The object of type Query with all the arguments provided in it.
-#     """
-#     parser = argparse.ArgumentParser()
-#     parser.add_argument(
-#         "mode", help="The way you want to find your pokemon. It can be either by Pokemon, Ability, Move.")
-#     parser.add_argument(
-#         "input", help="As input, the application can take in either a file name (Text file) or a name/id.")
-#     parser.add_argument(
-#         "--expanded", help="When this flag is provided, ceratain attributes are expanded. That is the pokedex will do sub-queries to get more information about a partivular attribute. If this flag is not provided, the app will not get the extra information and just print what's provided. ", action='store_true')
-#     parser.add_argument("--output", default="print",
-#                         help="The location of output in which the query should be printed to. ")
-
-#     try:
-#         args = parser.parse_args()
-#         query_ = Query()
-#         query_.mode = PokedexMode(args.mode)
-#         query_.input = args.input
-#         if args.expanded:
-#             query_.expand = True
-#         else:
-#             query_.expand = False
-#         if args.output:
-#             query_._output = args.output
-#         return query_
-#     except Exception as e:
-#         print(f"Error! Could not read arguments. \n{e}")
-#         quit()
-
-
 class BaseRequestHandler(abc.ABC):
     """
     Baseclass for all handlers that handler request. This can be
@@ -260,6 +225,10 @@ class InputHandler(BaseRequestHandler):
             # Checks if the file exists
             if os.path.exists(query_.input):
                 # reads the file and puts into query._data
+                query_.data = []
+                with open(query_.input, "r") as file:
+                    query_.data = file.readlines()
+                    query_.data = [x.strip() for x in query_.data]
                 if not self.next_handler:
                     return "", True
                 return self.next_handler.handle_query(query_)
@@ -292,29 +261,49 @@ class OutputHandler(BaseRequestHandler):
 
 class RequestHandler(BaseRequestHandler):
     """
-    Creates the request based on on the given query
-    :param query_: a Query
-    :precondition: the query must pass all the previous handlers successfully
-    :return: a tuple
+    Class the is responsible for dealing with querying requests to the API
     """
 
     def handle_query(self, query_: Query) -> (str, bool):
+        """
+        Creates the request based on on the given query
+        :param query_: a Query
+        :precondition: the query must pass all the previous handlers successfully
+        :return: a tuple
+        """
         print("Creating Request...")
-        print(f"Request: {query_}")
-        url = f"https://pokeapi.co/api/v2/{query_.mode.value}/{query_.input}"
-        query_.data = asyncio.run(self.process_single_request(1, url))
+        if query_.input.endswith('.txt'):
+            urls = [f"https://pokeapi.co/api/v2/{query_.mode.value}/{x}" for x in query_.data]
+            query_.data = asyncio.run(self.process_multiple_requests(urls))
+        else:
+            url = f"https://pokeapi.co/api/v2/{query_.mode.value}/{query_.input}"
+            query_.data = asyncio.run(self.process_single_request(1, url))
         # print('entered')
         return self.next_handler.handle_query(query_)
 
-    async def process_single_request(self, id_, url: str) -> list:
+    async def process_single_request(self, id_: int, url: str) -> list:
         """
+        Opens the api session go send request
+        :param id_: an int
+        :param url: a string
+        :return: a list
         """
         async with aiohttp.ClientSession() as session:
             response = await self.get_pokemon_data(id_, url, session)
             return response
+    
+    async def process_multiple_requests(self, urls):
+        async with aiohttp.ClientSession() as session:
+            response = await asyncio.gather(*[self.process_single_request(session, url) for url in urls], return_exceptions = True)
+        return response
 
     async def get_pokemon_data(self, id_: int, url: str, session: aiohttp.ClientSession) -> dict:
         """
+        Sends the request to the API and retrieve the response
+        :param id_: an int
+        :param url: a string
+        :param session: a ClientSession object
+        :return: a dict
         """
         target_url = url.format(id_)
         response = await session.request(method="GET", url=target_url)
@@ -322,22 +311,28 @@ class RequestHandler(BaseRequestHandler):
         return json_dict
 
 
+# Change this to
 class ObjectHandler(BaseRequestHandler):
     """
+    Creates the given object based on the data given from the api response.
     """
 
     def handle_query(self, query_: Query) -> (str, bool):
+        mode = ModePopulator()
         if query_.mode == PokedexMode.POKEMON:
-            pokemon = Pokemon(name=query_.data['name'], id=query_.data['id'], height=query_.data['height'], weight=query_.data['weight'], generation=query_.data['game_indices'],
+            factory = mode.get_factory(PokedexMode.POKEMON)
+            pokemon = factory.create_mode_object(name=query_.data['name'], id=query_.data['id'], height=query_.data['height'], weight=query_.data['weight'], generation=query_.data['game_indices'],
                               stats=query_.data['stats'][0]['base_stat'], types=query_.data['types'][0]['type']['name'],
                               abilities=query_.data['abilities'], moves=query_.data['moves'][0]['move']['name'])
             query_.data = pokemon
         elif query_.mode == PokedexMode.ABILITY:
-            ability = Ability(name=query_.data['name'], id=query_.data['id'], generation=query_.data['generation']['name'], effect=query_.data['effect_entries']
+            factory = mode.get_factory(PokedexMode.ABILITY)
+            ability = factory.create_mode_object(name=query_.data['name'], id=query_.data['id'], generation=query_.data['generation']['name'], effect=query_.data['effect_entries']
                               [0]['effect'], effect_short=query_.data['effect_entries'][0]['short_effect'], pokemon=query_.data['pokemon'])
             query_.data = ability
         elif query_.mode == PokedexMode.MOVE:
-            move = Move(name=query_.data['name'], id=query_.data['id'], generation=query_.data['generation']['name'], accuracy=query_.data['accuracy'], pp=query_.data['pp'],
+            factory = mode.get_factory(PokedexMode.MOVE)
+            move = factory.create_mode_object(name=query_.data['name'], id=query_.data['id'], generation=query_.data['generation']['name'], accuracy=query_.data['accuracy'], pp=query_.data['pp'],
                         power=query_.data['power'], type_=query_.data['type'], damage_class=query_.data['damage_class']['name'], effect_short=query_.data['effect_entries'][0]['short_effect'])
             query_.data = move
         return self.next_handler.handle_query(query_)
@@ -345,9 +340,15 @@ class ObjectHandler(BaseRequestHandler):
 
 class PrintHandler(BaseRequestHandler):
     """
+    A Class that handles the output
     """
 
     def handle_query(self, query_):
+        """
+        Prints the response to the either a file or the console
+        :param query_: 
+        """
+        print("Printing Response...")
         if query_.output.endswith('.txt'):
             with open(f'./{query_.output}', "w") as file:
                 file.write(query_.data.__str__())
@@ -358,16 +359,29 @@ class PrintHandler(BaseRequestHandler):
 
 class Response():
     def __init__(self, name, id, generation, **kwargs):
+        """
+        Initializes Response
+        """
         self._name = name
         self._id = id
         self._generation = generation
 
     def __str__(self):
-        return f"Name: {self._name}, ID: {self._id}, Generation: {self._generation}"
+        """
+        A String representation of the object
+        """
+        return f"Name: {self._name}, \nID: {self._id}, \nGeneration: {self._generation}"
 
 
 class Pokemon(Response):
+    """
+    Class that is responsible for the query searched using mode 'pokemon'
+    """
+
     def __init__(self, height, weight, stats, types, abilities, moves, **kwargs):
+        """
+        Initializes Pokemon
+        """
         self._height = height
         self._weight = weight
         self._stats = stats
@@ -377,22 +391,44 @@ class Pokemon(Response):
         super().__init__(**kwargs)
 
     def __str__(self):
-        return f"{super().__str__()}, Height: {self._height}, Weight: {self._weight}, Stats: {self._stats}, Types: {self._types}, Abilities: {self._abilities}, Move: {self._moves}"
+        """
+        A String representation of the object
+        """
+        ability_list = [x['ability']['name'] for x in self._abilities]
+        return f"{super().__str__()}, \nHeight: {self._height}, \nWeight: {self._weight}, \nStats: {self._stats}, \nTypes: {self._types}, \nAbilities: {ability_list}, \nMove: {self._moves}"
 
 
 class Ability(Response):
+    """
+    Class that is responsible for the query searched using mode 'ability'
+    """
+
     def __init__(self, effect, effect_short, pokemon, **kwargs):
+        """
+        Initializes the Ability
+        """
         self._effect = effect
         self._effect_short = effect_short
         self._pokemon = pokemon
         super().__init__(**kwargs)
 
     def __str__(self):
-        return f"{super().__str__()}, Effect: {self._effect}, Effect(Short): {self._effect_short}, Pokemon: {self._pokemon}"
+        """
+        A String representation of the object
+        """
+        pokemon_list = [x['pokemon']['name'] for x in self._pokemon]
+        return f"{super().__str__()}, \nEffect: {self._effect}, \nEffect(Short): {self._effect_short}, \nPokemon: {pokemon_list}"
 
 
 class Move(Response):
+    """
+    Class that is responsible for the query searched using mode 'move'
+    """
+
     def __init__(self, accuracy, pp, power, type_, damage_class, effect_short, **kwargs):
+        """
+        Initializes the Move
+        """
         self._accuracy = accuracy
         self._pp = pp
         self._power = power
@@ -402,7 +438,74 @@ class Move(Response):
         super().__init__(**kwargs)
 
     def __str__(self):
-        return f"{super().__str__()}, Accuracy: {self._accuracy}, PP: {self._pp}, Power: {self._power}, Type: {self._type}, Damage Class: {self._damage_class}, Effect(Short): {self._effect_short}"
+        """
+        A String representation of the object
+        """
+        return f"{super().__str__()}, \nAccuracy: {self._accuracy}, \nPP: {self._pp}, \nPower: {self._power}, \nType: {self._type['name']}, \nDamage Class: {self._damage_class}, \nEffect(Short): {self._effect_short}"
+
+
+class ResponseFactory(abc.ABC):
+    """
+    The base factory class. All response expect this factory class to generate response object.
+    The ResponseFactory class defines an interface to create response based on different modes.
+    """
+    @abc.abstractmethod
+    def create_mode_object(self):
+        pass
+
+
+class PokemonFactory(ResponseFactory):
+    """
+    Creates a Pokemon object
+    :return: a Pokemon
+    """
+
+    def create_mode_object(self, name, id, generation, height, weight, stats, types, abilities, moves):
+        return Pokemon(name=name, id=id, height=height, weight=weight, generation=generation, stats=stats, types=types, abilities=abilities, moves=moves)
+
+
+class AbilityFactory(ResponseFactory):
+    """
+    Creates an Ability object
+    :return: an Ability
+    """
+
+    def create_mode_object(self, name, id, generation, effect, effect_short, pokemon):
+        return Ability(name=name, id=id, generation=generation, effect=effect, effect_short=effect_short, pokemon=pokemon)
+
+
+class MoveFactory(ResponseFactory):
+    """
+    Creates a Move object
+    :return: a Move
+    """
+
+    def create_mode_object(self, name, id, generation, accuracy, pp, power, type_, damage_class, effect_short):
+        return Move(name=name, id=id, generation=generation, accuracy=accuracy, pp=pp, power=power, type_=type_, damage_class=damage_class, effect_short=effect_short)
+
+
+class ModePopulator:
+    """
+    Maintains a mapping of mode -> ResponseFactory. The ModePopulator
+    is responsible for retrieving the right factory for the specified
+    world.
+    """
+
+    # Maps world types to their respective factories
+    mode_factory_mapper = {
+        PokedexMode.POKEMON: PokemonFactory,
+        PokedexMode.ABILITY: AbilityFactory,
+        PokedexMode.MOVE: MoveFactory
+    }
+
+    def get_factory(self, mode_type: PokedexMode) -> ResponseFactory:
+        """
+        Retrieves the associated factory for the specified PokedexMode
+        :param mode_type: PokedexMode
+        :return: a ResponseFactory if found, None otherwise
+        """
+        factory_class = self.mode_factory_mapper.get(mode_type, None)
+        return factory_class()
 
 
 def main(query_: Query) -> None:

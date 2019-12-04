@@ -1,0 +1,9 @@
+Name: pound, 
+ID: 1, 
+Generation: generation-i, 
+Accuracy: 100, 
+PP: 35, 
+Power: 40, 
+Type: normal, 
+Damage Class: physical, 
+Effect(Short): Inflicts regular damage with no additional effect.

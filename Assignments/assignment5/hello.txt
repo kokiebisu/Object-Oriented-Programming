@@ -1,0 +1,1 @@
+Name: comet-punch, ID: 4, Generation: generation-i, Accuracy: 85, PP: 15, Power: 18, Type: {'name': 'normal', 'url': 'https://pokeapi.co/api/v2/type/1/'}, Damage Class: physical, Effect(Short): Hits 2-5 times in one turn.
